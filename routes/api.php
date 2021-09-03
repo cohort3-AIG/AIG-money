@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\Api\CybersourceController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +16,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+Route::post('payment', [CybersourceController::class ,'cybersource_api']);
+
+Route::fallback(function(){
+    return response()->json([
+        'success' => false,
+        'message' => 'Page Not Found. If error persists, contact q3construction1@gmail.com',
+    ], 404);
 });
