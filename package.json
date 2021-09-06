@@ -1,12 +1,12 @@
 {
     "private": true,
     "scripts": {
-        "dev": "npm run development",
+        "dev": "yarn run development",
         "development": "mix",
         "watch": "mix watch",
         "watch-poll": "mix watch -- --watch-options-poll=1000",
         "hot": "mix watch --hot",
-        "prod": "npm run production",
+        "prod": "yarn run production",
         "production": "mix --production"
     },
     "devDependencies": {
@@ -21,11 +21,13 @@
     "dependencies": {
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
-        "@material-ui/core": "^5.0.0-beta.5",
+        "@mui/icons-material": "^5.0.0-rc.0",
+        "@mui/material": "^5.0.0-rc.0",
         "@types/react": "^17.0.19",
         "@types/react-dom": "^17.0.9",
         "@types/react-router-dom": "^5.1.8",
         "formik": "^2.2.9",
+        "formik-material-ui": "^4.0.0-alpha.1",
         "notistack": "^1.0.6-next.2",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",

@@ -1,34 +1,21 @@
-import React, { useState } from "react";
+import React, { Fragment, lazy, Suspense, useContext, useEffect, useState } from "react";
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { AuthContext } from '../store/context/auth'
+import { CircularProgress } from "@mui/material"
+const LoggedInComponent = lazy(() => import("./loggedin/main"))
+const LoggedOutComponent = lazy(() => import("./loggedout/main"))
 
-export interface IUser {
-    name: string;
-    age: number;
-}
 const App = () => {
-    const [users, setUsers] = useState<IUser[]>([
-        {
-            name: "Bijaya",
-            age: 25,
-        },
-        {
-            name: "Ram",
-            age: 25,
-        },
-    ]);
-
+    const { auth, authCheckState } = useContext(AuthContext)
     return (
-        <div>
-            <h1>Users list</h1>
-            <ul>
-                {users.map((user: IUser) => {
-                    return (
-                        <li key={user.name}>
-                            {user.name} is {user.age} years old
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
+        <Router>
+            <Suspense fallback={<><CircularProgress /></>}>
+                <Switch>
+                    <LoggedOutComponent />
+                    <LoggedInComponent />
+                </Switch>
+            </Suspense>
+        </Router>
     );
 };
 
