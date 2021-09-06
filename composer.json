@@ -11,6 +11,9 @@
         "laravel/framework": "^8.54",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "ext-curl": "*",
+        "cybersource/rest-client-php": "0.0.23",
+	    "firebase/php-jwt": "^5.0.0",
         "spatie/laravel-permission": "^5.1",
         "twilio/sdk": "^6.28"
     },
