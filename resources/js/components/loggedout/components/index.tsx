@@ -1,2 +1,3 @@
-export { default as Authenticate } from './auth/auth'
+export { default as Login } from './auth/login/login'
+export { default as SignUp } from './auth/signup/signup'
 export { default as Home } from './home/home'

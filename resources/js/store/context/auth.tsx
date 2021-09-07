@@ -44,8 +44,8 @@ const AuthContextProvider = (props: any): JSX.Element => {
             email: email,
             password: password
         }).then(res => {
-            const token = res.data.key;
-            if (res.data.key) {
+            const token = res.data.token;
+            if (res.data.token) {
                 localStorage.setItem("token", token)
                 localStorage.setItem('email', email)
                 authDispatch(authSuccess(email, token))
@@ -53,6 +53,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
                 authDispatch(authFail("failed to login"))
             }
         }).catch(err => {
+            console.log("error")
             authDispatch(authFail(err))
         })
     }

@@ -1,13 +1,16 @@
 import React from 'react'
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import { Authenticate, Home } from "./components"
+import { Copyright } from '../shared'
+import { Home, Login, SignUp } from "./components"
+import { CssBaseline } from "@mui/material"
 function Main() {
     return (
         <>
-            {/* <Switch> */}
-                <Route exact path="/" component={Home} />
-                <Route exact path="/auth" component={Authenticate} />
-            {/* </Switch> */}
+            <CssBaseline />
+            <Route exact path="/" component={Home} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/signup" component={SignUp} />
+            <Copyright />
         </>
     );
 }
