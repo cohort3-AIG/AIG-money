@@ -15,6 +15,7 @@ function Main() {
     return (
         <>
             <Box sx={{ display: 'flex' }}>
+                aaa
                 <SideBar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />

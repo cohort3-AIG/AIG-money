@@ -15,6 +15,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import { useHistory } from "react-router-dom"
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -89,7 +90,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  const history = useHistory()
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -154,7 +155,7 @@ export default function MiniDrawer() {
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={ () => {history.push("/wallet")} }>
             <ListItemIcon>
               <AccountBalanceWalletIcon />
             </ListItemIcon>

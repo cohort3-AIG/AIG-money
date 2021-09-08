@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Grid, LinearProgress, Avatar, Typography, Button, Box, Link, Paper, TextField } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { AuthContext } from '../../../../../store/context/auth'
@@ -16,7 +16,7 @@ const validationSchema = yup.object({
         .required('Password is required'),
 });
 const Login: React.FC = (): JSX.Element => {
-    const { login } = useContext(AuthContext)
+    const { auth, login } = useContext(AuthContext)
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -27,6 +27,9 @@ const Login: React.FC = (): JSX.Element => {
             login(values.email, values.password)
         },
     });
+    useEffect(() => {
+        console.log(auth)
+    })
     return (
         <Box sx={{ height: "85vh" }}>
             <Paper
