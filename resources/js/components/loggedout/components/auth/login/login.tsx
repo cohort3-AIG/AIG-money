@@ -1,90 +1,116 @@
 import React, { useContext } from 'react'
 import { Grid, LinearProgress, Avatar, Typography, Button, Box, Link, Paper, TextField } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Copyright } from "../../../../shared"
 import { AuthContext } from '../../../../../store/context/auth'
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 
-type Props = {
-    classes: any,
-    changeFormType: any,
-}
-interface IValues {
-
-    email: string,
-    password: string,
-}
+const validationSchema = yup.object({
+    email: yup
+        .string()
+        .email('Enter a valid email')
+        .required('Email is required'),
+    password: yup
+        .string()
+        .min(8, 'Password should be of minimum 8 characters length')
+        .required('Password is required'),
+});
 const Login: React.FC = (): JSX.Element => {
     const { login } = useContext(AuthContext)
+    const formik = useFormik({
+        initialValues: {
+            email: '',
+            password: '',
+        },
+        validationSchema: validationSchema,
+        onSubmit: (values) => {
+            login(values.email, values.password)
+        },
+    });
     return (
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-            <Box
-                // className={classes.paper}
+        <Box sx={{ height: "85vh" }}>
+            <Paper
                 sx={{
-                    display: "flex", flexDirection: 'column',
-                    alignItems: 'center',
-                }}
-            >
-                <Avatar
-                // className={classes.avatar}
-                >
-                    <LockOutlinedIcon />
-                </Avatar>
-                <Typography component="h1" variant="h5">
-                    Sign in
-                </Typography>
-                <form
-                // className={classes.form}
-                >
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        id="email"
-                        label="Email Address"
-                        name="email"
-                        type="email"
-                    />
+                    padding: 5,
+                    maxWidth: '500px',
+                    marginTop: "10%",
+                    marginX: "auto"
+                }}>
+                <Box
+                    // className={classes.paper}
+                    sx={{
+                        display: "flex", flexDirection: 'column',
+                        alignItems: 'center',
 
-                    <TextField
-                        variant="outlined"
-                        margin="normal"
-                        required
-                        fullWidth
-                        name="password"
-                        label="Password"
-                        type="password"
-                        id="password"
-                    />
-
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                    // className={classes.submit}
+                    }}
+                >
+                    <Avatar
+                        sx={{ background: "#3C9905" }}
                     >
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
                         Sign In
-                    </Button>
+                    </Typography>
+                    <form
+                        onSubmit={formik.handleSubmit}
+                    >
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="email"
+                            label="Email"
+                            name="email"
+                            type="email"
+                            value={formik.values.email}
+                            onChange={formik.handleChange}
+                            error={formik.touched.email && Boolean(formik.errors.email)}
+                            helperText={formik.touched.email && formik.errors.email}
+                        />
 
-                    <Grid container>
-                        <Grid item xs>
-                            <Link href="#" variant="body2">
-                                Forgot password
-                            </Link>
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            name="password"
+                            label="Password"
+                            type="password"
+                            id="password"
+                            value={formik.values.password}
+                            onChange={formik.handleChange}
+                            error={formik.touched.password && Boolean(formik.errors.password)}
+                            helperText={formik.touched.password && formik.errors.password}
+                        />
+
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                        // className={classes.submit}
+                        >
+                            Sign In
+                        </Button>
+
+                        <Grid container>
+                            <Grid item xs>
+                                <Link href="#" variant="body2">
+                                    Forgot password
+                                </Link>
+                            </Grid>
+                            <Grid item>
+                                <Link href="/signup" variant="body2">
+                                    Don't have an account? Sign Up
+                                </Link>
+                            </Grid>
                         </Grid>
-                        <Grid item>
-                            <Link href="#" variant="body2">
-                                Don't have an account? Sign Up
-                            </Link>
-                        </Grid>
-                    </Grid>
-                    <Box mt={5}>
-                        <Copyright />
-                    </Box>
-                </form>
-            </Box>
-        </Grid >
+                    </form>
+                </Box>
+            </Paper>
+        </Box>
     )
 }
 
