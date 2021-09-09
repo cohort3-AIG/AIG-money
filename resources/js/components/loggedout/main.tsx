@@ -8,8 +8,8 @@ function Main() {
         <>
             <CssBaseline />
             <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={SignUp} />
+            <Route path="/login" component={Login} />
+            <Route path="/signup" component={SignUp} />
             <Copyright />
         </>
     );

@@ -3,8 +3,6 @@ import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles'
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import { ListItemText, ListItemIcon, ListItem, IconButton, Divider, Badge, List, Toolbar, Box } from '@mui/material';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import CssBaseline from '@mui/material/CssBaseline'
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -15,7 +13,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import { useHistory } from "react-router-dom"
+import { useHistory, useRouteMatch } from "react-router-dom"
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -98,6 +96,7 @@ export default function MiniDrawer() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  let { url } = useRouteMatch()
 
   return (
     <Box>
@@ -149,41 +148,36 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem button>
+          <ListItem button onClick={() => { history.push(url) }}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
             <ListItemText primary="Home" />
           </ListItem>
-          <ListItem button onClick={ () => {history.push("/wallet")} }>
+          <ListItem button onClick={() => { history.push(`${url}/wallet`) }}>
             <ListItemIcon>
               <AccountBalanceWalletIcon />
             </ListItemIcon>
             <ListItemText primary="Wallet" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => { history.push(`${url}/beneficiaries`) }}>
             <ListItemIcon>
               <PersonIcon />
             </ListItemIcon>
             <ListItemText primary="Beneficiaries" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
             <ListItemIcon>
             </ListItemIcon>
             <ListItemText primary="Transaction" />
           </ListItem>
-          <ListItem button>
+          <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
             <ListItemIcon>
             </ListItemIcon>
             <ListItemText primary="Statistics" />
           </ListItem>
-          <ListItem button>
-            <ListItemIcon>
-              <NotificationsIcon />
-            </ListItemIcon>
-            <ListItemText primary="Notifications" />
-          </ListItem>
-          <ListItem button>
+          <Divider />
+          <ListItem button onClick={() => { history.push(`${url}/settings`) }}>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { Box, Typography, } from "@mui/material"
-import { SideBar, Dashboard } from "./components"
+import { SideBar, Dashboard, Wallet, Beneficiaries, Statistics, Transactions, Settings } from "./components"
 import { styled } from '@mui/material/styles'
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -12,14 +12,21 @@ const DrawerHeader = styled('div')(({ theme }) => ({
     ...theme.mixins.toolbar,
 }));
 function Main() {
+    let { path } = useRouteMatch()
     return (
         <>
             <Box sx={{ display: 'flex' }}>
-                aaa
                 <SideBar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
-                    <Route exact path="/console" component={Dashboard} />
+                    <Switch>
+                        <Route exact path={`${path}`} component={Dashboard} />
+                        <Route path={`${path}/wallet`} component={Wallet} />
+                        <Route path={`${path}/beneficiaries`} component={Beneficiaries} />
+                        <Route path={`${path}/statistics`} component={Statistics} />
+                        <Route path={`${path}/transactions`} component={Transactions} />
+                        <Route path={`${path}/settings`} component={Settings} />
+                    </Switch>
                 </Box>
             </Box>
         </>
