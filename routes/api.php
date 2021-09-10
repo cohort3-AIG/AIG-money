@@ -17,13 +17,13 @@ use App\Http\Controllers\Api\CybersourceController;
 
 
 
-
+Route::post('payment', [CybersourceController::class, 'cybersource_api']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    Route::post('payment', [CybersourceController::class, 'cybersource_api']);
+   
     Route::fallback(function () {
         return response()->json([
             'success' => false,
