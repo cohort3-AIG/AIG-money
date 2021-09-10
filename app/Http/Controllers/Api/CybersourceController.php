@@ -26,8 +26,20 @@ class CybersourceController extends BaseController {
 
         try {
             $validated = $this->validate( $request, [
-              
-                
+                'number' => ['required', 'int'],
+                'expiration_month' => ['required', 'numeric'],
+                'expiration_year' => ['required', 'int'],
+                'total_amount' => ['required', 'numeric'],
+                'currency' => ['required', 'string'],
+                'first_name' => ['required'],
+                'last_name' => ['required'],
+                'address1' => ['required'],
+                'locality' => ['required'],
+                'administrative_area' => ['required'],
+                'postal_code' => ['required', 'numeric'],
+                'country' => ['required'],
+                'email' => ['required', 'email'],
+                'phone_number' => ['required']
             ] );
         } catch ( ValidationException $validationException ) {
             return $this->sendError( $validationException->getMessage(), $validationException->errors() );
@@ -110,7 +122,7 @@ class CybersourceController extends BaseController {
         } catch ( ApiException $e ) {
             return $this->sendError( $e->getMessage(), $e->getResponseBody() );
         }
-        //  return $request;
+      
 
     }
 }
