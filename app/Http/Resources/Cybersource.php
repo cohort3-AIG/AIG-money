@@ -30,7 +30,7 @@ class Cybersource extends JsonResource
                 'responseCode' => $this['processorInformation']['responseCode'],
                 'avs' => [
                     'code' => $this['processorInformation']['avs']['code'],
-                    'codeRaw' => $this['processorInformation']['avs']['codeRaw']
+                    // 'codeRaw' => $this['processorInformation']['avs']['codeRaw']
                 ],
             ],
             'orderInformation' => [
