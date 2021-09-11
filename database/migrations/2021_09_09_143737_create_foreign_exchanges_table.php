@@ -13,8 +13,8 @@ class CreateForeignExchangesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('forex_id');
             $table->foreign('forex_id')->references('id')->on('countries')->onDelete('cascade');
-            $table->unsignedInteger('source_currency');
-            $table->unsignedInteger('destination_currency');
+            $table->string('source_currency');
+            $table->string('destination_currency');
             $table->unsignedInteger('rate');
             $table->string('country');
             $table->timestamps();   // updated_at and created_at are very applicable on this one.
