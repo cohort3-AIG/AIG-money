@@ -7,22 +7,18 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ForeignExchangeFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = ForeignExchange::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         return [
-            //
+            'forex_id' => $this->faker->randomNumber(1),
+            'source_currency' => $this->faker->name(),
+            'destination_currency' => $this->faker->name(),
+            'rate' => $this->faker->randomNumber(2),
+            'country' => $this->faker->name(),
+            'created_at' => $this->faker->dateTimeThisMonth(),
+            'updated_at' => $this->faker->dateTimeThisMonth(),
         ];
     }
 }

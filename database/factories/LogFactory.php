@@ -7,22 +7,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class LogFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Log::class;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array
-     */
     public function definition()
     {
         return [
-            //
+            'user_id' => $this->faker->randomNumber(1),
+            'description' => $this->faker->sentence,
+            'created_at' => $this->faker->dateTimeThisMonth(),
+            'updated_at' => $this->faker->dateTimeThisMonth(),
         ];
     }
 }
