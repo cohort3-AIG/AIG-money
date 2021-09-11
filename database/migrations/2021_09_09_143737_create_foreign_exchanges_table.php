@@ -36,5 +36,6 @@ class CreateForeignExchangesTable extends Migration
     // If 'A' holds a PK, and 'B', has a FK to A, and 'C' has a relationship with 'B'
     // Laravel understands that 'C' is automatically related to A and therefore there shouldn't be a direct
     // definition of a relationship between 'C' & 'A'
+    // 
 
 }
