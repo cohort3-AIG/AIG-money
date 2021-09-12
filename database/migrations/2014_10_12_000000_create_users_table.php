@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
             $table->string('middle_name');
             $table->string('last_name');
             $table->unsignedBigInteger('wallet_id')->unique();
-            $table->unsignedInteger('phone_number')->unique();
+            $table->integer('phone_number')->unique();
 //            $table->timestamp('email_verified_at')->nullable();
 //            $table->string('password');
 //            $table->rememberToken();
