@@ -12,6 +12,11 @@ class TransactionType extends Model
     /** disable TimeStamps on this model. */
     public $timestamps = false;
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'name',
+    ];
+
 
     // Eloquent relationship to handle the one2one relationship of 'transaction_charge ===>>> transaction_charges'
     public function transaction_charge() {

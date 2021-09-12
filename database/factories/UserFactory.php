@@ -8,16 +8,26 @@ use Illuminate\Support\Str;
 
 class UserFactory extends Factory
 {
+    /**
+     * The name of the factory's corresponding model.
+     *
+     * @var string
+     */
     protected $model = User::class;
 
+    /**
+     * Define the model's default state.
+     *
+     * @return array
+     */
     public function definition()
     {
         return [
-            'first_name' => $this->faker->name(),
-            'middle_name' => $this->faker->name(),
-            'last_name' => $this->faker->name(),
-            'wallet_id' => $this->faker->randomNumber(4),
-            'phone_number' => $this->faker->randomNumber(4),
+            'first_name' => $this->faker->firstName,
+//            'middle_name' => $this->faker->firstName,
+            'last_name' => $this->faker->lastName,
+            'wallet_id' => $this->faker->randomNumber(5),
+            'phone_number' => $this->faker->randomNumber(8),
             'created_at' => $this->faker->dateTimeThisMonth(),
             'updated_at' => $this->faker->dateTimeThisMonth(),
 

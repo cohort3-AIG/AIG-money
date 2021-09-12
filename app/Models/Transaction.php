@@ -11,6 +11,14 @@ class Transaction extends Model
     use HasFactory;
     public $timestamps = [ "created_at" ]; // enable only to created_at
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'user_id',
+        'amount',
+        'transaction_id',
+//        'transaction_category',
+    ];
+
 
     // Eloquent relationship to handle the one2Many relationship of 'user ===>>> transactions'
     public function user() {
