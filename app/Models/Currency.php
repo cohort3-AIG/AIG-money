@@ -12,6 +12,14 @@ class Currency extends Model
     /** disable TimeStamps on this model. */
     public $timestamps = false;
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'currency_id',
+        'code',
+        'full_name',
+        'country',
+    ];
+
     // m2m relationship
     public function countries() {
         // The 'currencies' table being in a m2m relationship with 'countries' must implement the hasMany() method

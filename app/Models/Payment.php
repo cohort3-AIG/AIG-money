@@ -9,4 +9,10 @@ class Payment extends Model
 {
     use HasFactory;
     public $timestamps = [ "created_at" ]; // enable only to created_at
+
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'payment_type_id',
+        'transaction_id',
+    ];
 }

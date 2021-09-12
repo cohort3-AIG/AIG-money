@@ -12,6 +12,12 @@ class Country extends Model
     /** disable TimeStamps on this model. */
     public $timestamps = false;
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'country_code',
+        'name',
+    ];
+
 
     // Eloquent relationship to handle the one2Many relationship of 'user ===>>> foreign_exchanges'
     public function foreign_exchanges() {
