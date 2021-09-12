@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Faker\Calculator\TCNo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -30,5 +29,12 @@ class Transaction extends Model
     public function transaction_category() {
         // The 'transactions' table being the one that's holding the FK to the 'transaction_categories' table, means that it implements the belongsTo() method
         return $this->belongsTo(TransactionCategory::class);     // THE ONE PART
+    }
+
+
+    // Eloquent relationship to handle the one2one relationship of 'transactions ===>>> transfers'
+    public function transfers() {
+        // The 'transactions' table being the one that's providing a PK to the 'transfers' table in the one2one relationship means that it takes on the hasOne() method
+        return $this->hasOne(Transfer::class);
     }
 }
