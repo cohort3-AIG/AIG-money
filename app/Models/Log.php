@@ -10,6 +10,11 @@ class Log extends Model
     use HasFactory;
     public $timestamps = [ "created_at" ]; // enable only to created_at
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'user_id',
+        'description',
+    ];
 
     // Eloquent relationship to handle the one2Many relationship of 'user ===>>> logs'
     public function user() {

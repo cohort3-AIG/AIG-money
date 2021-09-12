@@ -12,6 +12,13 @@ class Wallet extends Model
     /** disable TimeStamps on this model. */
     public $timestamps = false;
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'user_id',
+        'balance',
+        'wallet_number',
+    ];
+
     // Eloquent relationship to handle the one2one relationship of 'user <<==== wallet'
     public function user() {
         // The 'wallets' table being the one that's holding the FK to the 'users' table, means that it implements the belongsTo() method

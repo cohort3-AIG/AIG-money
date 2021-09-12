@@ -10,6 +10,14 @@ class Transfer extends Model
     use HasFactory;
     public $timestamps = [ "created_at" ]; // enable only to created_at
 
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'sender_id',
+        'payment_id',
+        'transaction_id',
+        'amount',
+    ];
+
 
     // Eloquent relationship to handle the one2Many relationship of 'user ===>>> transfers'
     public function user() {

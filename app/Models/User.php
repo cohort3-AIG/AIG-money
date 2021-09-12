@@ -8,7 +8,29 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     use HasFactory;
+
     public $timestamps = false;
+
+    /** The attributes that are mass assignable. @var string[] */
+    protected $fillable = [
+        'first_name',
+        'middle_name',
+        'last_name',
+        'wallet_id',
+        'phone_number',
+    ];
+
+    /** The attributes that should be hidden for serialization. @var array */
+    protected $hidden = [
+//        'password',
+//        'remember_token',
+    ];
+
+    /** The attributes that should be cast. @var array */
+    protected $casts = [
+//        'email_verified_at' => 'datetime',
+    ];
+
 
     // Eloquent relationship to handle the one2one relationship of 'user ===>>> agent'
     public function agent() {
