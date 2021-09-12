@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { Box, Typography, } from "@mui/material"
-import { SideBar, Dashboard, Wallet, Beneficiaries, Statistics, Transactions, Settings } from "./components"
+import { SideBar, Dashboard, Wallet, Beneficiaries, Statistics, Transactions, Settings, Wallet_Details } from "./components"
 import { styled } from '@mui/material/styles'
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
@@ -22,6 +22,7 @@ function Main() {
                     <Switch>
                         <Route exact path={`${path}`} component={Dashboard} />
                         <Route path={`${path}/wallet`} component={Wallet} />
+                        <Route path={`${path}/details`} component={Wallet_Details} />
                         <Route path={`${path}/beneficiaries`} component={Beneficiaries} />
                         <Route path={`${path}/statistics`} component={Statistics} />
                         <Route path={`${path}/transactions`} component={Transactions} />

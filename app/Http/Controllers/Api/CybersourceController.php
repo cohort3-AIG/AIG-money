@@ -21,6 +21,7 @@ use Cybersource\ApiException;
 use App\Http\Resources\Cybersource as CybersourceResource;
 use App\Http\Controllers\Api\BaseController;
 use App\Models\Wallet;
+use App\Models\User;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,7 +29,8 @@ class CybersourceController extends BaseController {
 
     function cybersource_api( Request $request ) {
 
-        $user = $request->user();
+        // $user = $request->user();
+        $user=User::find(1);
         $error_message = array();
 
         try {
@@ -37,7 +39,7 @@ class CybersourceController extends BaseController {
                 'expiration_month' => ['required', 'numeric'],
                 'expiration_year' => ['required', 'int'],
                 'total_amount' => ['required', 'numeric'],
-                'currency' => ['required', 'string'],
+                // 'currency' => ['required', 'string'],
                 'security_code'=>['required', 'numeric']
             ] );
 
@@ -98,20 +100,20 @@ class CybersourceController extends BaseController {
 
             $orderInformationAmountDetailsArr = [
                 'totalAmount' => $validated['total_amount'],
-                'currency' => 'USD'
+                'currency' => 'UGX'
             ];
             $orderInformationAmountDetails = new Ptsv2paymentsOrderInformationAmountDetails( $orderInformationAmountDetailsArr );
 
             $orderInformationBillToArr = [
-                'firstName' => 'John',
-                'lastName' => 'Doe',
-                'address1' => '1 Market St',
-                'locality' => 'san francisco',
-                'administrativeArea' => 'CA',
-                'postalCode' => '94105',
-                'country' => 'US',
-                'email' => 'lwangaaksam@gmail.com',
-                'phoneNumber' => '4158880000'
+                'firstName' => 'Egesa',
+                'lastName' => 'Ronald Leonard',
+                'address1' => 'Plot 2530 Ggaba rd',
+                'locality' => 'Kampala',
+                'administrativeArea' => 'Central Uganda ',
+                'postalCode' => '11442',
+                'country' => 'UG',
+                'email' => 'egesa@magezi.net',
+                'phoneNumber' => '+256782442375'
             ];
             $orderInformationBillTo = new Ptsv2paymentsOrderInformationBillTo( $orderInformationBillToArr );
             $orderInformationArr = [
