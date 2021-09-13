@@ -21,12 +21,12 @@ function Main() {
                     <DrawerHeader />
                     <Switch>
                         <Route exact path={`${path}`} component={Dashboard} />
-                        <Route path={`${path}/wallet`} component={Wallet} />
-                        <Route path={`${path}/details`} component={Wallet_Details} />
-                        <Route path={`${path}/beneficiaries`} component={Beneficiaries} />
-                        <Route path={`${path}/statistics`} component={Statistics} />
-                        <Route path={`${path}/transactions`} component={Transactions} />
-                        <Route path={`${path}/settings`} component={Settings} />
+                        <Route exact path={`${path}/wallet`} component={Wallet} />
+                        {/* <Route exact path={`${path}/details`} component={Wallet_Details} /> */}
+                        <Route exact path={`${path}/beneficiaries`} component={Beneficiaries} />
+                        <Route exact path={`${path}/statistics`} component={Statistics} />
+                        <Route exact path={`${path}/transactions`} component={Transactions} />
+                        <Route exact path={`${path}/settings`} component={Settings} />
                     </Switch>
                 </Box>
             </Box>

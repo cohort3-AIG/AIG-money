@@ -6,12 +6,18 @@ import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
 import { Button } from "@mui/material";
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { useHistory, useRouteMatch } from "react-router-dom"
+import { Wallet_Details } from "..";
+
 
 const useStyles = makeStyles((theme: any) => ({
   container: {
@@ -40,15 +46,16 @@ function generate(element: React.ReactElement) {
 
 export default function Wallet() {
   const classes = useStyles();
+  const [dense, setDense] = React.useState(false);
   const [age, setAge] = React.useState('');
+  const [formstatus, setFormStatus] = React.useState(false);
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
-  const history = useHistory();
-  let { url } = useRouteMatch();
+ 
   return (
-    <>
+    <Container component="main">
       <Typography variant="h4" gutterBottom mb={2}>
         Wallet
       </Typography>
@@ -73,7 +80,7 @@ export default function Wallet() {
                 mb={6}
                 mt={3} >
                 <Button variant="contained" color="primary" sx={{ fontSize: 20 }}
-                onClick={() => { history.push(`${url}details`) }}
+                onClick={() => { setFormStatus(true) }}
                 >
                   ADD MONEY
                 </Button>
@@ -147,18 +154,24 @@ export default function Wallet() {
           </Grid>
         </Grid>
         <Grid item xs={8}>
-          {/* <Paper className={classes.paper} elevation={3}> <List dense={dense}>
+          {!formstatus?
+          <Paper className={classes.paper} elevation={3}> <List dense={dense}>
               {generate(
                 <ListItem>
                   <ListItemText
                     primary="Single-line item"
-                    secondary={secondary ? 'Secondary text' : null}
+                    secondary='Secondary text'
                   />
                 </ListItem>,
               )}
-            </List></Paper> */}
+            </List></Paper> 
+            :
+            <Paper className={classes.paper} elevation={3}>
+              <Wallet_Details/>
+            </Paper>
+          }
         </Grid>
       </Grid>
-    </>
+    </Container>
   );
 }

@@ -54,7 +54,7 @@ const deposit = ()=>{
     locality:"Jinja",
     administrative_area: "kampala",
     postal_code :2121,
-    country:"UUganda",
+    country:"Uganda",
     email:"lwangaaksam@gmail.com" ,
     phone_number:"755677766",
     security_code:"231"
