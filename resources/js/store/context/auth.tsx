@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/auth'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
-import { REGISTER_URL, LOGIN_URL } from '../../config/settings'
+import { LOGIN_URL } from '../../config/settings'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -58,28 +58,6 @@ const AuthContextProvider = (props: any): JSX.Element => {
         })
     }
 
-    const signup = (username: string, email: string, password1: string, password2: string) => {
-        authDispatch(authStart())
-        axios.post(`${REGISTER_URL}`, {
-            username,
-            email,
-            password1,
-            password2
-        }).then(res => {
-            const token = res.data.key;
-            if (res.data.key) {
-                localStorage.setItem("token", token)
-                localStorage.setItem('username', username)
-                localStorage.setItem('email', email)
-                authDispatch(authSuccess(email, token))
-            } else {
-                authDispatch(authFail("failed to signup"))
-            }
-        }).catch(err => {
-            authDispatch(authFail(err))
-        })
-    }
-
     const logout = (): IAuthAction => {
 
         localStorage.removeItem('token')
@@ -95,6 +73,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
     }
 
     const authCheckState = () => {
+        authDispatch(authStart())
         const token: string = JSON.stringify(localStorage.getItem("token"))
         const email: string = JSON.stringify(localStorage.getItem('email'))
         if (token === undefined) {
@@ -105,7 +84,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
     }
 
     return (
-        <AuthContext.Provider value={{ auth, login, signup, logout, authCheckState }}>
+        <AuthContext.Provider value={{ auth, login, logout, authCheckState }}>
             {props.children}
         </AuthContext.Provider>
     )
