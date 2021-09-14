@@ -1,6 +1,9 @@
 export interface Register {
-    step: number,
+    step: number | null,
     phone: string | null,
+    phone_confirmed: boolean | null,
+    token: string | null,
+    wallet_created: boolean | null
 }
 export interface IRegister extends Register {
     error: string | null,

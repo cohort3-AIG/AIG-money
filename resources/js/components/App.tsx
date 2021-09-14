@@ -1,7 +1,7 @@
 import React, { lazy, Suspense, useContext } from "react";
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom'
 import { AuthContext } from '../store/context/auth'
-import { CircularProgress } from "@mui/material"
+import { CircularProgress, Typography } from "@mui/material"
 import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 import green from '@mui/material/colors/green';
 import LoggedInComponent from './loggedin/main'
@@ -22,18 +22,22 @@ const App = () => {
     authCheckState()
   }, []);
   useEffect(() => {
-    console.log(auth.loading)
+    console.log(auth)
   });
   return (
     <Router>
       <ThemeProvider theme={themeMui}>
         <Switch>
           <Route path="/console">
-            <LoggedInComponent />
+            {auth.token !== "null" ? (
+              <><LoggedInComponent /></>
+            ) : (
+              <><Redirect to="/login" /></>)
+            }
           </Route>
           <Route path="/">
             {/* {auth.token !== null ? <Redirect to="/console" /> : <LoggedOutComponent />} */}
-            <LoggedOutComponent/>
+            <LoggedOutComponent />
           </Route>
         </Switch>
       </ThemeProvider>

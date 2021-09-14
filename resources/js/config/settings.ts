@@ -5,7 +5,7 @@ let HOST_URL: string = "";
 let PAYMENT_URL="";
 if (DEBUG) {
   LOGIN_URL = "http://localhost:8000/api/login/";
-  REGISTER_URL = "http://localhost:8000/api/register/";
+  REGISTER_URL = "http://127.0.0.1:8000/api/register";
   HOST_URL = "http://localhost:8000/api/";
   PAYMENT_URL = "http://localhost:8000/api/payment";
 }

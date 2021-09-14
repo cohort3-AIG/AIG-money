@@ -1,27 +1,45 @@
+
 import React, { useContext, useEffect } from 'react'
-import { Box, Paper, Typography, TextField, Button, Grid } from "@mui/material"
-import { AuthContext } from '../../../../../../store/context/auth'
+import { Grid, LinearProgress, Avatar, Typography, Button, Box, Link, Paper, TextField } from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-
+import { useSnackbar } from 'notistack';
+import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
-    email: yup
+    phone: yup
         .string()
-        .email('Enter a valid phone number')
-        .required('Phone number is required'),
+        .min(10, 'Phone should be valid')
+        .required('Phone is required'),
+
 });
-export default function Phone() {
-    // const { auth, login } = useContext(AuthContext)
+const Login: React.FC = (): JSX.Element => {
+    const { register, phoneValidate } = useContext(RegisterContext)
+    const { enqueueSnackbar } = useSnackbar();
+    const history = useHistory()
     const formik = useFormik({
         initialValues: {
-            phone: '',
+            phone: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            // login(values.email, values.password)
-            console.log("value")
+            phoneValidate(values.phone)
         },
     });
+    useEffect(() => {
+        if (register.phone) {
+            enqueueSnackbar(register.success, {
+                variant: 'success',
+            })
+            history.push("/register/phone_confirm");
+        }
+        if (register.error) {
+            enqueueSnackbar(register.error, {
+                variant: 'error',
+            })
+        }
+    }, [register])
     return (
         <Box>
             <Paper
@@ -31,12 +49,18 @@ export default function Phone() {
                     marginX: "auto"
                 }}>
                 <Box
+                    // className={classes.paper}
                     sx={{
                         display: "flex", flexDirection: 'column',
                         alignItems: 'center',
 
                     }}
                 >
+                    <Avatar
+                        sx={{ background: "#3C9905" }}
+                    >
+                        <LockOutlinedIcon />
+                    </Avatar>
                     <Typography variant="h5">
                         Sign up for Enviar Dinheiro
                     </Typography>
@@ -68,6 +92,7 @@ export default function Phone() {
                             fullWidth
                             variant="contained"
                             color="primary"
+                        // className={classes.submit}
                         >
                             Next
                         </Button>
@@ -77,3 +102,6 @@ export default function Phone() {
         </Box>
     )
 }
+
+export default Login;
+

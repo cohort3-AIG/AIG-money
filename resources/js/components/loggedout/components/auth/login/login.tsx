@@ -4,7 +4,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { AuthContext } from '../../../../../store/context/auth'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-
+import { useSnackbar } from 'notistack';
+import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
     email: yup
         .string()
@@ -17,6 +18,8 @@ const validationSchema = yup.object({
 });
 const Login: React.FC = (): JSX.Element => {
     const { auth, login } = useContext(AuthContext)
+    const { enqueueSnackbar } = useSnackbar();
+    const history = useHistory()
     const formik = useFormik({
         initialValues: {
             email: '',
@@ -28,8 +31,18 @@ const Login: React.FC = (): JSX.Element => {
         },
     });
     useEffect(() => {
-        console.log(auth)
-    })
+        if (auth.token !== 'null' && auth.token !== null) {
+            enqueueSnackbar("Logged In Successfully", {
+                variant: 'success',
+            })
+            history.push("/console");
+        }
+        if (auth.error) {
+            enqueueSnackbar(auth.error, {
+                variant: 'error',
+            })
+        }
+    }, [auth])
     return (
         <Box sx={{ height: "85vh" }}>
             <Paper

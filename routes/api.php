@@ -5,15 +5,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CybersourceController;
 use App\Http\Controllers\Api\UserAPIController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\WalletController;
 
 Route::post('payment', [CybersourceController::class, 'cybersource_api']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
-Route::post('/verify', [AuthController::class, 'verify']);
+Route::post('/verify_phone', [AuthController::class, 'verify_phone']);
+Route::post('/phone', [AuthController::class, 'phone']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-
+    Route::post('/wallet_create', [WalletController::class, 'create']);
     Route::fallback(function () {
         return response()->json([
             'success' => false,

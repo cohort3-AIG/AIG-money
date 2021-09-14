@@ -8,9 +8,12 @@ export const initialState: IRegister = {
     error: null,
     success: null,
     loading: false,
+    phone_confirmed: false,
+    token: null,
+    wallet_created: false
 }
 
-const signUpStart = (state: IRegister, action: IRegisterAction) => {
+const registerStart = (state: IRegister, action: IRegisterAction) => {
     return updateObject(state, {
         loading: true,
     })
@@ -21,35 +24,56 @@ const signUpSuccess = (state: IRegister, action: IRegisterAction) => {
         error: null,
         success: action.success,
         loading: false,
+        token: action.token,
+        step: 2
     })
 }
 
-const authFail = (state: IRegister, action: IRegisterAction) => {
+const registerFail = (state: IRegister, action: IRegisterAction) => {
     return updateObject(state, {
         error: action.error,
         loading: false,
     })
 }
-
-const authLogout = (state: IRegister, action: IRegisterAction) => {
-    return updateObject(state, {
-        token: null,
-        email: null,
-        error: null,
+const phonePending = (state: IRegister, action: IRegisterAction): IRegister => {
+    return updateObject(
+        state, {
         loading: false,
+        success: action.success,
+        phone: action.phone
     })
 }
-
+const phoneConfirmed = (state: IRegister, action: IRegisterAction): IRegister => {
+    return updateObject(
+        state, {
+        loading: false,
+        success: action.success,
+        step: 1,
+        phone_confirmed: true
+    })
+}
+const walletCreated = (state: IRegister, action: IRegisterAction): IRegister => {
+    return updateObject(
+        state, {
+        loading: false,
+        success: action.success,
+        wallet_created: true,
+    })
+}
 const reducer = (state: IRegister, action: IRegisterAction): IRegister => {
     switch (action.type) {
-        // case actionTypes.AUTH_START:
-        //     return authStart(state, action)
-        // case actionTypes.AUTH_SUCCESS:
-        //     return authSuccess(state, action)
-        // case actionTypes.AUTH_FAIL:
-        //     return authFail(state, action)
-        // case actionTypes.AUTH_LOGOUT:
-        //     return authLogout(state, action)
+        case actionTypes.REGISTER_START:
+            return registerStart(state, action);
+        case actionTypes.PHONE_PENDING:
+            return phonePending(state, action)
+        case actionTypes.REGISTER_FAIL:
+            return registerFail(state, action)
+        case actionTypes.PHONE_CONFIRMED:
+            return phoneConfirmed(state, action)
+        case actionTypes.REGISTER_SUCCESS:
+            return signUpSuccess(state, action);
+        case actionTypes.WALLET_CREATED:
+            return walletCreated(state, action);
         default:
             return state
     }

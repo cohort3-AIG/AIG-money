@@ -13,11 +13,7 @@ class Wallet extends Model
     public $timestamps = false;
 
     /** The attributes that are mass assignable. @var string[] */
-    protected $fillable = [
-        'user_id',
-        'balance',
-        'wallet_number',
-    ];
+    protected $fillable = [];
 
     // Eloquent relationship to handle the one2one relationship of 'user <<==== wallet'
     public function user() {

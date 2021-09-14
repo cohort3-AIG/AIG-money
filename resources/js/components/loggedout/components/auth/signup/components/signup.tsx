@@ -1,31 +1,57 @@
-import React, { useContext } from 'react'
-import { AuthContext } from '../../../../../../store/context/auth'
+import React, { useContext, useEffect } from 'react'
+import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as yup from 'yup';
 import { Box, Avatar, Typography, Button, Link, Paper, TextField } from '@mui/material/';
+import { useSnackbar } from 'notistack';
+import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
     email: yup
         .string()
         .email('Enter a valid email')
         .required('Email is required'),
+    first_name: yup.string().required("Last Name Is Required"),
+    last_name: yup.string().required("Last Name Is Required"),
     password: yup
+        .string()
+        .min(8, 'Password should be of minimum 8 characters length')
+        .required('Password is required'),
+    confirm_password: yup
         .string()
         .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
 });
 export default function Signup() {
-    const { login } = useContext(AuthContext)
+    const { register, signup } = useContext(RegisterContext)
     const formik = useFormik({
         initialValues: {
             email: '',
             password: '',
+            confirm_password: "",
+            last_name: "",
+            first_name: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            login(values.email, values.password)
+            signup(values.email, values.first_name, values.last_name, values.password, values.confirm_password, register.phone_number)
         },
     });
+    const { enqueueSnackbar } = useSnackbar();
+    const history = useHistory()
+    useEffect(() => {
+        if (register.token) {
+            enqueueSnackbar(register.success, {
+                variant: 'success',
+            })
+            history.push("/register/wallet_create");
+        }
+        if (register.error) {
+            enqueueSnackbar(register.error, {
+                variant: 'error',
+            })
+        }
+    }, [register])
     return (
         <Box>
             <Paper
@@ -76,10 +102,10 @@ export default function Signup() {
                             label="First Name"
                             name="first_name"
                             type="text"
-                            value={formik.values.email}
+                            value={formik.values.first_name}
                             onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
+                            error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                            helperText={formik.touched.first_name && formik.errors.first_name}
                         />
                         <TextField
                             variant="outlined"
@@ -90,10 +116,10 @@ export default function Signup() {
                             label="Last Name"
                             name="last_name"
                             type="text"
-                            value={formik.values.email}
+                            value={formik.values.last_name}
                             onChange={formik.handleChange}
-                            error={formik.touched.email && Boolean(formik.errors.email)}
-                            helperText={formik.touched.email && formik.errors.email}
+                            error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                            helperText={formik.touched.last_name && formik.errors.last_name}
                         />
                         <TextField
                             variant="outlined"
@@ -118,10 +144,10 @@ export default function Signup() {
                             label="Confirm Password"
                             type="password"
                             id="confirm_password"
-                            value={formik.values.password}
+                            value={formik.values.confirm_password}
                             onChange={formik.handleChange}
-                            error={formik.touched.password && Boolean(formik.errors.password)}
-                            helperText={formik.touched.password && formik.errors.password}
+                            error={formik.touched.confirm_password && Boolean(formik.errors.confirm_password)}
+                            helperText={formik.touched.confirm_password && formik.errors.confirm_password}
                         />
 
                         <Button

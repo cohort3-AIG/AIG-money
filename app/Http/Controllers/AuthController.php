@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Twilio\Rest\Client;
@@ -24,7 +25,7 @@ class AuthController extends Controller
             ->verifications
             ->create($fields['phone_number'], "sms");
         return [
-            "verification" => $verification->status
+            "status" => $verification->status
         ];
     }
     public function verify_phone(Request $request)
@@ -39,15 +40,22 @@ class AuthController extends Controller
         $token = getenv("TWILIO_AUTH_TOKEN");
         $service_id = getenv('TWILIO_VERIFY_SERVICE');
         $twilio = new Client($sid, $token);
-        $verification_check = $twilio->verify->v2->services($service_id)
-            ->verificationChecks
-            ->create(
-                $fields['code'], // code
-                ["to" => $fields['phone_number']]
-            );
-        return [
-            "verification" => $verification_check->status
-        ];
+        try {
+            $verification_check = $twilio->verify->v2->services($service_id)
+                ->verificationChecks
+                ->create(
+                    $fields['code'], // code
+                    ["to" => $fields['phone_number']]
+                );
+            return [
+                "verification" => $verification_check->status
+            ];
+        } catch (Exception $e) {
+            $response =  [
+                'error' => "something went wrong",
+            ];
+            return response($response, 400);
+        }
     }
     public function register(Request $request)
     {
@@ -55,8 +63,8 @@ class AuthController extends Controller
             [
                 'first_name' => 'required|string',
                 'last_name' => 'required|string',
-                'email' => 'required|string|unique:users,email',
-                'phone_number' => "required|string",
+                'email' => 'required|email|unique:users,email',
+                'phone_number' => "required|string|unique:users,phone_number",
                 'password' => 'required|string|confirmed'
             ]
         );
@@ -69,13 +77,24 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
-        $sid = getenv("TWILIO_ACCOUNT_SID");
-        $token = getenv("TWILIO_AUTH_TOKEN");
-        $service_id = getenv('TWILIO_VERIFY_SERVICE');
-        $twilio = new Client($sid, $token);
-        $twilio->verify->v2->services($service_id)
-            ->verifications
-            ->create($user->phone_number, "sms");
+        // $sid = getenv("TWILIO_ACCOUNT_SID");
+        // $token = getenv("TWILIO_AUTH_TOKEN");
+        // $service_id = getenv('TWILIO_VERIFY_SERVICE');
+        // $twilio = new Client($sid, $token);
+        // $twilio->verify->v2->services($service_id)
+        //     ->verifications
+        //     ->create(
+        //         $user->email, // to
+        //         "email", // channel
+        //         [
+        //             "channelConfiguration" => [
+        //                 "substitutions" => [
+        //                     "username" => "Foo Bar"
+        //                 ]
+        //             ]
+        //         ]
+        //     );
+
         $response =  [
             'user' => $user,
             'token' => $token,

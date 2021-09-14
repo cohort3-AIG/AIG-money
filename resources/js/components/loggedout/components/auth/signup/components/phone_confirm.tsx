@@ -1,26 +1,41 @@
 import React, { useContext, useEffect } from 'react'
 import { Box, Paper, Typography, TextField, Button, Grid } from "@mui/material"
-import { AuthContext } from '../../../../../../store/context/auth'
+import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-
+import { useSnackbar } from 'notistack';
+import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
     code: yup
         .number()
         .required('Verification Code is required'),
 });
 export default function PhoneConfirm() {
-    // const { auth, login } = useContext(AuthContext)
+    const { register, phoneConfirmationCode } = useContext(RegisterContext)
+    const { enqueueSnackbar } = useSnackbar();
+    const history = useHistory()
     const formik = useFormik({
         initialValues: {
             code: '',
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            // login(values.email, values.password)
-            console.log("value")
+            phoneConfirmationCode(values.code, register.phone)
         },
     });
+    useEffect(() => {
+        if (register.phone_confirmed) {
+            enqueueSnackbar(register.success, {
+                variant: 'success',
+            })
+            history.push("/register/signup");
+        }
+        if (register.error) {
+            enqueueSnackbar(register.error, {
+                variant: 'error',
+            })
+        }
+    }, [register])
     return (
         <Box>
             <Paper
