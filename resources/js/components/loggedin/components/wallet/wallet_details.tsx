@@ -17,66 +17,41 @@ import Review from './Review';
 import { UserPayment } from './user_detail';
 import axios from 'axios'
 import { PAYMENT_URL } from '../../../../config/settings'
+import { StepIconProps } from '@mui/material/StepIcon';
+import { styled } from '@mui/material/styles';
+import Check from '@mui/icons-material/Check';
+import CircularProgress from '@mui/material/CircularProgress'
 
 const user = new UserPayment;
-const steps = ['Billing address', 'Payment details', 'Confirm'];
-
+const steps = ['Billing address', 'Payment details', 'Confirm']; 
 
 const initialFormValues = {
-  
-  firstname:user.firstname,
-  lastname:user.lastname,
-  address1:user.address1,
-  address2:user.address2,
+
+  firstname: user.firstname,
+  lastname: user.lastname,
+  address1: user.address1,
+  address2: user.address2,
   city: user.city,
-  state:user.state,
-  country:user.country,
-  code:user.code,
-  allow:user.allow,
-  cvv:user.cvv,
-  cardnumber:user.cardno,
-  date:"",
-  cardname:user.firstname + " " + user.lastname,
-  amount:user.amount
+  state: user.state,
+  country: user.country,
+  code: user.code,
+  allow: user.allow,
+  cvv: user.cvv,
+  cardnumber: user.cardno,
+  date: "",
+  cardname: user.firstname + " " + user.lastname,
+  amount: user.amount
 };
 const theme = createTheme();
-
-const deposit = ()=>{
-  axios.post(`${PAYMENT_URL}`, {
-    number :'4111111111111111',
-    expiration_month:12,
-    expiration_year :2021,
-    total_amount:10.0,
-    currency :"USD",
-    first_name:"lwangaaksam",
-    last_name:"aksam",
-    address1 :"Jinja",
-    locality:"Jinja",
-    administrative_area: "kampala",
-    postal_code :2121,
-    country:"Uganda",
-    email:"lwangaaksam@gmail.com" ,
-    phone_number:"755677766",
-    security_code:"231"
-  }).then(res => {
-    if(res.data.success===true)
-    console.log(res);
-    else{
-      console.log(res.data);
-    }
-
-  }).catch(err => {
-    console.log(err)
-  })
-}
 
 export default function Wallet_Details() {
 
   const [activeStep, setActiveStep] = React.useState(0);
   const [values, setValues] = React.useState(initialFormValues);
-  
+  const [isloading, setIsLoading] = React.useState(false)
 
-  const onChangeHandler = (e:any)=> {
+
+  const onChangeHandler = (e: any) => {
     const { name, value } = e.target;
     console.log(value);
     setValues({
@@ -85,22 +60,44 @@ export default function Wallet_Details() {
     });
     console.log(values);
   }
- 
-  function makepayment(){
-    deposit()
-    return(
-      <>
-    <Typography variant="h5" gutterBottom>
-               Payment Notification
-             </Typography>
-             <Typography variant="subtitle1">
-               Your wallet has been updated successfuly
-             </Typography>
-            </>
-          
-    )
+let token=localStorage.getItem("token");
+
+  function makepayment() {
+    setIsLoading(true)
+    axios.post(`${PAYMENT_URL}`, {
+      number: '4111111111111111',
+      expiration_month: 12,
+      expiration_year: 2021,
+      total_amount: 10.0,
+      currency: "USD",
+      first_name: "lwangaaksam",
+      last_name: "aksam",
+      address1: "Jinja",
+      locality: "Jinja",
+      administrative_area: "kampala",
+      postal_code: "2121",
+      country: "Uganda",
+      email: "lwangaaksam@gmail.com",
+      phone_number: "755677766",
+      security_code: "231",
+    },{headers: {'Authorization': `Bearer ${token}`}}
+    ).then(res => {
+      if (res.data.success === true) {
+        console.log(res);
+        setActiveStep(activeStep + 1);
+        setIsLoading(false);
+      }
+      else {
+        console.log(res.data);
+        setActiveStep(activeStep + 1);
+        setIsLoading(false);
+      }
+
+    }).catch(err => {
+      console.log(err)
+    })
   }
-  
+
   function getStepContent(step: number) {
     switch (step) {
       case 0:
@@ -220,7 +217,7 @@ export default function Wallet_Details() {
             </Grid>
           </React.Fragment>
         );
-  
+
       case 1:
         return (
           <React.Fragment>
@@ -234,7 +231,7 @@ export default function Wallet_Details() {
                   id="cardname"
                   name="cardname"
                   label="Name on card"
-                   value={values.cardname}
+                  value={values.cardname}
                   fullWidth
                   autoComplete="cc-name"
                   variant="standard"
@@ -305,15 +302,55 @@ export default function Wallet_Details() {
   }
 
   const handleNext = () => {
+    if (activeStep === steps.length - 1) {
+
+      return makepayment()
+    }
     setActiveStep(activeStep + 1);
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
   };
- 
+  const QontoStepIconRoot = styled('div')<{ ownerState: { active?: boolean } }>(
+    ({ theme, ownerState }) => ({
+      color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : '#eaeaf0',
+      display: 'flex',
+      height: 22,
+      alignItems: 'center',
+      ...(ownerState.active && {
+        color: '#3C9905',
+      }),
+      '& .QontoStepIcon-completedIcon': {
+        color: '#3C9905',
+        zIndex: 1,
+        fontSize: 18,
+      },
+      '& .QontoStepIcon-circle': {
+        width: 20,
+        height: 20,
+        borderRadius: '50%',
+        backgroundColor: 'currentColor',
+      },
+    }),
+  );
+  function QontoStepIcon(props: StepIconProps) {
+    const { active, completed, className } = props;
+
+    return (
+      <QontoStepIconRoot ownerState={{ active }} className={className}>
+        {completed ? (
+          <Check className="QontoStepIcon-completedIcon" />
+        ) : (
+          <div className="QontoStepIcon-circle" />
+        )}
+      </QontoStepIconRoot>
+    );
+  }
+
+
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <Container component="main" maxWidth="sm" sx={{ mb: 10 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
@@ -322,40 +359,49 @@ export default function Wallet_Details() {
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
+              <Step key={label} >
+                <StepLabel StepIconComponent={QontoStepIcon} >{label}</StepLabel>
               </Step>
             ))}
           </Stepper>
           <React.Fragment>
-            {activeStep === steps.length ? 
-             <React.Fragment>
-             {makepayment()}
-           </React.Fragment>
-            : (
+            {activeStep === steps.length ?
               <React.Fragment>
-                {getStepContent(activeStep)}
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  {activeStep !== 0 && (
-                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                      Back
-                    </Button>
-                  )}
-                  <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{ mt: 3, ml: 1 }}
-                    // disabled={!false}
-                  >
-                    {activeStep === steps.length - 1 ? 'Make a deposit' : 'Next'}
-                  </Button>
-                </Box>
+                <Typography variant="h5" gutterBottom>
+                  Payment Notification
+                </Typography>
+                <Typography variant="subtitle1">
+                  Your wallet has been updated successfuly
+                </Typography>
+
               </React.Fragment>
-            )}
+              : (
+                <React.Fragment>
+                  {getStepContent(activeStep)}
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    {activeStep !== 0 && (
+                      <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color="primary" disabled={isloading}  >
+                        Back
+                      </Button>
+                    )}
+                    {isloading ? <CircularProgress color="success" /> :
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNext}
+                        sx={{ mt: 3, ml: 1 }}
+                      // disabled={!false}
+                      >
+                        {activeStep === steps.length - 1 ? 'Make a deposit' : 'Next'}
+                      </Button>
+                    }
+                  </Box>
+                </React.Fragment>
+              )}
           </React.Fragment>
         </Paper>
 
       </Container>
-    </ThemeProvider>
+    </>
   );
 }

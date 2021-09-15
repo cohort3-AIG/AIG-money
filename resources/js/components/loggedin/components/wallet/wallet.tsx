@@ -1,4 +1,4 @@
-import React,{ MouseEvent } from "react";
+import React, { MouseEvent } from "react";
 import { makeStyles } from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
@@ -12,13 +12,35 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Wallet_Details } from "..";
+import axios from 'axios'
+import { HOST_URL } from '../../../../config/settings'
 
 
+let token = localStorage.getItem("token");
+let wallet_data = `${HOST_URL}wallet_get`;
+// let transaction_history =`${HOST_URL}/wallet`;
+// let amount_spent =`${HOST_URL}/wallet`
+
+const initialFormValues = {
+
+  first_name:"",
+  last_name: "",
+  address1: "",
+  address2: "",
+  city: "",
+  state_pronvince_region: "",
+  country: "",
+  code: "",
+  allow: false,
+  cvv: 0,
+  cardnumber: 0,
+  date: "",
+  cardname:0,
+  amount: 0
+};
 const useStyles = makeStyles((theme: any) => ({
   container: {
     display: "grid",
@@ -47,13 +69,46 @@ function generate(element: React.ReactElement) {
 export default function Wallet() {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
+  const [walletBalance, setWalletBalance] = React.useState(0);
   const [age, setAge] = React.useState('');
   const [formstatus, setFormStatus] = React.useState(false);
+
+
+
+  const requestOne = axios.get(wallet_data, { headers: { 'Authorization': `Bearer ${token}` }});
+  // const requestTwo = axios.get(transaction_history,{ headers: { 'Authorization': `Bearer ${token}` }});
+  // const requestThree = axios.get(amount_spent,{ headers: { 'Authorization': `Bearer ${token}` }});
+  let user_detail;
+
+
+  React.useEffect(() => {
+
+    axios
+      .all([requestOne])
+      .then(
+        axios.spread((...responses) => {
+          
+          if (responses[0].data.success === true){
+            user_detail = responses[0].data.data[0]
+            setWalletBalance(user_detail.balance)
+          }
+          // const responseTwo = responses[1];
+          // const responesThree = responses[2];
+
+          // use/access the results
+          // console.log(responseOne, responseTwo, responesThree);
+        })
+      )
+      .catch(errors => {
+        // react on errors.
+        console.error(errors);
+      });
+  }, [walletBalance])
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
- 
+
   return (
     <Container component="main">
       <Typography variant="h4" gutterBottom mb={2}>
@@ -70,7 +125,7 @@ export default function Wallet() {
                 color="secondary"
                 sx={{ fontWeight: 'bold' }}
               >
-                $ 100,000
+                $ {walletBalance}000000
               </Typography>
 
               <Stack direction="row"
@@ -80,7 +135,7 @@ export default function Wallet() {
                 mb={6}
                 mt={3} >
                 <Button variant="contained" color="primary" sx={{ fontSize: 20 }}
-                onClick={() => { setFormStatus(true) }}
+                  onClick={() => { setFormStatus(true) }}
                 >
                   ADD MONEY
                 </Button>
@@ -111,7 +166,7 @@ export default function Wallet() {
                     value={age}
                     onChange={handleChange}
                     displayEmpty
-                     variant="standard"
+                    variant="standard"
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="">
@@ -124,8 +179,8 @@ export default function Wallet() {
                 </FormControl>
               </Stack>
 
-              {[{ name: "Spent", amount: "901" }, { name: "Recevied", amount: "901" }].map((key,value) => (
-                
+              {[{ name: "Spent", amount: "901" }, { name: "Recevied", amount: "901" }].map((key, value) => (
+
                 <Stack direction="row"
                   justifyContent="space-between"
                   alignItems="center"
@@ -147,15 +202,15 @@ export default function Wallet() {
                     ${key.amount}
                   </Typography>
                 </Stack>
-                
+
               ))}
 
             </Paper>
           </Grid>
         </Grid>
         <Grid item xs={8}>
-          {!formstatus?
-          <Paper className={classes.paper} elevation={3}> <List dense={dense}>
+          {!formstatus ?
+            <Paper className={classes.paper} elevation={3}> <List dense={dense}>
               {generate(
                 <ListItem>
                   <ListItemText
@@ -164,10 +219,10 @@ export default function Wallet() {
                   />
                 </ListItem>,
               )}
-            </List></Paper> 
+            </List></Paper>
             :
             <Paper className={classes.paper} elevation={3}>
-              <Wallet_Details/>
+              <Wallet_Details />
             </Paper>
           }
         </Grid>
