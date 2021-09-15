@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\UserAPIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WalletController;
 
-Route::post('payment', [CybersourceController::class, 'cybersource_api']);
+
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/verify_phone', [AuthController::class, 'verify_phone']);
@@ -16,6 +16,10 @@ Route::post('/phone', [AuthController::class, 'phone']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::post('/wallet_create', [WalletController::class, 'create']);
+    Route::get('/wallet_get', [WalletController::class, 'get_wallet_data']);
+
+    Route::post('payment', [CybersourceController::class, 'cybersource_api']);
+
     Route::fallback(function () {
         return response()->json([
             'success' => false,

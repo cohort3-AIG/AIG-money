@@ -14,11 +14,16 @@ class CreateTransactionsTable extends Migration
             $table->unsignedInteger('amount');
             $table->unsignedBigInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedBigInteger('transaction_id');
-            $table->foreign('transaction_id')->references('id')->on('transaction_categories')->onDelete('cascade');
-//            $table->unsignedInteger('transaction_category');
-//            $table->foreign('transaction_category')->references('category')->on('transaction_categories')->onDelete('cascade');
-            $table->timestamps();
+            
+            $table->string('status');
+            $table->string('reconciliation_id');
+            $table->string('transaction_id');
+            $table->unsignedBigInteger('transaction_cat_id');
+            $table->foreign('transaction_cat_id')->references('id')->on('transaction_categories')->onDelete('cascade');
+            //table->unsignedInteger('transaction_category');
+             //$table->foreign('transaction_category')->references('category')->on('transaction_categories')->onDelete('cascade');
+            // $table->timestamps();
+            $table->timestamp('date')->useCurrent = true;
         });
     }
 

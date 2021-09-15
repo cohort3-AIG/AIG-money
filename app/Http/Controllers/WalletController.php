@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Wallet;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Api\BaseController;
 
-class WalletController extends Controller
+class WalletController extends BaseController
 {
     function create(Request $request)
     {
@@ -32,5 +33,17 @@ class WalletController extends Controller
         return [
             "wallet" => $wallet
         ];
+    }
+     function get_wallet_data(Request $request)
+    {
+            if ($request->isMethod('get')) {
+
+           
+            $user = $request->user();
+            if (isset($user)) {
+                return $this->sendResponse([$user->wallet], 'Successfully.');
+            }
+
+        }
     }
 }

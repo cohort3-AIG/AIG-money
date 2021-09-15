@@ -8,14 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
-    public $timestamps = [ "created_at" ]; // enable only to created_at
+    // public $timestamps = [ "created_at" ]; // enable only to created_at
+    public $timestamps = false;
 
     /** The attributes that are mass assignable. @var string[] */
     protected $fillable = [
         'user_id',
         'amount',
         'transaction_id',
-//        'transaction_category',
+      'transaction_cat_id',
+      'status',
+      'reconciliation_id'
     ];
 
 

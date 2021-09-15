@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class BaseController extends Controller
 {
@@ -14,9 +13,9 @@ class BaseController extends Controller
      */
     public function sendResponse($result = [], $message, $code = 200)
     {
-    	$response = [
+        $response = [
             'success' => true,
-            'data'    => $result,
+            'data' => $result,
             'message' => $message,
         ];
 
@@ -28,15 +27,15 @@ class BaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function sendError($error, $errorMessages = [], $code = 404)
+    public function sendError($error, $errorMessages = [], $code = 200)
     {
-    	$response = [
+        $response = [
             'success' => false,
             'data' => [],
             'message' => $error,
         ];
 
-        if(!empty($errorMessages)){
+        if (!empty($errorMessages)) {
             $response['data'] = $errorMessages;
         }
 
@@ -45,7 +44,7 @@ class BaseController extends Controller
 
     /**
      * Upload file.
-     * 
+     *
      * @param mixed $file
      * @param string $storePath
      * @return bool
@@ -57,7 +56,7 @@ class BaseController extends Controller
 
     /**
      * Destroy file.
-     * 
+     *
      * @param string $filePath
      * @return bool
      */
