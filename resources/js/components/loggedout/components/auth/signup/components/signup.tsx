@@ -3,7 +3,7 @@ import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import * as yup from 'yup';
-import { Box, Avatar, Typography, Button, Link, Paper, TextField } from '@mui/material/';
+import { Box, Avatar, Typography, Button, LinearProgress, Paper, TextField } from '@mui/material/';
 import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
 const validationSchema = yup.object({
@@ -11,16 +11,27 @@ const validationSchema = yup.object({
         .string()
         .email('Enter a valid email')
         .required('Email is required'),
-    first_name: yup.string().required("Last Name Is Required"),
-    last_name: yup.string().required("Last Name Is Required"),
+    first_name: yup
+        .string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required("Last Name Is Required"),
+    last_name: yup
+        .string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required("Last Name Is Required"),
     password: yup
         .string()
-        .min(8, 'Password should be of minimum 8 characters length')
+        .matches(
+            /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+            "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+        )
         .required('Password is required'),
     confirm_password: yup
         .string()
-        .min(8, 'Password should be of minimum 8 characters length')
-        .required('Password is required'),
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
+        .required('Confirm Password is required'),
 });
 export default function Signup() {
     const { register, signup } = useContext(RegisterContext)
@@ -47,9 +58,18 @@ export default function Signup() {
             history.push("/register/wallet_create");
         }
         if (register.error) {
-            enqueueSnackbar(register.error, {
-                variant: 'error',
-            })
+            try {
+                var errors: any = Object.values(JSON.parse(register.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(register.error, {
+                    variant: 'error',
+                })
+            }
         }
     }, [register])
     return (
@@ -152,18 +172,21 @@ export default function Signup() {
 
                         <Button
                             type="submit"
-                            variant="contained"
                             fullWidth
-                            sx={{
-                                color: "white",
-                                marginX: "auto"
-                            }}
+                            variant="contained"
+                            color="primary"
+                            disabled={register.loading}
                         >
                             Next
                         </Button>
+                        {register.loading && (
+                            <LinearProgress />
+                        )}
                     </form>
                 </Box>
             </Paper>
         </Box>
     )
 }
+
+

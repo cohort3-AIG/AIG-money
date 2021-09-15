@@ -4,6 +4,7 @@ import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
 import { LOGIN_URL } from '../../config/settings'
+import { ContactlessOutlined } from '@mui/icons-material'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -50,7 +51,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
                 localStorage.setItem('email', email)
                 authDispatch(authSuccess(email, token))
             } else {
-                authDispatch(authFail("failed to login"))
+                authDispatch(authFail(res.data.message))
             }
         }).catch(err => {
             console.log("error")

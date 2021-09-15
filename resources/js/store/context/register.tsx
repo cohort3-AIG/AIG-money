@@ -96,7 +96,11 @@ const RegisterContextProvider = (props: any): JSX.Element => {
                 localStorage.setItem('phone', phone)
             }
         }).catch(err => {
-            registerDispatch(registerFail("Something went wrong"))
+            if (err.response.data.errors) {
+                registerDispatch(registerFail(JSON.stringify(err.response.data.errors)))
+            } else {
+                registerDispatch(registerFail("Something Went wrong"))
+            }
         })
     }
     const phoneConfirmationCode = (code: number, phone_number: string) => {
@@ -111,7 +115,11 @@ const RegisterContextProvider = (props: any): JSX.Element => {
                 }
             })
             .catch(err => {
-                registerDispatch(registerFail("Phone Confirmation Failed"))
+                if (err.response.data.errors) {
+                    registerDispatch(registerFail(JSON.stringify(err.response.data.errors)))
+                } else {
+                    registerDispatch(registerFail("Phone Confirmation Failed"))
+                }
             })
     }
     const signup = (email: string, first_name: string, last_name: string, password: string, password_confirmation: string, phone_number: string) => {
@@ -129,8 +137,15 @@ const RegisterContextProvider = (props: any): JSX.Element => {
             localStorage.setItem('email', email)
             registerDispatch(registerSuccess("Account Created Successfully", res.data.token))
         }).catch(err => {
-            // console.log(err)
-            registerDispatch(registerFail("something went wrong"))
+            if (err.response.data.errors) {
+                registerDispatch(registerFail(JSON.stringify(err.response.data.errors)))
+            } else {
+                if (err.response.data.errors) {
+                    registerDispatch(registerFail(JSON.stringify(err.response.data.errors)))
+                } else {
+                    registerDispatch(registerFail("Something Went wrong"))
+                }
+            }
         })
     }
     const create_wallet = (nationality: string, address_line_1: string, address_line_2: string, city_town_village: string, state_pronvince_region: string, postal_code: number) => {

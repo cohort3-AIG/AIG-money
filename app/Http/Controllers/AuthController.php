@@ -138,11 +138,10 @@ class AuthController extends Controller
                 'password' => 'required|string'
             ]
         );
-
         $user = User::where('email', $fields['email'])->first();
         if (!$user || !Hash::check($fields['password'], $user->password)) {
             return response([
-                'message' => 'Bad creds'
+                'message' => 'Invalid email or password'
             ]);
         }
         $token = $user->createToken('myapptoken')->plainTextToken;

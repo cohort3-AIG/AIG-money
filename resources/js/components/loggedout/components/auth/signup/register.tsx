@@ -14,6 +14,7 @@ import PhoneConfirm from './components/phone_confirm';
 import WalletCreate from './components/wallet_create';
 import EmailConfirm from './components/email_confirm';
 import { RegisterContext } from '../../../../../store/context/register';
+import { useHistory } from 'react-router-dom';
 const QontoConnector = styled(StepConnector)(({ theme }) => ({
     [`&.${stepConnectorClasses.alternativeLabel}`]: {
         top: 10,
@@ -150,6 +151,7 @@ const steps = ['Mobile Number', 'Create User', 'Create Wallet'];
 export default function Register() {
     let { path } = useRouteMatch()
     const { register } = useContext(RegisterContext);
+    const history = useHistory()
     return (
         <Box sx={{ minHeight: "95vh" }}>
             <AppBar position="static" color="inherit">
@@ -158,7 +160,7 @@ export default function Register() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Enviar Dinheiro
                     </Typography>
-                    <Button >Login</Button>
+                    <Button onClick={() => { history.push('/login') }}>Login</Button>
                     <Box sx={{ flexGrow: 1 }}></Box>
                 </Toolbar>
             </AppBar>
@@ -182,6 +184,6 @@ export default function Register() {
                     ))}
                 </Stepper>
             </Stack>
-        </Box>
+        </Box >
     );
 }

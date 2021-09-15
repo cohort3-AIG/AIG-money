@@ -13,11 +13,10 @@ const validationSchema = yup.object({
         .required('Email is required'),
     password: yup
         .string()
-        .min(8, 'Password should be of minimum 8 characters length')
         .required('Password is required'),
 });
 const Login: React.FC = (): JSX.Element => {
-    const { auth, login } = useContext(AuthContext)
+    const { auth, login } = useContext(AuthContext);
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory()
     const formik = useFormik({
@@ -106,11 +105,13 @@ const Login: React.FC = (): JSX.Element => {
                             fullWidth
                             variant="contained"
                             color="primary"
-                        // className={classes.submit}
+                            disabled={auth.loading}
                         >
                             Sign In
                         </Button>
-
+                        {auth.loading && (
+                            <LinearProgress />
+                        )}
                         <Grid container>
                             <Grid item xs>
                                 <Link href="#" variant="body2">
@@ -118,7 +119,7 @@ const Login: React.FC = (): JSX.Element => {
                                 </Link>
                             </Grid>
                             <Grid item>
-                                <Link href="/signup" variant="body2">
+                                <Link href="/register" variant="body2">
                                     Don't have an account? Sign Up
                                 </Link>
                             </Grid>

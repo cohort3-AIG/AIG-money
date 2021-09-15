@@ -10,7 +10,7 @@ ReactDOM.render(
     <React.StrictMode>
         {/* <ThemeContextProvider> */}
         <AuthContextProvider>
-            <SnackbarProvider maxSnack={3}>
+            <SnackbarProvider maxSnack={5}>
                 <App />
             </SnackbarProvider>
         </AuthContextProvider>

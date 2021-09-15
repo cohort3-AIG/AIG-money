@@ -1,19 +1,15 @@
-import React,{ MouseEvent } from "react";
+import React from "react";
 import { makeStyles } from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { Wallet_Details } from "..";
@@ -53,7 +49,7 @@ export default function Wallet() {
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
- 
+
   return (
     <Container component="main">
       <Typography variant="h4" gutterBottom mb={2}>
@@ -80,7 +76,7 @@ export default function Wallet() {
                 mb={6}
                 mt={3} >
                 <Button variant="contained" color="primary" sx={{ fontSize: 20 }}
-                onClick={() => { setFormStatus(true) }}
+                  onClick={() => { setFormStatus(true) }}
                 >
                   ADD MONEY
                 </Button>
@@ -111,7 +107,7 @@ export default function Wallet() {
                     value={age}
                     onChange={handleChange}
                     displayEmpty
-                     variant="standard"
+                    variant="standard"
                     inputProps={{ 'aria-label': 'Without label' }}
                   >
                     <MenuItem value="">
@@ -124,8 +120,8 @@ export default function Wallet() {
                 </FormControl>
               </Stack>
 
-              {[{ name: "Spent", amount: "901" }, { name: "Recevied", amount: "901" }].map((key,value) => (
-                
+              {[{ name: "Spent", amount: "901" }, { name: "Recevied", amount: "901" }].map((key, value) => (
+
                 <Stack direction="row"
                   justifyContent="space-between"
                   alignItems="center"
@@ -147,15 +143,15 @@ export default function Wallet() {
                     ${key.amount}
                   </Typography>
                 </Stack>
-                
+
               ))}
 
             </Paper>
           </Grid>
         </Grid>
         <Grid item xs={8}>
-          {!formstatus?
-          <Paper className={classes.paper} elevation={3}> <List dense={dense}>
+          {!formstatus ?
+            <Paper className={classes.paper} elevation={3}> <List dense={dense}>
               {generate(
                 <ListItem>
                   <ListItemText
@@ -164,10 +160,10 @@ export default function Wallet() {
                   />
                 </ListItem>,
               )}
-            </List></Paper> 
+            </List></Paper>
             :
             <Paper className={classes.paper} elevation={3}>
-              <Wallet_Details/>
+              <Wallet_Details />
             </Paper>
           }
         </Grid>

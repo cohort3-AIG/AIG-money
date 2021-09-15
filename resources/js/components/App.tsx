@@ -21,9 +21,7 @@ const App = () => {
   useEffect(() => {
     authCheckState()
   }, []);
-  useEffect(() => {
-    console.log(auth)
-  });
+  console.log(auth)
   return (
     <Router>
       <ThemeProvider theme={themeMui}>
@@ -36,7 +34,6 @@ const App = () => {
             }
           </Route>
           <Route path="/">
-            {/* {auth.token !== null ? <Redirect to="/console" /> : <LoggedOutComponent />} */}
             <LoggedOutComponent />
           </Route>
         </Switch>
