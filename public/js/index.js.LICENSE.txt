@@ -4,8 +4,6 @@ object-assign
 @license MIT
 */
 
-/*! countries-list v2.6.1 by Annexare | MIT */
-
 /**
  * A better abstraction over CSS.
  *
