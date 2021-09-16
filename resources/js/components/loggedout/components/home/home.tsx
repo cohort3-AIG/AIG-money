@@ -107,7 +107,7 @@ export default function Home() {
 
                         <Stack spacing={2} direction="row" sx={{ marginRight: 5 }}>
                             <Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>
-                            <Button onClick={() => { history.push('signup') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>
+                            <Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>
                         </Stack>
 
 

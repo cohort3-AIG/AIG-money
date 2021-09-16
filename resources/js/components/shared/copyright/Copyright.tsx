@@ -1,12 +1,13 @@
 import React from 'react';
-import { Typography, Link } from '@mui/material'
+import Link from '@mui/material/Link'
+import Typography from '@mui/material/Typography'
 const Copyright = () => {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
             {'Copyright © '}
             <Link color="inherit" href="#">
-                aigwallet.com
-      </Link>{' '}
+            Enviar Dinheiro
+            </Link>{' '}
             {new Date().getFullYear()}
             {'.'}
         </Typography>

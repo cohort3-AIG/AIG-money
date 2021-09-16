@@ -1,13 +1,15 @@
 import React, { useContext, useEffect } from 'react'
-import { Box, Paper, Typography, TextField, Button, Grid } from "@mui/material"
+import { Box, Paper, Typography, TextField, Button, LinearProgress } from "@mui/material"
 import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
+
 const validationSchema = yup.object({
     code: yup
-        .number()
+        .string()
+        .matches(/^[0-9]{6}$/, "Code is invalid")
         .required('Verification Code is required'),
 });
 export default function PhoneConfirm() {
@@ -31,9 +33,18 @@ export default function PhoneConfirm() {
             history.push("/register/signup");
         }
         if (register.error) {
-            enqueueSnackbar(register.error, {
-                variant: 'error',
-            })
+            try {
+                var errors: any = Object.values(JSON.parse(register.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(register.error, {
+                    variant: 'error',
+                })
+            }
         }
     }, [register])
     return (
@@ -65,7 +76,8 @@ export default function PhoneConfirm() {
                             id="code"
                             label="Code"
                             name="code"
-                            type="number"
+                            type="text"
+                            onBlur={formik.handleBlur}
                             value={formik.values.code}
                             onChange={formik.handleChange}
                             error={formik.touched.code && Boolean(formik.errors.code)}
@@ -76,9 +88,13 @@ export default function PhoneConfirm() {
                             fullWidth
                             variant="contained"
                             color="primary"
+                            disabled={register.loading}
                         >
                             Next
                         </Button>
+                        {register.loading && (
+                            <LinearProgress />
+                        )}
                     </form>
                 </Box>
             </Paper>

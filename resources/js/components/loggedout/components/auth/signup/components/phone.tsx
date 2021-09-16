@@ -1,16 +1,17 @@
 
 import React, { useContext, useEffect } from 'react'
-import { Grid, LinearProgress, Avatar, Typography, Button, Box, Link, Paper, TextField } from '@mui/material'
+import { LinearProgress, Avatar, Typography, Button, Box, Paper, TextField } from '@mui/material'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom";
+import "yup-phone";
 const validationSchema = yup.object({
     phone: yup
         .string()
-        .min(10, 'Phone should be valid')
+        .phone()
         .required('Phone is required'),
 
 });
@@ -35,9 +36,18 @@ const Login: React.FC = (): JSX.Element => {
             history.push("/register/phone_confirm");
         }
         if (register.error) {
-            enqueueSnackbar(register.error, {
-                variant: 'error',
-            })
+            try {
+                var errors: any = Object.values(JSON.parse(register.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(register.error, {
+                    variant: 'error',
+                })
+            }
         }
     }, [register])
     return (
@@ -49,7 +59,6 @@ const Login: React.FC = (): JSX.Element => {
                     marginX: "auto"
                 }}>
                 <Box
-                    // className={classes.paper}
                     sx={{
                         display: "flex", flexDirection: 'column',
                         alignItems: 'center',
@@ -78,6 +87,7 @@ const Login: React.FC = (): JSX.Element => {
                             id="phone"
                             label="Phone"
                             name="phone"
+                            placeholder="eg... +18884521505"
                             type="text"
                             value={formik.values.phone}
                             onChange={formik.handleChange}
@@ -92,10 +102,13 @@ const Login: React.FC = (): JSX.Element => {
                             fullWidth
                             variant="contained"
                             color="primary"
-                        // className={classes.submit}
+                            disabled={register.loading}
                         >
                             Next
                         </Button>
+                        {register.loading && (
+                            <LinearProgress />
+                        )}
                     </form>
                 </Box>
             </Paper>

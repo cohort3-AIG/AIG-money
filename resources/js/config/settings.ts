@@ -1,8 +1,8 @@
 let DEBUG: boolean = true
-let LOGIN_URL: string = "";
-let REGISTER_URL: string = "";
-let HOST_URL: string = "";
-let PAYMENT_URL="";
+let LOGIN_URL: string = "https:ed.asteriskint.group/api/login/";
+let REGISTER_URL: string = "https:ed.asteriskint.group/api/register/";
+let HOST_URL: string = "https:ed.asteriskint.group/api/";
+let PAYMENT_URL="https:ed.asteriskint.group/api/payment/";
 if (DEBUG) {
   LOGIN_URL = "http://localhost:8000/api/login/";
   REGISTER_URL = "http://127.0.0.1:8000/api/register";

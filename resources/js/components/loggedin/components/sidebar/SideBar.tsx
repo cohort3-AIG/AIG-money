@@ -14,6 +14,8 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import PersonIcon from '@mui/icons-material/Person';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useHistory, useRouteMatch } from "react-router-dom"
+import { AuthContext } from "../../../../store/context/auth"
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -97,7 +99,7 @@ export default function MiniDrawer() {
     setOpen(false);
   };
   let { url } = useRouteMatch()
-
+  const { logout } = React.useContext(AuthContext)
   return (
     <Box>
       <CssBaseline />
@@ -182,6 +184,16 @@ export default function MiniDrawer() {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary="Setting" />
+          </ListItem>
+          <ListItem button onClick={() => {
+            logout()
+            history.push('/')
+            window.location.reload()
+          }}>
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Drawer>

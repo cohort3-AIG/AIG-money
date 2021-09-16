@@ -2,14 +2,11 @@ import React, { useContext, useEffect } from 'react'
 import { RegisterContext } from '../../../../../../store/context/register'
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Box, Avatar, Typography, Button, Checkbox, Paper, TextField, FormControlLabel, FormGroup, Autocomplete } from '@mui/material/';
+import { Box, Avatar, Typography, Button, Checkbox, Paper, TextField, FormControlLabel, FormGroup, Autocomplete, LinearProgress } from '@mui/material/';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
-import { countries } from "countries-list"
+import { countries } from "../../../../../shared/countries/countries"
 const validationSchema = yup.object({
     postal_code: yup
         .number()
@@ -25,9 +22,10 @@ const validationSchema = yup.object({
     address_line_1: yup
         .string()
         .required("Address Line 1 is required"),
-    nationality: yup
-        .string()
-        .required("Nationality is required"),
+    terms: yup
+        .bool()
+        .oneOf([true], 'Field must be checked')
+        .required("To create account you must agree to terms and conditions")
 });
 export default function WalletCreate() {
     const { register, create_wallet } = useContext(RegisterContext)
@@ -40,11 +38,11 @@ export default function WalletCreate() {
             city_town_village: "",
             address_line_2: "",
             address_line_1: "",
-            nationality: "",
+            terms: false,
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            create_wallet(values.nationality, values.address_line_1, values.address_line_2, values.city_town_village, values.state_province_region, values.postal_code);
+            create_wallet(inputValue, values.address_line_1, values.address_line_2, values.city_town_village, values.state_province_region, values.postal_code);
         },
     });
     useEffect(() => {
@@ -55,12 +53,28 @@ export default function WalletCreate() {
             history.push("/console");
         }
         if (register.error) {
-            enqueueSnackbar(register.error, {
-                variant: 'error',
-            })
+            try {
+                var errors: any = Object.values(JSON.parse(register.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(register.error, {
+                    variant: 'error',
+                })
+            }
         }
     }, [register])
-    const countries_label = Object.values(countries).map(element => { return { label: element.name } })
+    const [value, setValue] = React.useState();
+    const [inputValue, setInputValue] = React.useState();
+    React.useEffect(() => {
+        console.log("value", value);
+    }, [value]);
+    React.useEffect(() => {
+        console.log("inputValue", inputValue);
+    }, [inputValue]);
     return (
         <Box>
             <Paper
@@ -87,35 +101,46 @@ export default function WalletCreate() {
                     <form
                         onSubmit={formik.handleSubmit}
                     >
-                        {/* <Autocomplete
-                            disablePortal
-                            options={countries_label}
-                            sx={{ marginY: 2 }}
-                            renderInput={(params) => <TextField {...params}
-                                label="Nationality"
-                                fullWidth
-                                required
-                                name="nationality"
-                                id="nationality"
-                                value={formik.values.nationality}
-                                onChange={formik.handleChange}
-                                error={formik.touched.nationality && Boolean(formik.errors.nationality)}
-                                helperText={formik.touched.nationality && formik.errors.nationality}
-                            />}
-                        /> */}
-                        <TextField
-                            label="Nationality"
-                            fullWidth
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            name="nationality"
+                        <Autocomplete
                             id="nationality"
-                            type="text"
-                            value={formik.values.nationality}
-                            onChange={formik.handleChange}
-                            error={formik.touched.nationality && Boolean(formik.errors.nationality)}
-                            helperText={formik.touched.nationality && formik.errors.nationality}
+                            options={countries}
+                            autoHighlight
+                            getOptionLabel={(option) => option.label}
+                            value={value}
+                            onChange={(event: any, newValue: any) => {
+                                setValue(newValue);
+                            }}
+                            inputValue={inputValue}
+                            onInputChange={(event: any, newInputValue: any) => {
+                                setInputValue(newInputValue);
+                            }}
+                            renderOption={(props, option) => (
+                                <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                                    <img
+                                        loading="lazy"
+                                        width="20"
+                                        src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
+                                        srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
+                                        alt=""
+                                    />
+                                    {option.label}
+                                </Box>
+                            )}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Nationality"
+                                    fullWidth
+                                    required
+                                    variant="outlined"
+                                    margin="normal"
+                                    name="nationality"
+                                    inputProps={{
+                                        ...params.inputProps,
+                                        autoComplete: 'new-password', // disable autocomplete and autofill
+                                    }}
+                                />
+                            )}
                         />
                         <TextField
                             variant="outlined"
@@ -188,7 +213,13 @@ export default function WalletCreate() {
                         />
                         <FormGroup>
                             <FormControlLabel
-                                control={<Checkbox color="primary" />}
+                                control={<Checkbox
+                                    color="primary"
+                                    id="terms"
+                                    name="terms"
+                                    value={formik.values.terms}
+                                    onChange={formik.handleChange}
+                                />}
                                 label="
                                 I confirm that I have read, consent and agree to Enviar Dinheiro's User Agreement and Privacy Statement, and I am of legal age."
                             />
@@ -201,9 +232,13 @@ export default function WalletCreate() {
                                 color: "white",
                                 marginX: "auto"
                             }}
+                            disabled={register.loading}
                         >
                             Create Account
                         </Button>
+                        {register.loading && (
+                            <LinearProgress />
+                        )}
                     </form>
                 </Box>
             </Paper>
