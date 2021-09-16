@@ -14,82 +14,81 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Review from './Review';
-import { UserPayment } from './user_detail';
 import axios from 'axios'
 import { PAYMENT_URL } from '../../../../config/settings'
 import { StepIconProps } from '@mui/material/StepIcon';
 import { styled } from '@mui/material/styles';
 import Check from '@mui/icons-material/Check';
 import CircularProgress from '@mui/material/CircularProgress'
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
 
-const user = new UserPayment;
-const steps = ['Billing address', 'Payment details', 'Confirm']; 
+const steps = ['Billing address', 'Payment details', 'Confirm'];
 
-const initialFormValues = {
 
-  firstname: user.firstname,
-  lastname: user.lastname,
-  address1: user.address1,
-  address2: user.address2,
-  city: user.city,
-  state: user.state,
-  country: user.country,
-  code: user.code,
-  allow: user.allow,
-  cvv: user.cvv,
-  cardnumber: user.cardno,
-  date: "",
-  cardname: user.firstname + " " + user.lastname,
-  amount: user.amount
-};
 const theme = createTheme();
 
-export default function Wallet_Details() {
-
+export default function Wallet_Details(props: any) {
+  const user = props.user_detail;
+  user.cardname = user.last_name+" "+user.first_name;
+  user.cardnumber = "";
+  user.amount = 0;
+  user.date = new Date();
+  user.cvv = "";
+  console.log(user);
   const [activeStep, setActiveStep] = React.useState(0);
-  const [values, setValues] = React.useState(initialFormValues);
-  const [isloading, setIsLoading] = React.useState(false)
+  const [values, setValues] = React.useState(user);
+  const [isloading, setIsLoading] = React.useState(false);
+  const [isempty, setIsEmpty] = React.useState(false);
+  const [errors, setErrors] = React.useState({} as any);
 
 
   const onChangeHandler = (e: any) => {
     const { name, value } = e.target;
-    console.log(value);
+
     setValues({
       ...values,
       [name]: value
     });
-    console.log(values);
+
   }
-let token=localStorage.getItem("token");
+  let token = localStorage.getItem("token");
 
   function makepayment() {
     setIsLoading(true)
     axios.post(`${PAYMENT_URL}`, {
-      number: '4111111111111111',
-      expiration_month: 12,
-      expiration_year: 2021,
-      total_amount: 10.0,
-      currency: "USD",
-      first_name: "lwangaaksam",
-      last_name: "aksam",
-      address1: "Jinja",
-      locality: "Jinja",
-      administrative_area: "kampala",
-      postal_code: "2121",
-      country: "Uganda",
+      number:values.cardnumber,
+      expiration_month: (values.date.getMonth() + 1) < 10 ? "0" + (values.date.getMonth() + 1) : (values.date.getMonth() + 1),
+      expiration_year: values.date.getFullYear(),
+      total_amount:parseFloat(values.amount),
+      // currency: "USD",
+      first_name: values.first_name,
+      last_name: values.last_name,
+      address1: values.address_line_1,
+      address2: values.address_line_2,
+      // locality: "Jinja",
+      // administrative_area: "kampala",
+      postal_code: values.postal_code.toString(),
+      // country: values.nationality
+      country:"Uganda",
       email: "lwangaaksam@gmail.com",
-      phone_number: "755677766",
-      security_code: "231",
-    },{headers: {'Authorization': `Bearer ${token}`}}
+      phone_number: "0755677766",
+      security_code: values.cvv,
+    }, { headers: { 'Authorization': `Bearer ${token}` } }
     ).then(res => {
       if (res.data.success === true) {
         console.log(res);
         setActiveStep(activeStep + 1);
         setIsLoading(false);
+        location.reload();
+
       }
       else {
         console.log(res.data);
-        setActiveStep(activeStep + 1);
+        // setActiveStep(activeStep + 1);
+        console.log(user)
         setIsLoading(false);
       }
 
@@ -103,17 +102,17 @@ let token=localStorage.getItem("token");
       case 0:
         return (
           <React.Fragment>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom noWrap>
               Billing address
             </Typography>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} >
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   id="firstname"
                   name="firstname"
                   label="First name"
-                  value={values.firstname}
+                  value={values.first_name}
                   fullWidth
                   autoComplete="given-name"
                   variant="standard"
@@ -128,30 +127,30 @@ let token=localStorage.getItem("token");
                   label="Last name"
                   fullWidth
                   autoComplete="family-name"
-                  value={values.lastname}
+                  value={values.last_name}
                   variant="standard"
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   id="address1"
                   name="address1"
                   label="Address line 1"
                   fullWidth
-                  value={values.address1}
+                  value={values.address_line_1}
                   autoComplete="shipping address-line1"
                   variant="standard"
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={6}>
                 <TextField
                   id="address2"
                   name="address2"
                   label="Address line 2"
-                  value={values.address2}
+                  value={values.address_line_2}
                   fullWidth
                   autoComplete="shipping address-line2"
                   variant="standard"
@@ -164,7 +163,7 @@ let token=localStorage.getItem("token");
                   id="city"
                   name="city"
                   label="City"
-                  value={values.city}
+                  value={values.city_town_village}
                   fullWidth
                   autoComplete="shipping address-level2"
                   variant="standard"
@@ -177,7 +176,7 @@ let token=localStorage.getItem("token");
                   name="state"
                   label="State/Province/Region"
                   fullWidth
-                  value={values.state}
+                  value={values.state_pronvince_region}
                   variant="standard"
                   onChange={onChangeHandler}
                 />
@@ -189,7 +188,7 @@ let token=localStorage.getItem("token");
                   name="code"
                   label="Zip / Postal code"
                   fullWidth
-                  value={values.code}
+                  value={values.postal_code}
                   autoComplete="shipping postal-code"
                   variant="standard"
                   onChange={onChangeHandler}
@@ -202,13 +201,13 @@ let token=localStorage.getItem("token");
                   name="country"
                   label="Country"
                   fullWidth
-                  value={values.country}
+                  value={values.nationality}
                   autoComplete="shipping country"
                   variant="standard"
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={1} md={3} zeroMinWidth>
                 <FormControlLabel
                   control={<Checkbox color="secondary" name="saveAddress" value={user.allow} />}
                   label="Use this address for next payment deposit"
@@ -221,7 +220,7 @@ let token=localStorage.getItem("token");
       case 1:
         return (
           <React.Fragment>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom noWrap>
               Payment method
             </Typography>
             <Grid container spacing={3}>
@@ -244,6 +243,8 @@ let token=localStorage.getItem("token");
                   id="cardnumber"
                   name="cardnumber"
                   label="Card number"
+                  inputProps={{ maxLength: 16 }}
+                  type="number"
                   fullWidth
                   value={values.cardnumber}
                   autoComplete="cc-number"
@@ -252,17 +253,26 @@ let token=localStorage.getItem("token");
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
-                  required
-                  id="date"
-                  label="Expiry date"
-                  name="date"
-                  fullWidth
+                {/* <TextField
+                  
                   value={values.date}
-                  autoComplete="cc-exp"
-                  variant="standard"
                   onChange={onChangeHandler}
-                />
+                /> */}
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    label="Expiry date"
+                    value={values.date}
+                    onChange={(newValue) => {
+                      setValues({
+                        ...values,
+                        date:newValue
+                      })
+                    }}
+                    minDate={new Date()}
+                    views={["month", "year"]}
+                    renderInput={(params) => <TextField {...params} helperText={null} variant="standard"/>}
+                  />
+                </LocalizationProvider>
               </Grid>
               <Grid item xs={12} md={6}>
                 <TextField
@@ -270,6 +280,8 @@ let token=localStorage.getItem("token");
                   id="cvv"
                   name="cvv"
                   label="CVV"
+                  type="number"
+                  inputProps={{ maxLength: 3}}
                   helperText="Last three digits on signature strip"
                   fullWidth
                   value={values.cvv}
@@ -284,6 +296,7 @@ let token=localStorage.getItem("token");
                   id="amount"
                   name="amount"
                   label="amount"
+                  type="number"
                   fullWidth
                   value={values.amount}
                   autoComplete="cc-csc"
@@ -295,7 +308,7 @@ let token=localStorage.getItem("token");
           </React.Fragment>
         );
       case 2:
-        return <Review />;
+        return <Review summary={values} />;
       default:
         throw new Error('Unknown step');
     }
@@ -305,6 +318,9 @@ let token=localStorage.getItem("token");
     if (activeStep === steps.length - 1) {
 
       return makepayment()
+    }
+    if (Object.keys(values).length === 0) {
+      return setIsEmpty(true);
     }
     setActiveStep(activeStep + 1);
   };
@@ -352,9 +368,9 @@ let token=localStorage.getItem("token");
   return (
     <>
       <CssBaseline />
-      <Container component="main" maxWidth="sm" sx={{ mb: 10 }}>
+      <Container component="main" maxWidth="sm" sx={{ mb: 10 }} >
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
-          <Typography component="h1" variant="h4" align="center">
+          <Typography component="h1" variant="h4" align="center" noWrap>
             Make a new Deposit
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
@@ -367,20 +383,20 @@ let token=localStorage.getItem("token");
           <React.Fragment>
             {activeStep === steps.length ?
               <React.Fragment>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom noWrap>
                   Payment Notification
                 </Typography>
-                <Typography variant="subtitle1">
+                <Typography variant="subtitle1" noWrap>
                   Your wallet has been updated successfuly
                 </Typography>
-
+                
               </React.Fragment>
               : (
                 <React.Fragment>
                   {getStepContent(activeStep)}
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {activeStep !== 0 && (
-                      <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color="primary" disabled={isloading}  >
+                      <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color="primary" disabled={isloading || isempty }  >
                         Back
                       </Button>
                     )}

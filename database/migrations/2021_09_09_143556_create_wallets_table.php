@@ -20,6 +20,7 @@ class CreateWalletsTable extends Migration
             $table->string('city_town_village');
             $table->string('state_pronvince_region');
             $table->unsignedInteger('postal_code');
+            $table->boolean('allow')->default(0);
             $table->timestamps();
         });
     }

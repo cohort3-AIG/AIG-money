@@ -50,14 +50,14 @@ class CybersourceController extends BaseController
                         'first_name' => ['required', 'string'],
                         'last_name' => ['required', 'string'],
                         'address1' => ['required', 'string'],
-                        'locality' => ['required', 'string'],
+                        // 'locality' => ['required', 'string'],
                         'security_code' => ['required', 'numeric'],
                         'postal_code' => ['required', 'string'],
-                        'administrative_area' => ['required', 'string'],
+                        // 'administrative_area' => ['required', 'string'],
                         'country' => ['required', 'string'],
 
                     ]);
-
+                
                 } catch (ValidationException $validationException) {
                     return $this->sendError($validationException->getMessage(), $validationException->errors());
                 }
@@ -125,8 +125,8 @@ class CybersourceController extends BaseController
                         // "address2" => "Address 2",
                         "address1" => $validated['address1'],
                         "postalCode" => $validated['postal_code'],
-                        "locality" => $validated['locality'],
-                        "administrative_area" => $validated['locality'],
+                        // "locality" => $validated['locality'],
+                        // "administrative_area" => $validated['administrative_area'],
                         "country" => $validated['country'],
                         "email" => $validated['email'],
                     ];
