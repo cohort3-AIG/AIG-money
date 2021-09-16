@@ -23,7 +23,7 @@ import CircularProgress from '@mui/material/CircularProgress'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+
 
 const steps = ['Billing address', 'Payment details', 'Confirm'];
 
@@ -37,7 +37,6 @@ export default function Wallet_Details(props: any) {
   user.amount = 0;
   user.date = new Date();
   user.cvv = "";
-  console.log(user);
   const [activeStep, setActiveStep] = React.useState(0);
   const [values, setValues] = React.useState(user);
   const [isloading, setIsLoading] = React.useState(false);
@@ -52,7 +51,8 @@ export default function Wallet_Details(props: any) {
       ...values,
       [name]: value
     });
-
+    
+    console.log(values.name);
   }
   let token = localStorage.getItem("token");
 
@@ -110,7 +110,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="firstname"
-                  name="firstname"
+                  name="first_name"
                   label="First name"
                   value={values.first_name}
                   fullWidth
@@ -123,7 +123,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="lastname"
-                  name="lastname"
+                  name="last_name"
                   label="Last name"
                   fullWidth
                   autoComplete="family-name"
@@ -136,7 +136,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="address1"
-                  name="address1"
+                  name="address_line_1"
                   label="Address line 1"
                   fullWidth
                   value={values.address_line_1}
@@ -148,7 +148,7 @@ export default function Wallet_Details(props: any) {
               <Grid item xs={12} sm={6}>
                 <TextField
                   id="address2"
-                  name="address2"
+                  name="address_line_2"
                   label="Address line 2"
                   value={values.address_line_2}
                   fullWidth
@@ -161,7 +161,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="city"
-                  name="city"
+                  name="city_town_village"
                   label="City"
                   value={values.city_town_village}
                   fullWidth
@@ -173,7 +173,7 @@ export default function Wallet_Details(props: any) {
               <Grid item xs={12} sm={6}>
                 <TextField
                   id="state"
-                  name="state"
+                  name="state_pronvince_region"
                   label="State/Province/Region"
                   fullWidth
                   value={values.state_pronvince_region}
@@ -185,7 +185,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="code"
-                  name="code"
+                  name="postal_code"
                   label="Zip / Postal code"
                   fullWidth
                   value={values.postal_code}
@@ -198,7 +198,7 @@ export default function Wallet_Details(props: any) {
                 <TextField
                   required
                   id="country"
-                  name="country"
+                  name="nationality"
                   label="Country"
                   fullWidth
                   value={values.nationality}
@@ -262,7 +262,7 @@ export default function Wallet_Details(props: any) {
                   <DatePicker
                     label="Expiry date"
                     value={values.date}
-                    onChange={(newValue) => {
+                    onChange={(newValue:any) => {
                       setValues({
                         ...values,
                         date:newValue
@@ -270,7 +270,7 @@ export default function Wallet_Details(props: any) {
                     }}
                     minDate={new Date()}
                     views={["month", "year"]}
-                    renderInput={(params) => <TextField {...params} helperText={null} variant="standard"/>}
+                    renderInput={(params:any) => <TextField {...params} helperText={null} variant="standard"/>}
                   />
                 </LocalizationProvider>
               </Grid>
