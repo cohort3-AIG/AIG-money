@@ -18,7 +18,6 @@ export default function Review(props: any) {
     { name: 'Card number', detail: user.cardnumber },
     { name: 'Expiry date', detail: (user.date.getMonth() + 1) + "/" + user.date.getFullYear() },
   ];
-  console.log(payments)
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -29,7 +28,8 @@ export default function Review(props: any) {
         <List disablePadding>
           <ListItem sx={{ py: 1, px: 3 }}>
               <Typography variant="subtitle1" sx={{ fontWeight: 700 }} >
-               A total of   ${user.amount} will be credited on your account
+               A total of   ${user.amount} will be credited on your account 
+                with a charge of guide${user.amount * 0.05}
              </Typography>
           </ListItem>
         </List>

@@ -14,14 +14,15 @@ class CreateTransactionCategoriesTable extends Migration
             $table->id();
 //            $table->unsignedBigInteger('transaction_id');   // ???????????
             $table->string('category');
+            $table->unsignedInteger('charge');
             $table->timestamps();
         });
 
         DB::table('transaction_categories')->insert([
-            ['category' => 'card to wallet'],
-            ['category' => 'wallet to wallet'],
-            ['category' => 'wallet to mobile'],
-            ['category' => 'wallet to card']
+            ['category' => 'card to wallet','charge'=>0.05],
+            ['category' => 'wallet to wallet','charge'=>0.01],
+            ['category' => 'wallet to mobile','charge'=>0.01],
+            ['category' => 'wallet to card','charge'=>0.01],
         ]);
 
     }

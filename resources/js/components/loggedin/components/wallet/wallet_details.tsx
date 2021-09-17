@@ -23,7 +23,8 @@ import CircularProgress from '@mui/material/CircularProgress'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-
+import { Alert } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
 const steps = ['Billing address', 'Payment details', 'Confirm'];
 
@@ -35,24 +36,28 @@ export default function Wallet_Details(props: any) {
   user.cardname = user.last_name+" "+user.first_name;
   user.cardnumber = "";
   user.amount = 0;
+  user.country = '';
+  user.phone ='' ;
+  user.email = '';
   user.date = new Date();
   user.cvv = "";
+  user.locality="";
+  user.administrative_area="";
   const [activeStep, setActiveStep] = React.useState(0);
   const [values, setValues] = React.useState(user);
   const [isloading, setIsLoading] = React.useState(false);
   const [isempty, setIsEmpty] = React.useState(false);
-  const [errors, setErrors] = React.useState({} as any);
+  const [errors, setErrors] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
 
   const onChangeHandler = (e: any) => {
     const { name, value } = e.target;
-
     setValues({
       ...values,
       [name]: value
     });
     
-    console.log(values.name);
   }
   let token = localStorage.getItem("token");
 
@@ -68,18 +73,18 @@ export default function Wallet_Details(props: any) {
       last_name: values.last_name,
       address1: values.address_line_1,
       address2: values.address_line_2,
-      // locality: "Jinja",
-      // administrative_area: "kampala",
+      locality: values.locality,
+      administrative_area: values.administrative_area,
       postal_code: values.postal_code.toString(),
       // country: values.nationality
-      country:"Uganda",
-      email: "lwangaaksam@gmail.com",
-      phone_number: "0755677766",
+      country:values.country,
+      email: values.email,
+      phone_number: values.phone,
       security_code: values.cvv,
     }, { headers: { 'Authorization': `Bearer ${token}` } }
     ).then(res => {
       if (res.data.success === true) {
-        console.log(res);
+      
         setActiveStep(activeStep + 1);
         setIsLoading(false);
         location.reload();
@@ -87,9 +92,11 @@ export default function Wallet_Details(props: any) {
       }
       else {
         console.log(res.data);
-        // setActiveStep(activeStep + 1);
-        console.log(user)
+        setActiveStep(0);
         setIsLoading(false);
+        setErrors(true);
+       
+     
       }
 
     }).catch(err => {
@@ -102,6 +109,8 @@ export default function Wallet_Details(props: any) {
       case 0:
         return (
           <React.Fragment>
+            
+            
             <Typography variant="h6" gutterBottom noWrap>
               Billing address
             </Typography>
@@ -112,6 +121,7 @@ export default function Wallet_Details(props: any) {
                   id="firstname"
                   name="first_name"
                   label="First name"
+                  error={values.first_name.length === 0 ? true : false}
                   value={values.first_name}
                   fullWidth
                   autoComplete="given-name"
@@ -126,6 +136,7 @@ export default function Wallet_Details(props: any) {
                   name="last_name"
                   label="Last name"
                   fullWidth
+                  error={values.last_name.length === 0 ? true : false}
                   autoComplete="family-name"
                   value={values.last_name}
                   variant="standard"
@@ -139,6 +150,7 @@ export default function Wallet_Details(props: any) {
                   name="address_line_1"
                   label="Address line 1"
                   fullWidth
+                  error={values.address_line_1.length === 0 ? true : false}
                   value={values.address_line_1}
                   autoComplete="shipping address-line1"
                   variant="standard"
@@ -164,6 +176,7 @@ export default function Wallet_Details(props: any) {
                   name="city_town_village"
                   label="City"
                   value={values.city_town_village}
+                  error={values.city_town_village.length === 0 ? true : false}
                   fullWidth
                   autoComplete="shipping address-level2"
                   variant="standard"
@@ -176,6 +189,7 @@ export default function Wallet_Details(props: any) {
                   name="state_pronvince_region"
                   label="State/Province/Region"
                   fullWidth
+                  error={values.state_pronvince_region.length === 0 ? true : false}
                   value={values.state_pronvince_region}
                   variant="standard"
                   onChange={onChangeHandler}
@@ -188,13 +202,14 @@ export default function Wallet_Details(props: any) {
                   name="postal_code"
                   label="Zip / Postal code"
                   fullWidth
+                  error={values.postal_code.length === 0 ? true : false}
                   value={values.postal_code}
                   autoComplete="shipping postal-code"
                   variant="standard"
                   onChange={onChangeHandler}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
+              {/* <Grid item xs={12} sm={6}>
                 <TextField
                   required
                   id="country"
@@ -203,6 +218,80 @@ export default function Wallet_Details(props: any) {
                   fullWidth
                   value={values.nationality}
                   autoComplete="shipping country"
+                  variant="standard"
+                  onChange={onChangeHandler}
+                />
+              </Grid> */}
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  id="country"
+                  name="country"
+                  error={values.country.length === 0 ? true : false}
+                  label="Country"
+                  fullWidth
+                  value={values.country}
+                  // autoComplete="shipping country"
+                  variant="standard"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  id="email"
+                  name="email"
+                  type="email"
+                  label="email"
+                  error={values.email.length === 0 ? true : false}
+                  fullWidth
+                  value={values.email}
+                  // autoComplete="shipping country"
+                  variant="standard"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  id="phone"
+                  name="phone"
+                  type="phone"
+                  label="phone"
+                  error={values.phone.length === 0 ? true : false}
+                  fullWidth
+                  value={values.phone}
+                  // autoComplete="shipping country"
+                  variant="standard"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  id="administrative_area"
+                  name="administrative_area"
+                  type="administrative_area"
+                  label="administrative_area"
+                  error={values.administrative_area.length === 0 ? true : false}
+                  fullWidth
+                  value={values.administrative_area}
+                  // autoComplete="shipping country"
+                  variant="standard"
+                  onChange={onChangeHandler}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  required
+                  id="locality"
+                  name="locality"
+                  type="locality"
+                  label="locality"
+                  fullWidth
+                  error={values.locality.length === 0 ? true : false}
+                  value={values.locality}
+                  // autoComplete="shipping country"
                   variant="standard"
                   onChange={onChangeHandler}
                 />
@@ -232,6 +321,7 @@ export default function Wallet_Details(props: any) {
                   label="Name on card"
                   value={values.cardname}
                   fullWidth
+                  error={values.cardname.length === 0 ? true : false}
                   autoComplete="cc-name"
                   variant="standard"
                   onChange={onChangeHandler}
@@ -246,6 +336,7 @@ export default function Wallet_Details(props: any) {
                   inputProps={{ maxLength: 16 }}
                   type="number"
                   fullWidth
+                  error={values.cardnumber.length === 0 ? true : false}
                   value={values.cardnumber}
                   autoComplete="cc-number"
                   variant="standard"
@@ -284,6 +375,7 @@ export default function Wallet_Details(props: any) {
                   inputProps={{ maxLength: 3}}
                   helperText="Last three digits on signature strip"
                   fullWidth
+                  error={values.cvv.length === 0 ? true : false}
                   value={values.cvv}
                   autoComplete="cc-csc"
                   variant="standard"
@@ -298,6 +390,7 @@ export default function Wallet_Details(props: any) {
                   label="amount"
                   type="number"
                   fullWidth
+                  error={values.amount === 0|| values.amount.length === 0 ? true : false}
                   value={values.amount}
                   autoComplete="cc-csc"
                   variant="standard"
@@ -315,18 +408,29 @@ export default function Wallet_Details(props: any) {
   }
 
   const handleNext = () => {
+    if ((Object.keys(values).filter(x => (values[x] === '' || values[x] === undefined || values[x] === 0 && x != "allow") && x !='address_line_2').length>=1 && activeStep === 1)) {
+      setActiveStep(activeStep-1);
+     
+     return setIsEmpty(true);
+    }
+    
     if (activeStep === steps.length - 1) {
-
+      setErrors(false)
       return makepayment()
     }
-    if (Object.keys(values).length === 0) {
-      return setIsEmpty(true);
-    }
+   
     setActiveStep(activeStep + 1);
   };
 
   const handleBack = () => {
     setActiveStep(activeStep - 1);
+  };
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    setOpen(false);
   };
   const QontoStepIconRoot = styled('div')<{ ownerState: { active?: boolean } }>(
     ({ theme, ownerState }) => ({
@@ -380,6 +484,7 @@ export default function Wallet_Details(props: any) {
               </Step>
             ))}
           </Stepper>
+          {errors ? <Typography variant="subtitle1" gutterBottom noWrap><Alert severity="error">Something went wrong.  check if the information is correct Please try again</Alert></Typography> : ""}
           <React.Fragment>
             {activeStep === steps.length ?
               <React.Fragment>
@@ -396,7 +501,7 @@ export default function Wallet_Details(props: any) {
                   {getStepContent(activeStep)}
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     {activeStep !== 0 && (
-                      <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color="primary" disabled={isloading || isempty }  >
+                      <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }} color="primary" disabled={isloading }  >
                         Back
                       </Button>
                     )}
@@ -406,12 +511,21 @@ export default function Wallet_Details(props: any) {
                         color="primary"
                         onClick={handleNext}
                         sx={{ mt: 3, ml: 1 }}
-                      // disabled={!false}
+                        // disabled={isempty}
                       >
                         {activeStep === steps.length - 1 ? 'Make a deposit' : 'Next'}
                       </Button>
+                      
                     }
                   </Box>
+                  {isempty?
+                  <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+                      <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+                    Some fields appear to be empty.
+                    </Alert>
+                  </Snackbar>
+                  :""
+                   }
                 </React.Fragment>
               )}
           </React.Fragment>

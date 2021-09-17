@@ -9,6 +9,7 @@ class CreateTransactionChargesTable extends Migration
     /** Run the migrations. */
     public function up()
     {
+        // to be removed
         Schema::create('transaction_charges', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('charge');

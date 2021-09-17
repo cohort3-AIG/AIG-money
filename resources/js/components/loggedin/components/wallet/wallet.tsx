@@ -205,14 +205,20 @@ export default function Wallet() {
         <Grid item xs={8}>
           {!formstatus ?
             <Paper className={classes.paper} elevation={3}> <List dense={dense}>
-              {generate(
+              {/* {generate(
                 <ListItem>
                   <ListItemText
                     primary="Single-line item"
                     secondary='Secondary text'
                   />
                 </ListItem>,
-              )}
+              )} */}
+              <ListItem>
+                <ListItemText
+                  primary="Welcome back"
+                  secondary='Soon we shall update this page'
+                />
+              </ListItem>,
             </List></Paper>
             :
             <Paper className={classes.paper} elevation={3}>
