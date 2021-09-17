@@ -13,18 +13,9 @@ class DatabaseSeeder extends Seeder
         // \App\Models\User::factory(10)->create();
         $this->call(UserSeeder::class);   // call this first
         $this->call(AgentSeeder::class);     // call second
-        $this->call(BeneficiarySeeder::class);  // etc...
         $this->call(CountrySeeder::class);
         $this->call(CurrencySeeder::class);
-        $this->call(ForeignExchangeSeeder::class);
         $this->call(LogSeeder::class);
-        $this->call(PaymentTypeSeeder::class);
-        $this->call(TransactionCategorySeeder::class);
-        $this->call(TransactionTypeSeeder::class);
-        $this->call(TransactionChargeSeeder::class);
-        $this->call(TransactionSeeder::class);
-        $this->call(TransferSeeder::class);
-        $this->call(WalletSeeder::class);
     }
 }
 

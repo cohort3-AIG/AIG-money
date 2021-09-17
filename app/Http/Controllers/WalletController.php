@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Wallet;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 
@@ -20,6 +20,7 @@ class WalletController extends BaseController
                 'postal_code' => "numeric|required"
             ]
         );
+        
         $wallet = new Wallet();
         $wallet->user_id = $request->user()->id;
         $wallet->balance = 0.0;

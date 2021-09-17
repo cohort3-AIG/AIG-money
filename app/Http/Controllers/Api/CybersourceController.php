@@ -7,8 +7,10 @@ use App\Http\Resources\Cybersource as CybersourceResource;
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../Helpers/ExternalConfiguration.php';
 use App\Models\Transaction;
+use App\Models\TransactionCategory;
 use App\Models\User;
-use App\Models\Wallet;
+//use App\Models\Wallet;
+use Bavix\Wallet\Models\Wallet;
 use CyberSource\ApiClient;
 use Cybersource\ApiException;
 use CyberSource\Api\PaymentsApi;
@@ -21,6 +23,7 @@ use CyberSource\Model\Ptsv2paymentsOrderInformationBillTo;
 use CyberSource\Model\Ptsv2paymentsPaymentInformation;
 use CyberSource\Model\Ptsv2paymentsPaymentInformationCard;
 use CyberSource\Model\Ptsv2paymentsProcessingInformation;
+use CyberSource\Model\Ptsv2paymentsProcessingInformationAuthorizationOptions;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
@@ -30,13 +33,10 @@ class CybersourceController extends BaseController
     public function cybersource_api(Request $request)
     {
 
-  
-
         if ($request->isMethod('post')) {
 
             $address2 = isset($request['address2']) ? isset($request['address2']) : null;
             $user = $request->user();
-            // $user = User::find(1);
             $error_message = array();
             if (isset($user)) {
 
@@ -50,14 +50,14 @@ class CybersourceController extends BaseController
                         'first_name' => ['required', 'string'],
                         'last_name' => ['required', 'string'],
                         'address1' => ['required', 'string'],
-                        // 'locality' => ['required', 'string'],
+                        'locality' => ['required', 'string'],
                         'security_code' => ['required', 'numeric'],
                         'postal_code' => ['required', 'string'],
-                        // 'administrative_area' => ['required', 'string'],
+                        'administrative_area' => ['required', 'string'],
                         'country' => ['required', 'string'],
 
                     ]);
-                
+
                 } catch (ValidationException $validationException) {
                     return $this->sendError($validationException->getMessage(), $validationException->errors());
                 }
@@ -79,7 +79,9 @@ class CybersourceController extends BaseController
                 if (!is_numeric($validated['expiration_year']) || $validated['expiration_year'] < $currentYear || $validated['expiration_year'] > $currentYear + 10) {
                     array_push($error_message, ['expiration_year' => 'Invalid expiry year of ' . $validated['expiration_year'] . ' submitted']);
                 }
-
+                if ($validated['total_amount'] < 2) {
+                    array_push($error_message, ['total_amount' => "The amount entered is less than the required amount"]);
+                }
                 if (!empty($error_message)) {
                     return $this->sendError('Invalid card details', $error_message);
                 }
@@ -89,14 +91,22 @@ class CybersourceController extends BaseController
                     // } else {
                     //     $capture = false;
                     // }
+                    
 
                     $clientReferenceInformationArr = [
                         'code' => 'TC50171_3',
                     ];
                     $clientReferenceInformation = new Ptsv2paymentsClientReferenceInformation($clientReferenceInformationArr);
+                    $processingInformationAuthorizationOptionsArr = [
+                        "partialAuthIndicator" => false,
+                        "ignoreAvsResult" => false,
+                        "ignoreCvResult" => false,
+                    ];
+                    $processingInformationAuthorizationOptions = new Ptsv2paymentsProcessingInformationAuthorizationOptions($processingInformationAuthorizationOptionsArr);
 
                     $processingInformationArr = [
                         'capture' => $capture,
+                        "authorizationOptions" => $processingInformationAuthorizationOptions
                     ];
                     $processingInformation = new Ptsv2paymentsProcessingInformation($processingInformationArr);
 
@@ -113,8 +123,11 @@ class CybersourceController extends BaseController
                     ];
                     $paymentInformation = new Ptsv2paymentsPaymentInformation($paymentInformationArr);
 
+                    $charge_cat = TransactionCategory::where('category', 'card to wallet')->first();
+                    $charged_amount = $validated['total_amount'] - ($charge_cat->charge * $validated['total_amount']);
+
                     $orderInformationAmountDetailsArr = [
-                        'totalAmount' => $validated['total_amount'],
+                        'totalAmount' => $charged_amount,
                         'currency' => 'USD',
                     ];
                     $orderInformationAmountDetails = new Ptsv2paymentsOrderInformationAmountDetails($orderInformationAmountDetailsArr);
@@ -125,8 +138,8 @@ class CybersourceController extends BaseController
                         // "address2" => "Address 2",
                         "address1" => $validated['address1'],
                         "postalCode" => $validated['postal_code'],
-                        // "locality" => $validated['locality'],
-                        // "administrative_area" => $validated['administrative_area'],
+                        "locality" => $validated['locality'],
+                        "administrative_area" => $validated['administrative_area'],
                         "country" => $validated['country'],
                         "email" => $validated['email'],
                     ];
@@ -169,7 +182,8 @@ class CybersourceController extends BaseController
                             'transaction_cat_id' => 1,
                         ]);
                         $new_trans->save();
-                        $charged_amount = $result['orderInformation']['amountDetails']['authorizedAmount'] - (0.05 * ($result['orderInformation']['amountDetails']['authorizedAmount']));
+
+                        
 
                         // to be removed.
                         // if (Wallet::find($user->id) === null) {
@@ -187,7 +201,7 @@ class CybersourceController extends BaseController
                         $user_wallet->save();
                         // }
 
-                        return $this->sendResponse(['Your wallet was updated to ' . $user_wallet->balance], 'Successfully.');
+                        return $this->sendResponse(['Your wallet was updated to $' . $user_wallet->balance], 'Successfully.');
                     } else {
                         return $this->sendResponse($result, 'Failed');
                     }

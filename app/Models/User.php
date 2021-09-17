@@ -2,20 +2,26 @@
 
 namespace App\Models;
 
+use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Traits\HasWallet;
+use Bavix\Wallet\Traits\HasWallets;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 
-class User extends Model
+class User extends Authenticatable implements Wallet
 {
-    use HasApiTokens, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable, HasWallet, HasWallets;
 
     public $timestamps = false;
 
     /** The attributes that are mass assignable. @var string[] */
     protected $fillable = [
         'first_name',
+        'middle_name',
         'last_name',
         'phone_number',
         'email',
@@ -42,20 +48,6 @@ class User extends Model
         return $this->hasOne(Agent::class);
     }
 
-    // m2m relationship
-    public function beneficiaries()
-    {
-        // The 'users' table being in a m2m relationship with 'beneficiaries' must implement the belongsToMany() method
-        return $this->belongsToMany(Beneficiary::class);
-    }
-
-    // Eloquent relationship to handle the one2one relationship of 'user <<=== wallet'
-    public function wallet()
-    {
-        // The 'users' table being the one that's providing a PK to the 'wallets' table in the one2one relationship means that it takes on the hasOne() method
-        return $this->hasOne(Wallet::class);
-    }
-
     // Eloquent relationship to handle the one2Many relationship of 'user ===>>> logs'
     public function logs()
     {
@@ -63,17 +55,4 @@ class User extends Model
         return $this->hasMany(Log::class);   // THE MANY PART
     }
 
-    // Eloquent relationship to handle the one2Many relationship of 'user ===>>> transactions'
-    public function transactions()
-    {
-        // The 'users' table being the one that's providing a PK to the 'transactions' table in the one2many relationship means that it takes on the hasMany() method
-        return $this->hasMany(Transaction::class);   // THE MANY PART
-    }
-
-    // Eloquent relationship to handle the one2Many relationship of 'user ===>>> transfers'
-    public function transfers()
-    {
-        // The 'users' table being the one that's providing a PK to the 'transfers' table in the one2many relationship means that it takes on the hasMany() method
-        return $this->hasMany(Transfer::class);   // THE MANY PART
-    }
 }
