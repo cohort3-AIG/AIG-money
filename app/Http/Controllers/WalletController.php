@@ -21,6 +21,11 @@ class WalletController extends BaseController
             ]
         );
         
+        // TODO if this raises issues @Gerald, We'll fix it. with the sample lines below.
+//        $user->hasWallet('my-wallet');    // bool
+//        $wallet = $user->createWallet([   // if false, create
+//        ...
+        
         $wallet = new Wallet();
         $wallet->user_id = $request->user()->id;
         $wallet->balance = 0.0;
