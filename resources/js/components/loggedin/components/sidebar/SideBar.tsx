@@ -16,6 +16,8 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useHistory, useRouteMatch } from "react-router-dom"
 import { AuthContext } from "../../../../store/context/auth"
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import AssessmentIcon from '@mui/icons-material/Assessment';
+import ReceiptIcon from '@mui/icons-material/Receipt';
 const drawerWidth = 240;
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -170,11 +172,13 @@ export default function MiniDrawer() {
           </ListItem>
           <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
             <ListItemIcon>
+              <ReceiptIcon />
             </ListItemIcon>
             <ListItemText primary="Transaction" />
           </ListItem>
           <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
             <ListItemIcon>
+              <AssessmentIcon />
             </ListItemIcon>
             <ListItemText primary="Statistics" />
           </ListItem>

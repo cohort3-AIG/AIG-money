@@ -13,13 +13,14 @@ class CreateWalletsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id')->unique();     // one2one r/ship
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->unsignedFloat('balance');
+            $table->double('balance',15, 2);
             $table->string('nationality');
             $table->string('address_line_1');
             $table->string('address_line_2');
             $table->string('city_town_village');
             $table->string('state_pronvince_region');
             $table->unsignedInteger('postal_code');
+            $table->boolean('allow')->default(0);
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@ class User extends Model
         'phone_number',
         'email',
         'password',
+        'allow'
     ];
 
     /** The attributes that should be hidden for serialization. @var array */

@@ -29,6 +29,7 @@ class WalletController extends BaseController
         $wallet->city_town_village = $fields['city_town_village'];
         $wallet->state_pronvince_region = $fields['state_pronvince_region'];
         $wallet->postal_code = $fields['postal_code'];
+        $wallet->allow = 0;
         $wallet->save();
         return [
             "wallet" => $wallet
@@ -41,7 +42,10 @@ class WalletController extends BaseController
            
             $user = $request->user();
             if (isset($user)) {
-                return $this->sendResponse([$user->wallet], 'Successfully.');
+                $user_account=$user->wallet;
+                $user_account->first_name=$user->first_name;
+                $user_account->last_name=$user->last_name;
+                return $this->sendResponse([$user_account], 'Successfully.');
             }
 
         }

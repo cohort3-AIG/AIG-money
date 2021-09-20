@@ -7,54 +7,61 @@ import Grid from '@mui/material/Grid';
 
 
 
-const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
-const payments = [
-  { name: 'Card type', detail: 'Visa' },
-  { name: 'Card holder', detail: 'Mr John Smith' },
-  { name: 'Card number', detail: 'xxxx-xxxx-xxxx-1234' },
-  { name: 'Expiry date', detail: '04/2024' },
-];
+// const addresses = ['1 Material-UI Drive', 'Reactville', 'Anytown', '99999', 'USA'];
 
-export default function Review() {
+
+export default function Review(props: any) {
+  const user = props.summary;
+  const payments = [
+    { name: 'Card type', detail: 'Visa' },
+    { name: 'Card holder', detail: user.last_name+" "+user.first_name },
+    { name: 'Card number', detail: user.cardnumber },
+    { name: 'Expiry date', detail: (user.date.getMonth() + 1) + "/" + user.date.getFullYear() },
+  ];
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
         Payment summary
       </Typography>
-      <List disablePadding>
-        <ListItem sx={{ py: 1, px: 0 }}>
-          <ListItemText primary="Total" />
-          <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-            A total of $34.06 will be credited on your account
-          </Typography>
-        </ListItem>
-      </List>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={6}>
+      <Grid container spacing={3} wrap="nowrap" >
+      <Grid item xs >
+        <List disablePadding>
+          <ListItem sx={{ py: 1, px: 3 }}>
+              <Typography variant="subtitle1" sx={{ fontWeight: 700 }} >
+               A total of   ${user.amount} will be credited on your account 
+                with a charge of guide${user.amount * 0.05}
+             </Typography>
+          </ListItem>
+        </List>
+        </Grid>
+      </Grid>
+    
+        
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Billing
           </Typography>
-          <Typography gutterBottom>John Smith</Typography>
-          <Typography gutterBottom>{addresses.join(', ')}</Typography>
+          <Grid item xs={12} sm={6} >
+          <Typography gutterBottom>{user.last_name+" "+user.first_name}</Typography>
+        <Typography gutterBottom>{user.address_line_1 + " , " + user.address_line_2}</Typography>
         </Grid>
-        <Grid item container direction="column" xs={12} sm={6}>
+    
           <Typography variant="h6" gutterBottom sx={{ mt: 2 }}>
             Payment details
           </Typography>
-          <Grid container>
             {payments.map((payment) => (
               <React.Fragment key={payment.name}>
-                <Grid item xs={6}>
+                <Grid container  wrap="nowrap" direction="row" spacing={3}>
+                <Grid item>
                   <Typography gutterBottom>{payment.name}</Typography>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs>
                   <Typography gutterBottom>{payment.detail}</Typography>
+                </Grid>
                 </Grid>
               </React.Fragment>
             ))}
-          </Grid>
-        </Grid>
-      </Grid>
+          
+      
     </React.Fragment>
   );
 }

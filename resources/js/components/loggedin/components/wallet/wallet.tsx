@@ -26,18 +26,13 @@ const initialFormValues = {
 
   first_name:"",
   last_name: "",
-  address1: "",
-  address2: "",
-  city: "",
+  address_line_1: "",
+  address_line_2: "",
+  balance: 0,
   state_pronvince_region: "",
-  country: "",
-  code: "",
-  allow: false,
-  cvv: 0,
-  cardnumber: 0,
-  date: "",
-  cardname:0,
-  amount: 0
+  city_town_village: "",
+  postal_code:"",
+  allow: 0,
 };
 const useStyles = makeStyles((theme: any) => ({
   container: {
@@ -67,7 +62,7 @@ function generate(element: React.ReactElement) {
 export default function Wallet() {
   const classes = useStyles();
   const [dense, setDense] = React.useState(false);
-  const [walletBalance, setWalletBalance] = React.useState(0);
+  const [wallet_detail, setWallet] = React.useState(initialFormValues);
   const [age, setAge] = React.useState('');
   const [formstatus, setFormStatus] = React.useState(false);
 
@@ -76,7 +71,7 @@ export default function Wallet() {
   const requestOne = axios.get(wallet_data, { headers: { 'Authorization': `Bearer ${token}` }});
   // const requestTwo = axios.get(transaction_history,{ headers: { 'Authorization': `Bearer ${token}` }});
   // const requestThree = axios.get(amount_spent,{ headers: { 'Authorization': `Bearer ${token}` }});
-  let user_detail;
+
 
 
   React.useEffect(() => {
@@ -87,8 +82,9 @@ export default function Wallet() {
         axios.spread((...responses) => {
           
           if (responses[0].data.success === true){
-            user_detail = responses[0].data.data[0]
-            setWalletBalance(user_detail.balance)
+            
+              setWallet(responses[0].data.data[0])
+              console.log(wallet_detail)
           }
           // const responseTwo = responses[1];
           // const responesThree = responses[2];
@@ -101,12 +97,12 @@ export default function Wallet() {
         // react on errors.
         console.error(errors);
       });
-  }, [walletBalance])
+  }, [])
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value as string);
   };
-
+  
   return (
     <Container component="main">
       <Typography variant="h4" gutterBottom mb={2}>
@@ -123,7 +119,7 @@ export default function Wallet() {
                 color="secondary"
                 sx={{ fontWeight: 'bold' }}
               >
-                $ {walletBalance}000000
+                $ {wallet_detail.balance}000000
               </Typography>
 
               <Stack direction="row"
@@ -209,18 +205,24 @@ export default function Wallet() {
         <Grid item xs={8}>
           {!formstatus ?
             <Paper className={classes.paper} elevation={3}> <List dense={dense}>
-              {generate(
+              {/* {generate(
                 <ListItem>
                   <ListItemText
                     primary="Single-line item"
                     secondary='Secondary text'
                   />
                 </ListItem>,
-              )}
+              )} */}
+              <ListItem>
+                <ListItemText
+                  primary="Welcome back"
+                  secondary='Soon we shall update this page'
+                />
+              </ListItem>,
             </List></Paper>
             :
             <Paper className={classes.paper} elevation={3}>
-              <Wallet_Details />
+              <Wallet_Details user_detail={wallet_detail} />
             </Paper>
           }
         </Grid>

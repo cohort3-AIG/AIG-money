@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper, Modal } from "@mui/material"
+import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material"
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -7,12 +7,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
+import SelectMethod from './components/send/selectMethod';
+import CreditCard from './components/deposit/CreditCard';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 400,
+    // width: 400,
     bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
@@ -29,11 +31,11 @@ export default function dashboard() {
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} >
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card sx={{ height: "40vh" }}>
                         <CardMedia
                             component="img"
                             alt="green iguana"
-                            height="140"
+                            height="240"
                             image="/images/default.png"
                         />
                         <CardContent>
@@ -53,25 +55,69 @@ export default function dashboard() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Paper>xs=4</Paper>
+                    <Paper sx={{ minHeight: "40vh" , padding: 3 }}>
+                        <Typography variant="h5" >Beneficiaries</Typography>
+                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            <ListItem alignItems="flex-start">
+                                <ListItemText
+                                    primary="Musumba"
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="span"
+                                                variant="body2"
+                                                color="text.primary"
+                                            >
+                                                +256700215506
+                                            </Typography>
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
+                            <Divider variant="fullWidth" component="li" />
+                        </List>
+                    </Paper>
                 </Grid>
-                <Grid item xs={12}>
-                    <Paper>xs=4</Paper>
+                <Grid item xs={12} >
+                    <Paper sx={{ minHeight: "40vh", padding: 3 }}>
+                        <Typography variant="h5">Recent Transactions</Typography>
+                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                            <ListItem alignItems="flex-start">
+                                <ListItemAvatar>
+                                    <Avatar sx={{ background: '#3C9905' }}>50$</Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary="To Gerald"
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="span"
+                                                variant="body2"
+                                                color="text.primary"
+                                            >
+                                                Charge 2$
+                                            </Typography>
+                                            {" — Wallet to Wallet"}
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
+                            <Divider variant="inset" component="li" />
+                        </List>
+                    </Paper>
                 </Grid>
             </Grid>
             <Modal
                 open={openDeposit}
-                onClose={handleDepositClose}
+                // onClose={handleDepositClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Text in a modal
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
+                    <CreditCard />
+                    <Button onClick={handleDepositClose}>Cancel</Button><Button>Next</Button>
                 </Box>
             </Modal>
 
@@ -82,12 +128,7 @@ export default function dashboard() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Text in a modal
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-                    </Typography>
+                    <SelectMethod />
                 </Box>
             </Modal>
 
