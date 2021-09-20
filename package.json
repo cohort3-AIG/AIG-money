@@ -32,6 +32,7 @@
         "@types/react-helmet": "^6.1.2",
         "@types/react-router-dom": "^5.1.8",
         "@types/yup": "^0.29.13",
+        "cleave.js": "^1.6.0",
         "countries-list": "^2.6.1",
         "formik": "^2.2.9",
         "notistack": "^1.0.6-next.3",

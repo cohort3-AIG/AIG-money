@@ -10,5 +10,6 @@ const mix = require('laravel-mix');
  | file for the application as well as bundling up all the JS files.
  |
  */
- mix.disableSuccessNotifications();
- mix.ts("resources/js/index.tsx", "public/js").react();
+mix.disableSuccessNotifications();
+mix.ts("resources/js/index.tsx", "public/js").react();
+mix.extract(['react', '@mui/icons-material', '@mui/material'], "public/js/library/library.js")

@@ -1,8 +1,9 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
-import { Box, Typography, } from "@mui/material"
+import { Box} from "@mui/material"
 import { SideBar, Dashboard, Wallet, Beneficiaries, Statistics, Transactions, Settings, Wallet_Details } from "./components"
 import { styled } from '@mui/material/styles'
+import { Copyright } from '../shared'
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -29,6 +30,7 @@ function Main() {
                         <Route exact path={`${path}/settings`} component={Settings} />
                     </Switch>
                 </Box>
+                <Copyright />
             </Box>
         </>
     );
