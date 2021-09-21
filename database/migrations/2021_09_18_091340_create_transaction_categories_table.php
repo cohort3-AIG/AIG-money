@@ -12,7 +12,6 @@ class CreateTransactionCategoriesTable extends Migration
     {
         Schema::create('transaction_categories', function (Blueprint $table) {
             $table->id();
-//            $table->unsignedBigInteger('transaction_id');   // ???????????
             $table->string('category');
             $table->unsignedInteger('charge');
             $table->timestamps();

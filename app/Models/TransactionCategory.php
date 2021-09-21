@@ -21,6 +21,6 @@ class TransactionCategory extends Model
     // Eloquent relationship to handle the one2Many relationship of 'transaction_categories ===>>> transactions'
     public function transactions() {
         // The 'transaction_categories' table being the one that's providing a PK to the 'transactions' table in the one2many relationship means that it takes on the hasMany() method
-        return $this->hasMany(Transaction::class);   // THE MANY PART
+        return $this->hasMany(\App\Models\Transaction::class);   // THE MANY PART
     }
 }

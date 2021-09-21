@@ -9,7 +9,8 @@ require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../Helpers/ExternalConfigura
 use App\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\User;
-use App\Models\Wallet;
+//use App\Models\Wallet;
+use Bavix\Wallet\Models\Wallet;
 use CyberSource\ApiClient;
 use Cybersource\ApiException;
 use CyberSource\Api\PaymentsApi;

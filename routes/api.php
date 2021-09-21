@@ -4,8 +4,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CybersourceController;
 use App\Http\Controllers\Api\UserAPIController;
+use App\Http\Controllers\Api\LogAPIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WalletController;
+use App\Http\Controllers\Api\WalletToWalletController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -30,8 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 
-// START
-// THE APIS FOR HANDLING CRUD OPERATIONS ON THE USE ENTITY
+// START THE APIS FOR HANDLING CRUD OPERATIONS ON THE USE ENTITY
 
 // #Users api Route for the get method to display users values from the db
 Route::get("user/list", [UserAPIController::class, "index"]);
@@ -52,3 +53,27 @@ Route::delete("user/{id}", [UserAPIController::class, "destroy"]);
 Route::get("user/search/{name}", [UserAPIController::class, "where"]);
 
 // END API ROUTES FOR THE USER ENTITY
+
+
+
+/** #start WALLET TO WALLET WORKFLOW... */
+
+// Add some sample funds to 'logged in' user
+Route::post("wallet/me/add/", [WalletToWalletController::class, "addToAuthWallet"]);
+// Add some sample funds to 'specific' user
+Route::post("wallet/user/add/", [WalletToWalletController::class, "addToSomeWallet"]);   // WORKs !
+
+// view wallet balance of auth user
+Route::get("wallet/me/balance/", [WalletToWalletController::class, "walletBalanceOfAuthenticatedUser"]);   // WORKs !
+// view wallet balance of specific user
+Route::get("wallet/user/balance/", [WalletToWalletController::class, "walletBalanceOfSpecificUser"]);   // WORKs !
+
+// transfer from 'wallet to wallet'
+Route::post("wallet/transfer/", [WalletToWalletController::class, "transferWalletToWallet"]);
+
+// LOGS of the 'transactions'
+Route::get("transactions/logs/", [LogAPIController::class, "index"]);   // Works
+
+/** #end WALLET TO WALLET WORKFLOW... */
+
+
