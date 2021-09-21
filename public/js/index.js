@@ -26360,17 +26360,83 @@ var main_2 = __importDefault(__webpack_require__(/*! ./loggedout/main */ "./reso
 var react_2 = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var App = function App() {
-  var _a = (0, react_1.useContext)(auth_1.AuthContext),
-      auth = _a.auth,
-      authCheckState = _a.authCheckState;
+  var _a, _b, _c, _d;
+
+  var _e = (0, react_1.useContext)(auth_1.AuthContext),
+      auth = _e.auth,
+      authCheckState = _e.authCheckState;
 
   var themeMui = (0, styles_1.createTheme)({
+    typography: {
+      fontFamily: 'monospace'
+    },
+    breakpoints: {},
+    shape: {
+      borderRadius: 30
+    },
+    spacing: 2,
     palette: {
       primary: {
         main: '#3C9905'
+      },
+      secondary: {
+        main: '#00FF00'
       }
     }
   });
+  themeMui.typography.h6 = (_a = {
+    flexGrow: 1,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    fontSize: '1rem',
+    '@media (min-width:600px)': {
+      fontSize: '1.3rem'
+    }
+  }, _a[themeMui.breakpoints.up('md')] = {
+    fontSize: '1.6rem'
+  }, _a);
+  themeMui.typography.h4 = (_b = {
+    paddingTop: 8,
+    flexGrow: 1,
+    fontStyle: 'normal',
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '1rem',
+    '@media (min-width:600px)': {
+      fontSize: '1.2rem'
+    }
+  }, _b[themeMui.breakpoints.up('md')] = {
+    fontSize: '1.5rem'
+  }, _b);
+  themeMui.typography.h5 = (_c = {
+    alignItems: 'center',
+    paddingLeft: 50,
+    paddingTop: 6,
+    justifyContent: 'center',
+    flexGrow: 1,
+    marginX: "auto",
+    fontSize: '1rem',
+    '@media (min-width:600px)': {
+      fontSize: '1.25rem'
+    }
+  }, _c[themeMui.breakpoints.up('md')] = {
+    fontSize: '1.45rem'
+  }, _c);
+  themeMui.typography.h3 = (_d = {
+    alignItems: 'center',
+    paddingLeft: 40,
+    paddingTop: 7,
+    justifyContent: 'center',
+    flexGrow: 1,
+    marginX: "auto",
+    fontSize: '0.7rem',
+    '@media (min-width:600px)': {
+      fontSize: '1rem'
+    }
+  }, _d[themeMui.breakpoints.up('md')] = {
+    fontSize: '1.2rem'
+  }, _d);
   (0, react_2.useEffect)(function () {
     authCheckState();
   }, []);
@@ -30015,18 +30081,12 @@ function Home() {
     onClick: function onClick() {
       history.push('login');
     },
-    variant: "outlined",
-    sx: {
-      borderRadius: 10
-    }
+    variant: "outlined"
   }, "Log In"), React.createElement(Button_1["default"], {
     onClick: function onClick() {
       history.push('register');
     },
-    variant: "contained",
-    sx: {
-      borderRadius: 10
-    }
+    variant: "contained"
   }, "Sign Up")))), React.createElement(Header, null), React.createElement(React.Fragment, null, React.createElement(Box_1["default"], {
     sx: {
       flexGrow: 1
@@ -30061,18 +30121,7 @@ function Home() {
     timeout: 2000
   } : {}), React.createElement(Typography_1["default"], {
     variant: "h4",
-    color: "primary",
-    sx: {
-      py: 8,
-      flexGrow: 1,
-      color: "green",
-      fontSize: 40,
-      fontStyle: 'normal',
-      fontFamily: 'Monospace',
-      fontWeight: 'Bold',
-      justifyContent: 'center',
-      alignItems: 'center'
-    }
+    color: "primary"
   }, "Tranfer money to loved ones the easiest way possible", React.createElement("nav", {
     style: {
       paddingTop: 6,
@@ -30101,16 +30150,7 @@ function Home() {
 
     }
   }, React.createElement(Typography_1["default"], {
-    variant: "h4",
-    sx: {
-      alignItems: 'center',
-      fontSize: 40,
-      px: 50,
-      pt: 6,
-      justifyContent: 'center',
-      flexGrow: 1,
-      marginX: "auto"
-    }
+    variant: "h5"
   }, "Get started with us today"), React.createElement(Box_1["default"], {
     sx: {
       px: 70,
@@ -30127,15 +30167,7 @@ function Home() {
       alignItems: 'centre'
     }
   }, "Get Started")), React.createElement(Typography_1["default"], {
-    variant: "h5",
-    sx: {
-      alignItems: 'center',
-      px: 40,
-      pt: 7,
-      justifyContent: 'center',
-      flexGrow: 1,
-      marginX: "auto"
-    }
+    variant: "h3"
   }, "Find out why we are the best at securing your money online", React.createElement("nav", {
     style: {
       alignItems: 'center',
@@ -30150,7 +30182,6 @@ function Home() {
   }, React.createElement(Button_1["default"], {
     variant: "contained",
     sx: {
-      borderRadius: 10,
       alignItems: 'centre',
       px: 5
     }
