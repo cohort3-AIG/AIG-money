@@ -26688,7 +26688,7 @@ function dashboard() {
   }, react_1["default"].createElement(CardMedia_1["default"], {
     component: "img",
     alt: "green iguana",
-    height: "240",
+    height: "120",
     image: "/images/default.png"
   }), react_1["default"].createElement(CardContent_1["default"], null, react_1["default"].createElement(Typography_1["default"], {
     gutterBottom: true,

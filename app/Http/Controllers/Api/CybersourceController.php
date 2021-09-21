@@ -86,12 +86,8 @@ class CybersourceController extends BaseController
                     return $this->sendError('Invalid card details', $error_message);
                 }
                 try {
-                    // if ( isset( $flag ) && $flag == 'true' ) {
+                
                     $capture = true;
-                    // } else {
-                    //     $capture = false;
-                    // }
-                    
 
                     $clientReferenceInformationArr = [
                         'code' => 'TC50171_3',
@@ -124,7 +120,7 @@ class CybersourceController extends BaseController
                     $paymentInformation = new Ptsv2paymentsPaymentInformation($paymentInformationArr);
 
                     $charge_cat = TransactionCategory::where('category', 'card to wallet')->first();
-                    $charged_amount = $validated['total_amount'] - ($charge_cat->charge * $validated['total_amount']);
+                    $charged_amount = $validated['total_amount'] + ($charge_cat->charge * $validated['total_amount']);
 
                     $orderInformationAmountDetailsArr = [
                         'totalAmount' => $charged_amount,
@@ -175,7 +171,7 @@ class CybersourceController extends BaseController
                     if ($result['status'] === 'AUTHORIZED') {
                         $new_trans = Transaction::updateOrCreate([
                             'user_id' => $user->id,
-                            'amount' => $result['orderInformation']['amountDetails']['authorizedAmount'],
+                            'amount' =>  $validated['total_amount'],
                             'status' => $result['status'],
                             'transaction_id' => bcrypt($result['processorInformation']['transactionId']),
                             'reconciliation_id' => bcrypt($result['reconciliationId']),
@@ -201,7 +197,7 @@ class CybersourceController extends BaseController
                         $user_wallet->save();
                         // }
 
-                        return $this->sendResponse(['Your wallet was updated to $' . $user_wallet->balance], 'Successfully.');
+                        return $this->sendResponse(['Your wallet was updated to $' . $user_wallet->balance,"charge ".($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
                         return $this->sendResponse($result, 'Failed');
                     }
