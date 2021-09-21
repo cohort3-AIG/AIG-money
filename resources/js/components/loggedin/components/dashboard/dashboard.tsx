@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText } from "@mui/material"
+import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Fab } from "@mui/material"
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import SelectMethod from './components/send/selectMethod';
 import CreditCard from './components/deposit/CreditCard';
+import AddIcon from '@mui/icons-material/Add';
+
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -27,6 +29,9 @@ export default function dashboard() {
     const [openSend, setSendOpen] = React.useState(false);
     const handleSendOpen = () => setSendOpen(true);
     const handleSendClose = () => setSendOpen(false);
+    const [openBeneficiary, setBeneficiaryOpen] = React.useState(false);
+    const handleBeneficiaryOpen = () => setBeneficiaryOpen(true);
+    const handleBeneficiaryClose = () => setBeneficiaryOpen(false);
     return (
         <>
             <Grid container spacing={3}>
@@ -55,7 +60,9 @@ export default function dashboard() {
                     </Card>
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Paper sx={{ minHeight: "40vh" , padding: 3 }}>
+                    <Paper sx={{
+                        minHeight: "40vh", padding: 3, position: 'relative'
+                    }}>
                         <Typography variant="h5" >Beneficiaries</Typography>
                         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
                             <ListItem alignItems="flex-start">
@@ -77,6 +84,15 @@ export default function dashboard() {
                             </ListItem>
                             <Divider variant="fullWidth" component="li" />
                         </List>
+                        <Fab color="primary" aria-label="add" sx={{
+                            position: 'absolute',
+                            bottom: 5,
+                            right: 5
+                        }}
+                            onClick={handleBeneficiaryOpen}
+                        >
+                            <AddIcon />
+                        </Fab>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} >
@@ -131,7 +147,16 @@ export default function dashboard() {
                     <SelectMethod />
                 </Box>
             </Modal>
-
+            <Modal
+                open={openBeneficiary}
+                onClose={handleBeneficiaryClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    Create Beneficiary
+                </Box>
+            </Modal>
         </>
     )
 }

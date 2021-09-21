@@ -26623,6 +26623,8 @@ var selectMethod_1 = __importDefault(__webpack_require__(/*! ./components/send/s
 
 var CreditCard_1 = __importDefault(__webpack_require__(/*! ./components/deposit/CreditCard */ "./resources/js/components/loggedin/components/dashboard/components/deposit/CreditCard.tsx"));
 
+var Add_1 = __importDefault(__webpack_require__(/*! @mui/icons-material/Add */ "./node_modules/@mui/icons-material/Add.js"));
+
 var style = {
   position: 'absolute',
   top: '50%',
@@ -26658,6 +26660,18 @@ function dashboard() {
 
   var handleSendClose = function handleSendClose() {
     return setSendOpen(false);
+  };
+
+  var _c = react_1["default"].useState(false),
+      openBeneficiary = _c[0],
+      setBeneficiaryOpen = _c[1];
+
+  var handleBeneficiaryOpen = function handleBeneficiaryOpen() {
+    return setBeneficiaryOpen(true);
+  };
+
+  var handleBeneficiaryClose = function handleBeneficiaryClose() {
+    return setBeneficiaryOpen(false);
   };
 
   return react_1["default"].createElement(react_1["default"].Fragment, null, react_1["default"].createElement(material_1.Grid, {
@@ -26702,7 +26716,8 @@ function dashboard() {
   }, react_1["default"].createElement(material_1.Paper, {
     sx: {
       minHeight: "40vh",
-      padding: 3
+      padding: 3,
+      position: 'relative'
     }
   }, react_1["default"].createElement(Typography_1["default"], {
     variant: "h5"
@@ -26726,7 +26741,16 @@ function dashboard() {
   })), react_1["default"].createElement(material_1.Divider, {
     variant: "fullWidth",
     component: "li"
-  })))), react_1["default"].createElement(material_1.Grid, {
+  })), react_1["default"].createElement(material_1.Fab, {
+    color: "primary",
+    "aria-label": "add",
+    sx: {
+      position: 'absolute',
+      bottom: 5,
+      right: 5
+    },
+    onClick: handleBeneficiaryOpen
+  }, react_1["default"].createElement(Add_1["default"], null)))), react_1["default"].createElement(material_1.Grid, {
     item: true,
     xs: 12
   }, react_1["default"].createElement(material_1.Paper, {
@@ -26775,7 +26799,14 @@ function dashboard() {
     "aria-describedby": "modal-modal-description"
   }, react_1["default"].createElement(system_1.Box, {
     sx: style
-  }, react_1["default"].createElement(selectMethod_1["default"], null))));
+  }, react_1["default"].createElement(selectMethod_1["default"], null))), react_1["default"].createElement(material_1.Modal, {
+    open: openBeneficiary,
+    onClose: handleBeneficiaryClose,
+    "aria-labelledby": "modal-modal-title",
+    "aria-describedby": "modal-modal-description"
+  }, react_1["default"].createElement(system_1.Box, {
+    sx: style
+  }, "Create Beneficiary")));
 }
 
 exports["default"] = dashboard;
