@@ -4,15 +4,14 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCountriesTable extends Migration
+class CreatePaymentTypesTable extends Migration
 {
     /** Run the migrations. */
     public function up()
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('payment_types', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('country_code')->unique();
-            $table->string('name');
+            $table->string('type');
             $table->timestamps();
         });
     }
@@ -20,6 +19,6 @@ class CreateCountriesTable extends Migration
     /** Reverse the migrations. */
     public function down()
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('payment_types');
     }
 }

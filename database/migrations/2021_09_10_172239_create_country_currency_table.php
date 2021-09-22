@@ -14,7 +14,7 @@ class CreateCountryCurrencyTable extends Migration
     public function up()
     {
         Schema::create('country_currency', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->timestamps();
         });
     }

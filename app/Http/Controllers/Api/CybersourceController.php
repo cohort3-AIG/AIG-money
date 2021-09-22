@@ -86,7 +86,7 @@ class CybersourceController extends BaseController
                     return $this->sendError('Invalid card details', $error_message);
                 }
                 try {
-                
+
                     $capture = true;
 
                     $clientReferenceInformationArr = [
@@ -170,7 +170,7 @@ class CybersourceController extends BaseController
                     $result = new CybersourceResource($apiResponse[0]);
                     if ($result['status'] === 'AUTHORIZED') {
                         $new_trans = Transaction::updateOrCreate([
-                            'user_id' => $user->id,
+                            'holder_id' => $user->id,
                             'amount' =>  $validated['total_amount'],
                             'status' => $result['status'],
                             'transaction_id' => bcrypt($result['processorInformation']['transactionId']),
@@ -179,20 +179,20 @@ class CybersourceController extends BaseController
                         ]);
                         $new_trans->save();
 
-                        
+
 
                         // to be removed.
                         // if (Wallet::find($user->id) === null) {
 
                         //     $user_wallet = Wallet::create([
-                        //         'user_id' => $user->id,
+                        //         'holder_id' => $user->id,
                         //         'transaction_id' => $new_trans->id,
                         //         'balance' => $charged_amount,
                         //     ]);
                         // } else {
 
                         $user_wallet = Wallet::find($user->id);
-                        $user_wallet->user_id = $user->id;
+                        $user_wallet->holder_id = $user->id;
                         $user_wallet->balance = $user_wallet->balance + $charged_amount;
                         $user_wallet->save();
                         // }

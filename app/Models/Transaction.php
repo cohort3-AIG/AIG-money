@@ -9,16 +9,23 @@ use Illuminate\Database\Eloquent\Model;
 class Transaction extends Model
 {
     use HasFactory;
-    public $timestamps = false;
+
 
     /** The attributes that are mass assignable. @var string[] */
     protected $fillable = [
-        'user_id',
+        'payable_type',
+        'payable_id',
+        'wallet_id',
+        'holder_id',
         'amount',
         'transaction_id',
         'transaction_cat_id',
         'status',
-        'reconciliation_id'
+        'reconciliation_id',
+        'uuid',
+        'type',
+        'confirmed',
+        'meta',
     ];
 
     public function user() {

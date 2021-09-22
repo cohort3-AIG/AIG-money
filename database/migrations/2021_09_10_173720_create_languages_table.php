@@ -4,14 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCountriesTable extends Migration
+class CreateLanguagesTable extends Migration
 {
     /** Run the migrations. */
     public function up()
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('languages', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('country_code')->unique();
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('countries')->onDelete('cascade');
             $table->string('name');
             $table->timestamps();
         });
@@ -20,6 +21,6 @@ class CreateCountriesTable extends Migration
     /** Reverse the migrations. */
     public function down()
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('languages');
     }
 }

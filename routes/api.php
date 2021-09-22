@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Api\WalletToWalletController;
 use App\Http\Controllers\Api\TransactionController;
+use App\Http\Controllers\Api\BeneficiaryAPIController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -33,6 +34,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 
 Route::get("charge",[TransactionController::class, 'get_charge']);
+
+
 // START THE APIS FOR HANDLING CRUD OPERATIONS ON THE USE ENTITY
 
 // #Users api Route for the get method to display users values from the db
@@ -65,7 +68,7 @@ Route::post("wallet/me/add/", [WalletToWalletController::class, "addToAuthWallet
 Route::post("wallet/user/add/", [WalletToWalletController::class, "addToSomeWallet"]);   // WORKs !
 
 // view wallet balance of auth user
-Route::get("wallet/me/balance/", [WalletToWalletController::class, "walletBalanceOfAuthenticatedUser"]);   // WORKs !
+Route::get("wallet/me/balance/", [WalletToWalletController::class, "walletBalanceOfAuthenticatedUser"]);   //
 // view wallet balance of specific user
 Route::get("wallet/user/balance/", [WalletToWalletController::class, "walletBalanceOfSpecificUser"]);   // WORKs !
 
@@ -78,3 +81,5 @@ Route::get("transactions/logs/", [LogAPIController::class, "index"]);   // Works
 /** #end WALLET TO WALLET WORKFLOW... */
 
 
+// BENEFICIARIES
+Route::resource("beneficiaries", BeneficiaryAPIController::class);

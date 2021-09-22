@@ -18,6 +18,8 @@ class Currency extends Model
         'code',
         'full_name',
         'country',
+        'created_at',
+        'updated_at'
     ];
 
     // m2m relationship
