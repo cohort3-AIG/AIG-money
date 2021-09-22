@@ -106,8 +106,8 @@ export default function Home() {
                         </Button> */}
 
                         <Stack spacing={2} direction="row" sx={{ marginRight: 5 }}>
-                            <Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>
-                            <Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>
+                            <Button onClick={() => { history.push('login') }} variant="outlined">Log In</Button>
+                            <Button onClick={() => { history.push('register') }} variant="contained" >Sign Up</Button>
                         </Stack>
 
 
@@ -142,7 +142,7 @@ export default function Home() {
                                     {...(checked ? { timeout: 2000 } : {})}>
 
 
-                                    <Typography variant="h4" color="primary" sx={{ py: 8, flexGrow: 1, color: "green", fontSize: 40, fontStyle: 'normal', fontFamily: 'Monospace', fontWeight: 'Bold', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Typography variant="h4" color="primary" >
                                         Tranfer money to loved ones the easiest way possible
                                         <nav style={{ paddingTop: 6, fontSize: 20, fontStyle: 'normal', color: 'grey' }}>
                                             let's go cashless together
@@ -169,11 +169,11 @@ export default function Home() {
                             //},
                         }} >
 
-                            <Typography variant="h4" sx={{ alignItems: 'center', fontSize: 40, px: 50, pt: 6, justifyContent: 'center', flexGrow: 1, marginX: "auto" }}>Get started with us today</Typography>
+                            <Typography variant="h5" >Get started with us today</Typography>
                             <Box sx={{ px: 70, pt: 5 }} position="static">
                                 <Button onClick={() => { history.push('signup') }} variant="outlined" sx={{ borderRadius: 10, alignItems: 'centre' }}>Get Started</Button>
                             </Box>
-                            <Typography variant="h5" sx={{ alignItems: 'center', px: 40, pt: 7, justifyContent: 'center', flexGrow: 1, marginX: "auto" }}>
+                            <Typography variant="h3" >
                                 Find out why we are the best at securing your money online
                                 <nav style={{ alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
                                     With a very easy guide on how it can be shared with loved ones
@@ -181,7 +181,7 @@ export default function Home() {
                             </Typography>
 
                             <Box sx={{ px: 65, pt: 6 }} >
-                                <Button variant="contained" sx={{ borderRadius: 10, alignItems: 'centre', px: 5 }}>Learn More</Button>
+                                <Button variant="contained" sx={{ alignItems: 'centre', px: 5 }}>Learn More</Button>
                             </Box>
 
                         </Paper>

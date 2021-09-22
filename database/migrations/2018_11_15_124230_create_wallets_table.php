@@ -25,19 +25,20 @@ class CreateWalletsTable extends Migration
     {
         Schema::create($this->table(), function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('user_id')->unique();     // one2one r/ship
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->double('balance',15, 2);
-            $table->string('nationality');
-            $table->string('address_line_1');
-            $table->string('address_line_2');
-            $table->string('city_town_village');
-            $table->string('state_pronvince_region');
-            $table->unsignedInteger('postal_code');
-            $table->boolean('allow')->default(0);
             $table->morphs('holder');
-            $table->string('name');
-            $table->string('slug')->index();
+            $table->foreign('holder_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+            $table->string('nationality')->nullable();
+            $table->string('address_line_1')->nullable();
+            $table->string('address_line_2')->nullable();
+            $table->string('city_town_village')->nullable();
+            $table->string('state_pronvince_region')->nullable();
+            $table->unsignedInteger('postal_code')->nullable();
+            $table->boolean('allow')->default(0);
+            $table->string('name')->nullable();
+            $table->string('slug')->index()->nullable();
             $table->string('description')->nullable();
             $table->decimal('balance', 64, 0)->default(0);
             $table->timestamps();
@@ -59,7 +60,7 @@ class CreateWalletsTable extends Migration
             ->selectRaw('sum(amount) as balance')
             ->selectRaw('? as created_at', [$now])
             ->selectRaw('? as updated_at', [$now])
-            ->groupBy('holder_type', 'holder_id')
+            ->groupBy('holder_type', 'holder_id', 'payable_id')
             ->orderBy('holder_type');
 
         DB::transaction(function () use ($query) {

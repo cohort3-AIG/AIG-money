@@ -10,7 +10,7 @@ class CreateCurrenciesTable extends Migration
     public function up()
     {
         Schema::create('currencies', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('currency_id');
             $table->foreign('currency_id')->references('id')->on('countries')->onDelete('cascade');
             $table->string('code');

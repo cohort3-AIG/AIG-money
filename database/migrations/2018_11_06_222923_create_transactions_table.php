@@ -19,14 +19,22 @@ class CreateTransactionsTable extends Migration
         Schema::create($this->table(), function (Blueprint $table) {
 
             $table->bigIncrements('id');
-            $table->morphs('payable');
-            $table->enum('type', ['deposit', 'withdraw'])->index();
+//            $table->morphs('payable');    // this is to be returned in the near future.
+            $table->string('payable_type')->nullable();
+            $table->string('payable_id')->nullable();
+            $table->enum('type', ['deposit', 'withdraw'])->index()->nullable();
             $table->decimal('amount', 64, 0);
-            $table->string('status');
-            $table->string('reconciliation_id');
-            $table->boolean('confirmed');
+            $table->unsignedBigInteger('holder_id')->unsigned()->nullable();
+            $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('status')->nullable();
+            $table->string('reconciliation_id')->nullable();
+            $table->string('transaction_id')->nullable();
+            $table->unsignedBigInteger('transaction_cat_id')->nullable();
+            $table->foreign('transaction_cat_id')->references('id')->on('transaction_categories')->onDelete('cascade');
+
+            $table->boolean('confirmed')->nullable();
             $this->json($table, 'meta')->nullable();
-            $table->uuid('uuid')->unique();
+            $table->uuid('uuid')->unique()->nullable();
             $table->timestamps();
 
             $table->index(['payable_type', 'payable_id', 'type'], 'payable_type_ind');

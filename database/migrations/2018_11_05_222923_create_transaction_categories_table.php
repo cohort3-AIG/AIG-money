@@ -11,9 +11,10 @@ class CreateTransactionCategoriesTable extends Migration
     public function up()
     {
         Schema::create('transaction_categories', function (Blueprint $table) {
-            $table->id();
+            $table->bigIncrements('id');
             $table->string('category');
-            $table->unsignedInteger('charge');
+//            $table->unsignedInteger('charge');   // chsnged
+            $table->decimal('charge');
             $table->timestamps();
         });
 

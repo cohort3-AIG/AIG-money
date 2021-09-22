@@ -16,6 +16,8 @@ class TransactionCategory extends Model
     protected $fillable = [
 //        'transaction_id',
         'category',
+        'created_at',
+        'updated_at'
     ];
 
     // Eloquent relationship to handle the one2Many relationship of 'transaction_categories ===>>> transactions'
