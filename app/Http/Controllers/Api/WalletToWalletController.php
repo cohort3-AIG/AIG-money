@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\WalletToWalletRequest;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,8 @@ class WalletToWalletController extends Controller
     {
         $user = User::find($request->id);   // return the user of specified 'id'
         $user->id=$request->id;
-        return ["Current Balance" => $user->balance];
+//        $user_wallet = Wallet::where("holder_id",$user->id)->get();
+        return ["Current Balance" => $user->wallet->get()->balance];
     }
 
     public function transferWalletToWallet(Request $request)   // TRANSFER money from auth wallet to named wallet

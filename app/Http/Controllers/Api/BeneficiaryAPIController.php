@@ -31,7 +31,14 @@ class BeneficiaryAPIController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            "user_id"=> "required",
+            "first_name"=> "required",
+            "last_name"=> "required",
+            "phone_number"=> "required",
+        ]);
+
+        return Beneficiary::create($request->all());
     }
 
     /**
@@ -42,7 +49,7 @@ class BeneficiaryAPIController extends Controller
      */
     public function show($id)
     {
-        //
+        return Beneficiary::find($id);     // return resource of id 'id'
     }
 
     /**
@@ -54,7 +61,8 @@ class BeneficiaryAPIController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $product = Beneficiary::find($id);
+        $product->update($request->all());
     }
 
     /**
@@ -65,6 +73,18 @@ class BeneficiaryAPIController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Beneficiary::destroy($id);
+    }
+
+    /** Search the specified resource from storage. */
+    public function where($name)
+    {
+        return Beneficiary::where("name", "like", "%" .$name. "%")->get();
+    }
+
+    /** Edit the specified resource from storage. */
+    public function edit($id)
+    {
+        return Beneficiary::edit($id);
     }
 }

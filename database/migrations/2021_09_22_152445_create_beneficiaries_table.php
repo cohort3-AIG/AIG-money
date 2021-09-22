@@ -14,7 +14,6 @@ class CreateBeneficiariesTable extends Migration
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('first_name');
-            $table->string('middle_name')->nullable();
             $table->string('last_name');
             $table->unsignedInteger('phone_number');
             $table->timestamps();

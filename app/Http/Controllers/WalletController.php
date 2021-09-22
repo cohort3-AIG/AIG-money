@@ -48,11 +48,6 @@ class WalletController extends BaseController
         $wallet->save();
 
 
-
-
-
-
-
         return ["wallet" => $wallet];
     }
 
@@ -63,7 +58,7 @@ class WalletController extends BaseController
 
             $user = $request->user();
             if (isset($user)) {
-                $user_account = $user->wallet;
+                $user_account = $user->wallet->get()->last();
                 $user_account->first_name = $user->first_name;
                 $user_account->last_name = $user->last_name;
                 return $this->sendResponse([$user_account], 'Successfully.');

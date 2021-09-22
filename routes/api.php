@@ -81,5 +81,11 @@ Route::get("transactions/logs/", [LogAPIController::class, "index"]);   // Works
 /** #end WALLET TO WALLET WORKFLOW... */
 
 
-// BENEFICIARIES
+/** BENEFICIARIES */
 Route::resource("beneficiaries", BeneficiaryAPIController::class);
+
+// edit beneficiaries instance in db
+Route::get("beneficiaries/{id}/edit", [BeneficiaryAPIController::class, "edit"]);
+
+// SEARCH FOR beneficiaries
+Route::get("beneficiaries/search/{name}", [BeneficiaryAPIController::class, "where"]);

@@ -56,8 +56,8 @@ class User extends Authenticatable implements Wallet
         return $this->belongsToMany(Beneficiary::class);
     }
 
-    public function wallet() {
-        return $this->hasOne(Wallet::class);
-    }
+//    public function wallet() {
+//        return $this->hasOne(Wallet::class);
+//    }
     
 }
