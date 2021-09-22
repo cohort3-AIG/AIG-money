@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Fab } from "@mui/material"
+import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Fab, IconButton } from "@mui/material"
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -10,7 +10,8 @@ import { Box } from '@mui/system';
 import SelectMethod from './components/send/selectMethod';
 import CreditCard from './components/deposit/CreditCard';
 import AddIcon from '@mui/icons-material/Add';
-
+import Beneficiary from './components/beneficiary/beneficiary';
+import CloseIcon from '@mui/icons-material/Close';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -39,7 +40,7 @@ export default function Dashboard() {
                     <Card sx={{ height: "40vh" }}>
                         <CardMedia
                             component="img"
-                            alt="green iguana"
+                            alt="profile picture"
                             height="240"
                             image="/images/default.png"
                         />
@@ -127,13 +128,12 @@ export default function Dashboard() {
             </Grid>
             <Modal
                 open={openDeposit}
-                // onClose={handleDepositClose}
+                onClose={handleDepositClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
                     <CreditCard />
-                    <Button onClick={handleDepositClose}>Cancel</Button><Button>Next</Button>
                 </Box>
             </Modal>
 
@@ -154,7 +154,7 @@ export default function Dashboard() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    Create Beneficiary
+                    <Beneficiary />
                 </Box>
             </Modal>
         </>
