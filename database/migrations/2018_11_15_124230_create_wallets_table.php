@@ -27,7 +27,7 @@ class CreateWalletsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->unique();     // one2one r/ship
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->double('balance',15, 2);
+//            $table->double('balance',15, 2);
             $table->string('nationality');
             $table->string('address_line_1');
             $table->string('address_line_2');

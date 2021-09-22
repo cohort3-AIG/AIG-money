@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\LogAPIController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Api\WalletToWalletController;
+use App\Http\Controllers\Api\TransactionController;
 
 
 Route::post('/login', [AuthController::class, 'login']);
@@ -31,7 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 
-
+Route::get("charge",[TransactionController::class, 'get_charge']);
 // START THE APIS FOR HANDLING CRUD OPERATIONS ON THE USE ENTITY
 
 // #Users api Route for the get method to display users values from the db

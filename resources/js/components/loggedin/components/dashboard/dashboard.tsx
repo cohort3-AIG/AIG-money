@@ -40,7 +40,7 @@ export default function dashboard() {
                         <CardMedia
                             component="img"
                             alt="green iguana"
-                            height="240"
+                            height="120"
                             image="/images/default.png"
                         />
                         <CardContent>
