@@ -1,10 +1,9 @@
-import React, { useReducer, createContext } from 'react'
+import { useReducer, createContext } from 'react'
 import reducer, { initialState } from '../reducers/register'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/register'
 import { IRegister, IRegisterAction } from '../models/register'
 import { REGISTER_URL, HOST_URL } from '../../config/settings'
-import { updateObject } from '../utility'
 
 export const RegisterContext = createContext<IRegister | any>(initialState);
 
