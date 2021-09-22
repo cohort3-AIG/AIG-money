@@ -1,0 +1,4 @@
+// authentication actions
+export const BENEFICIARY_START = 'BENEFICIARY_START'
+export const BENEFICIARY_SUCCESS = 'BENEFICIARY_SUCCESS'
+export const BENEFICIARY_FAIL = 'BENEFICIARY_FAIL'
