@@ -53,7 +53,7 @@ export default function Dashboard() {
                         <CardMedia
                             component="img"
                             alt="profile picture"
-                            height="240"
+                            height="140"
                             image="/images/default.png"
                         />
                         <CardContent>
