@@ -12,7 +12,7 @@ class BeneficiaryAPIController extends Controller
     public function index()
     {
         $beneficicaryy = Beneficiary::all();
-        
+
         return response()->json([
             'status'=> 200,
             'beneficiaries'=> $beneficicaryy,
@@ -33,7 +33,12 @@ class BeneficiaryAPIController extends Controller
     /** Display the specified resource. */
     public function show($id)
     {
-        return Beneficiary::find($id);
+        $benef = Beneficiary::find($id);
+
+        return response()->json([
+            'status'=> 200,
+            'result'=> $benef,
+        ]);
     }
 
     /** Update the specified resource in storage. */
