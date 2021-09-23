@@ -12,15 +12,13 @@ class BeneficiaryAPIController extends Controller
     /** Display a listing of the resource. */
     public function index(Request $request)
     {
-//        $user = $request->user();
+//        $my_beneficiaries = $request->user()->beneficiaries;
         $user = User::find(1);
-        $my_beneficiaries = $user->beneficiaries();
 
         return response()->json([
             'status'=> 200,
-            'beneficiaries'=> $my_beneficiaries,
+            'My-beneficiaries'=> $user,
         ]);}
-
 
 
     /** Store a newly created resource in storage. */

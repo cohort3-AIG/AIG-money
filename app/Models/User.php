@@ -37,7 +37,7 @@ class User extends Authenticatable implements Wallet
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     public function agent()
     {
         return $this->hasOne(Agent::class);
@@ -50,10 +50,13 @@ class User extends Authenticatable implements Wallet
 
     public function beneficiaries()    // m2m
     {
-        return $this->belongsToMany(
-            Beneficiary::class,
-        'beneficiaries_users',
-        'user_id',
-        'beneficiary_id');
+//        return $this->belongsToMany(
+//            Beneficiary::class,
+//        'beneficiaries_users',
+//        'user_id',
+//        'beneficiary_id');
+
+        return $this->belongsToMany(Beneficiary::class);
+
     }
 }
