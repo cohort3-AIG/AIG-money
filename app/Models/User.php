@@ -38,31 +38,25 @@ class User extends Authenticatable implements Wallet
         'email_verified_at' => 'datetime',
     ];
 
-
-    // Eloquent relationship to handle the one2one relationship of 'user ===>>> agent'
     public function agent()
     {
         return $this->hasOne(Agent::class);
     }
 
-    // Eloquent relationship to handle the one2Many relationship of 'user ===>>> logs'
     public function logs()
     {
-        return $this->hasMany(Log::class);   // THE MANY PART
+        return $this->hasMany(Log::class);
     }
 
-    // m2m relationship
-    public function beneficiaries()
+    public function beneficiaries()    // m2m
     {
+//        return $this->belongsToMany(
+//            Beneficiary::class,
+//        'beneficiaries_users',
+//        'user_id',
+//        'beneficiary_id');
+
         return $this->belongsToMany(Beneficiary::class);
+
     }
-
-//    public function transactions() {
-//        return $this->hasMany(\Bavix\Wallet\Models\Transaction::class);
-//    }
-
-//    public function wallet() {
-//        return $this->hasOne(Wallet::class);
-//    }
-
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Bavix\Wallet\Models\Wallet;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
 
@@ -21,38 +22,33 @@ class WalletController extends BaseController
             ]
         );
 
-//        $user = $request->user();
-//        $user->hasWallet('my-wallet');    // bool
-//        $wallet = $user->createWallet([   // if false, create
-//            'holder_id' => $user->id,
-//            'balance' => 0.0,
-//            'nationality' => $fields['nationality'],
-//            'address_line_1' => $fields['address_line_1'],
-//            'address_line_2' => $fields['address_line_2'],
-//            'city_town_village' => $fields['city_town_village'],
-//            'state_pronvince_region' => $fields['state_pronvince_region'],
-//            'postal_code' => $fields['postal_code'],
-//            'allow' => 0
-//        ]);
+        $user = User::first();
+        $user->hasWallet('my-wallet'); // bool(false)
+        $wallet = $user->createWallet([
+        'holder_id' => $request->user()->id,
+        'balance' => 0.0,
+        'nationality' => $fields['nationality'],
+        'address_line_1' => $fields['address_line_1'],
+        'address_line_2' => $fields['address_line_2'],
+        'city_town_village' => $fields['city_town_village'],
+        'state_pronvince_region' => $fields['state_pronvince_region'],
+        'postal_code' => $fields['postal_code'],
+        'allow' => 0
+        ]);
 
-        if(!$request->user()->wallet->exists()){
-            $wallet = new Wallet();
-            $wallet->holder_id = $request->user()->id;
-            $wallet->balance = 0.0;
-            $wallet->nationality = $fields['nationality'];
-            $wallet->address_line_1 = $fields['address_line_1'];
-            $wallet->address_line_2 = $fields['address_line_2'];
-            $wallet->city_town_village = $fields['city_town_village'];
-            $wallet->state_pronvince_region = $fields['state_pronvince_region'];
-            $wallet->postal_code = $fields['postal_code'];
-            $wallet->allow = 0;
-            $wallet->save();
-
-            return ["wallet" => $wallet];
-        }
-
-        return ['Sorry User already has a wallet!'];
-
+//        $wallet = new Wallet();
+//        $wallet->holder_id = $request->user()->id;
+//        $wallet->balance = 0.0;
+//        $wallet->nationality = $fields['nationality'];
+//        $wallet->address_line_1 = $fields['address_line_1'];
+//        $wallet->address_line_2 = $fields['address_line_2'];
+//        $wallet->city_town_village = $fields['city_town_village'];
+//        $wallet->state_pronvince_region = $fields['state_pronvince_region'];
+//        $wallet->postal_code = $fields['postal_code'];
+//        $wallet->allow = 0;
+//        $wallet->save();
+        
+        return ["wallet" => $wallet];
 
     }
 

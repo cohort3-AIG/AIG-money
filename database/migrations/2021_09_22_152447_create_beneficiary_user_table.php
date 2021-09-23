@@ -15,7 +15,16 @@ class CreateBeneficiaryUserTable extends Migration
     {
         Schema::create('beneficiary_user', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->timestamps();
+
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')->onDelete('cascade');
+
+            $table->unsignedBigInteger('beneficiary_id');
+            $table->foreign('beneficiary_id')
+                ->references('id')
+                ->on('beneficiaries')->onDelete('cascade');
         });
     }
 
