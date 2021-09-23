@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -55,4 +56,13 @@ class User extends Authenticatable implements Wallet
     {
         return $this->belongsToMany(Beneficiary::class);
     }
+
+//    public function transactions() {
+//        return $this->hasMany(\Bavix\Wallet\Models\Transaction::class);
+//    }
+
+//    public function wallet() {
+//        return $this->hasOne(Wallet::class);
+//    }
+
 }
