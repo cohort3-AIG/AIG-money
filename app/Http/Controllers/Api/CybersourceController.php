@@ -139,6 +139,7 @@ class CybersourceController extends BaseController
                         "administrative_area" => $validated['administrative_area'],
                         "country" => $validated['country'],
                         "email" => $validated['email'],
+                        "phoneNumber" =>$user->phone_number
                     ];
                     $address2 ? array_push($orderInformationBillToArr, (object) ["address2" => $address2]) : "";
                     $orderInformationBillTo = new Ptsv2paymentsOrderInformationBillTo($orderInformationBillToArr);
@@ -171,12 +172,13 @@ class CybersourceController extends BaseController
                     $result = new CybersourceResource($apiResponse[0]);
                     if ($result['status'] === 'AUTHORIZED') {
                         $new_trans = Transaction::updateOrCreate([
-                            'holder_id' => $user->id,
+                            'wallet_id' => $user->id,
                             'amount' =>  $validated['total_amount'],
                             'status' => $result['status'],
                             'transaction_id' => bcrypt($result['processorInformation']['transactionId']),
                             'reconciliation_id' => bcrypt($result['reconciliationId']),
                             'transaction_cat_id' => 1,
+                            'charge'=>$charge_cat->charge * $validated['total_amount']
                         ]);
                         $new_trans->save();
 
@@ -186,15 +188,14 @@ class CybersourceController extends BaseController
                         // if (Wallet::find($user->id) === null) {
 
                         //     $user_wallet = Wallet::create([
-                        //         'holder_id' => $user->id,
+                        //         'wallet_id' => $user->id,
                         //         'transaction_id' => $new_trans->id,
                         //         'balance' => $charged_amount,
                         //     ]);
                         // } else {
 
-//                        $user_wallet = Wallet::where("holder_id",$user->id)->get()->first();
+//                        $user_wallet = Wallet::where("wallet_id",$user->id)->get()->first();
                         $user_wallet = $user->wallet;   // LIFESAVER 100% !
-
                         $totalAmount=$user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
                         $user_wallet->save();
