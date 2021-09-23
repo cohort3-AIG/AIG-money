@@ -24,6 +24,7 @@ class CreateTransactionsTable extends Migration
             $table->string('payable_id')->nullable();
             $table->enum('type', ['deposit', 'withdraw'])->index()->nullable();
             $table->decimal('amount', 64, 0);
+            $table->decimal('charge', 20, 0)->nullable();
             $table->unsignedBigInteger('holder_id')->unsigned()->nullable();
             $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('status')->nullable();
