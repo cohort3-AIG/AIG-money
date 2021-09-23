@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\WalletToWalletRequest;
-use Bavix\Wallet\Models\Transaction;
-use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 
 
@@ -42,14 +39,6 @@ class WalletToWalletController extends Controller
         $userBal = $user->balance;
         return ["Current Balance of selected user is " => $userBal];
     }
-
-//    public function transferWalletToWallet(Request $request)
-//    {
-////        $sendingWallet = User::find($request->user());
-//        $sendingWallet = User::find(1)->wallet;    // the logged-in user
-//        $receivingWallet = User::find(2)->wallet;
-//        return $sendingWallet->transfer($receivingWallet, 100);
-//    }
 
     public function transferWalletToWallet(Request $request)
     {
