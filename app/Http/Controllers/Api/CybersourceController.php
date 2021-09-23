@@ -6,7 +6,8 @@ use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\Cybersource as CybersourceResource;
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../Helpers/ExternalConfiguration.php';
-use App\Models\Transaction;
+//use App\Models\Transaction;
+use Bavix\Wallet\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\User;
 //use App\Models\Wallet;
@@ -191,7 +192,9 @@ class CybersourceController extends BaseController
                         //     ]);
                         // } else {
 
-                        $user_wallet = Wallet::where("holder_id",$user->id)->get()->first();
+//                        $user_wallet = Wallet::where("holder_id",$user->id)->get()->first();
+                        $user_wallet = $user->wallet;   // LIFESAVER 100% !
+
                         $totalAmount=$user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
                         $user_wallet->save();

@@ -51,7 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get("transactions/logs/me/", [LogAPIController::class, "myTransactions"]);   // Works
 
     // Beneficiary
-    Route::get("beneficiary/list", [BeneficiaryAPIController::class, "index"]);
+    Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
     Route::get("beneficiary/{id}", [BeneficiaryAPIController::class, "show"]);
     Route::put("beneficiary/{id}", [BeneficiaryAPIController::class, "update"]);

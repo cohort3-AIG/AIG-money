@@ -17,8 +17,12 @@ class CreateTransfersTable extends Migration
             $table->bigIncrements('id');
             $table->morphs('from');
             $table->morphs('to');
-            $table->unsignedBigInteger('deposit_id');
-            $table->unsignedBigInteger('withdraw_id');
+//            $table->unsignedBigInteger('from_id');
+//            $table->string('from_type');
+//            $table->unsignedBigInteger('to_id');
+//            $table->string('to_type');
+            $table->unsignedInteger('deposit_id');
+            $table->unsignedInteger('withdraw_id');
             $table->uuid('uuid')->unique();
             $table->timestamps();
 

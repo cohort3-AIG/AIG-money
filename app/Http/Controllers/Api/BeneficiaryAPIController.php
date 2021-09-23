@@ -4,24 +4,30 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\User;
 use App\Models\Beneficiary;
 
 class BeneficiaryAPIController extends Controller
 {
     /** Display a listing of the resource. */
-    public function index()
+    public function index(Request $request)
     {
-        $beneficicaryy = Beneficiary::all();
+//        $user = $request->user();
+        $user = User::find(1);
+        $my_beneficiaries = $user->beneficiaries();
 
         return response()->json([
             'status'=> 200,
-            'beneficiaries'=> $beneficicaryy,
+            'beneficiaries'=> $my_beneficiaries,
         ]);}
+
+
 
     /** Store a newly created resource in storage. */
     public function store(Request $request)
     {
         $request->validate([
+            'user_id'=> "required",
             'first_name'=> "required",
             'last_name'=> "required",
             'phone_number'=> "required",
@@ -63,4 +69,6 @@ class BeneficiaryAPIController extends Controller
             ->orWhere('last_name', 'LIKE', "%{$name}%")
             ->get();
     }
+
+//    public function
 }
