@@ -21,17 +21,17 @@ class CreateTransfersTable extends Migration
 //            $table->string('from_type');
 //            $table->unsignedBigInteger('to_id');
 //            $table->string('to_type');
-            $table->unsignedInteger('deposit_id');
-            $table->unsignedInteger('withdraw_id');
+            //$table->unsignedInteger('deposit_id');
+           // $table->unsignedInteger('withdraw_id');
             $table->uuid('uuid')->unique();
             $table->timestamps();
 
-            $table->foreign('deposit_id')
+            $table->foreignId('deposit_id')
                 ->references('id')
                 ->on($this->transactionTable())
                 ->onDelete('cascade');
 
-            $table->foreign('withdraw_id')
+            $table->foreignId('withdraw_id')
                 ->references('id')
                 ->on($this->transactionTable())
                 ->onDelete('cascade');
