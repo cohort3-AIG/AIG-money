@@ -27,7 +27,10 @@ class LogAPIController extends Controller
         $user = User::find(1);
         $myWallet = $user->wallet->get()->all();
 
-        return $myWallet;
+        return response()->json([
+            'status'=> 200,
+            'transactions'=> $myWallet,
+        ]);
 
 //        $transaction_logs = Transaction::find($myWallet->transaction);
 //
