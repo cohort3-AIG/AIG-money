@@ -35,7 +35,7 @@ class WalletController extends BaseController
 //            'allow' => 0
 //        ]);
 
-        if(!$request->user()->wallet->wallet->exists()){
+        if(!$request->user()->wallet->exists()){
             $wallet = new Wallet();
             $wallet->holder_id = $request->user()->id;
             $wallet->balance = 0.0;
