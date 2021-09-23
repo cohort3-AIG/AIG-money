@@ -40,7 +40,7 @@ class WalletToWalletController extends Controller
         $user = User::find($request->id);   // return the user of specified 'id'
         $user->id=$request->id;
 //        $user_wallet = Wallet::where("holder_id",$user->id)->get();
-        return ["Current Balance" => $user->wallet->get()->last()];
+        return ["Current Balance" => $user->wallet->get()->last()->balance];
     }
 
     public function transferWalletToWallet(Request $request)   // TRANSFER money from auth wallet to named wallet
