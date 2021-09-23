@@ -191,17 +191,13 @@ class CybersourceController extends BaseController
                         //     ]);
                         // } else {
 
-                        $user_wallet = Wallet::where("holder_id",$user->id)->get()->first();
-                        $totalAmount=$user_wallet->balance + $validated['total_amount'];
-                        $user_wallet->balance = $totalAmount;
+                        $user_wallet = Wallet::find($user->id);
+                        $user_wallet->holder_id = $user->id;
+                        $user_wallet->balance = $user_wallet->balance + $charged_amount;
                         $user_wallet->save();
-
-                        // $updated_user=Wallet::find($new_id);
-                        // return $updated_user->balance;
-                        
                         // }
 
-                        return $this->sendResponse(['Your wallet was updated to $' . $totalAmount,"charge ".($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
+                        return $this->sendResponse(['Your wallet was updated to $' . $user_wallet->balance,"charge ".($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
                         return $this->sendResponse($result, 'Failed');
                     }
