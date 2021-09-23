@@ -2,75 +2,49 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\Beneficiary;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
+use App\Models\Beneficiary;
 
 class BeneficiaryAPIController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
+    /** Display a listing of the resource. */
     public function index()
     {
-        $beneficiaries = Beneficiary::all();
-
+        $beneficicaryy = Beneficiary::all();
+        
         return response()->json([
             'status'=> 200,
-            'beneficiaries'=> $beneficiaries,
-        ]);
-    }
+            'beneficiaries'=> $beneficicaryy,
+        ]);}
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
+    /** Store a newly created resource in storage. */
     public function store(Request $request)
     {
         $request->validate([
-            "user_id"=> "required",
-            "first_name"=> "required",
-            "last_name"=> "required",
-            "phone_number"=> "required",
+            'first_name'=> "required",
+            'last_name'=> "required",
+            'phone_number'=> "required",
         ]);
 
         return Beneficiary::create($request->all());
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /** Display the specified resource. */
     public function show($id)
     {
-        return Beneficiary::find($id);     // return resource of id 'id'
+        return Beneficiary::find($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /** Update the specified resource in storage. */
     public function update(Request $request, $id)
     {
-        $product = Beneficiary::find($id);
-        $product->update($request->all());
+        $beneficiary = Beneficiary::find($id);
+        $beneficiary->update($request->all());
+        return $beneficiary;
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    /** Remove the specified resource from storage. */
     public function destroy($id)
     {
         return Beneficiary::destroy($id);
@@ -79,12 +53,9 @@ class BeneficiaryAPIController extends Controller
     /** Search the specified resource from storage. */
     public function where($name)
     {
-        return Beneficiary::where("name", "like", "%" .$name. "%")->get();
-    }
-
-    /** Edit the specified resource from storage. */
-    public function edit($id)
-    {
-        return Beneficiary::edit($id);
+        return Beneficiary::query()
+            ->where('first_name', 'LIKE', "%{$name}%")
+            ->orWhere('last_name', 'LIKE', "%{$name}%")
+            ->get();
     }
 }
