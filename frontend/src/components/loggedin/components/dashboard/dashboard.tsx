@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Grid, Paper, Modal, Avatar, Divider, List, ListItem, ListItemAvatar, ListItemText, Fab, IconButton } from "@mui/material"
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -10,8 +10,9 @@ import { Box } from '@mui/system';
 import SelectMethod from './components/send/selectMethod';
 import CreditCard from './components/deposit/CreditCard';
 import AddIcon from '@mui/icons-material/Add';
-import Beneficiary from './components/beneficiary/beneficiary';
-import CloseIcon from '@mui/icons-material/Close';
+import Beneficiary from './components/beneficiary/beneficiary'
+import { DepositContext } from '../../../../store/context/deposit'
+import DepositDetails from './components/deposit/DepositDetails';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -24,6 +25,7 @@ const style = {
     p: 4,
 };
 export default function Dashboard() {
+    const { deposit } = useContext(DepositContext)
     const [openDeposit, setOpenDeposit] = React.useState(false);
     const handleDepositOpen = () => setOpenDeposit(true);
     const handleDepositClose = () => setOpenDeposit(false);
@@ -133,7 +135,11 @@ export default function Dashboard() {
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
-                    <CreditCard />
+                    {deposit.step === 1 ?
+                        <DepositDetails />
+                        : <CreditCard />}
+
+
                 </Box>
             </Modal>
 

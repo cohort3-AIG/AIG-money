@@ -1,51 +1,44 @@
 import "./style.css"
+import { MutableRefObject, useContext, useRef } from 'react'
 import { Box, Typography, Checkbox, FormControlLabel, Autocomplete, TextField, LinearProgress, Button } from "@mui/material"
 import { useFormik } from "formik"
 import * as yup from "yup"
 import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
 import { countries } from "../../../../../shared/countries/countries"
+import Cleave from 'cleave.js/react';
+import { DepositContext } from "../../../../../../store/context/deposit"
 const validationSchema = yup.object({
-    postal_code: yup
-        .number()
-        .required("Postal Code is Required"),
-    state_province_region: yup
+    cardNo: yup
         .string()
-        .required("State Province Region is required"),
-    city_town_village: yup
+        .required("Card Number is Required"),
+    expiry: yup
         .string()
-        .required("City Town Village is required"),
-    address_line_2: yup
-        .string(),
-    address_line_1: yup
+        .required("Expiry is required"),
+    ccv: yup
         .string()
-        .required("Address Line 1 is required"),
-    terms: yup
-        .bool()
-        .oneOf([true], 'Field must be checked')
-        .required("To create account you must agree to terms and conditions")
+        .required("Securty Code is required"),
 });
 export default function CreditCard() {
     // const { register, create_wallet } = useContext(RegisterContext)
+    const { deposit, insertCard } = useContext(DepositContext)
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory()
+    const cardTypeRef = useRef() as MutableRefObject<HTMLDivElement>
     const formik = useFormik({
         initialValues: {
-            postal_code: '',
-            state_province_region: "",
-            city_town_village: "",
-            address_line_2: "",
-            address_line_1: "",
-            terms: false,
+            cardNo: "",
+            expiry: "",
+            ccv: ""
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            // create_wallet(inputValue, values.address_line_1, values.address_line_2, values.city_town_village, values.state_province_region, values.postal_code);
+            insertCard(values.cardNo, values.expiry, values.ccv)
         },
     });
     return (
         <Box>
-            <form>
+            <form onSubmit={formik.handleSubmit}>
                 <Box className="body">
                     <Box className="card">
 
@@ -53,11 +46,52 @@ export default function CreditCard() {
                         <Box className="card__row">
                             <Box className="card__col">
                                 <label htmlFor="cardNumber" className="card__label">Card Number</label
-                                ><input
+                                ><Cleave
+                                    options={{
+                                        creditCard: true,
+                                        delimiter: "-",
+                                        onCreditCardTypeChanged: (type) => {
+                                            const visa = "fab fa-cc-visa"
+                                            const mastercard = "fab fa-cc-mastercard"
+                                            const amex = "fab fa-cc-amex"
+                                            const diners = "fab fa-cc-diners-club"
+                                            const jcb = "fab fa-cc-jcb"
+                                            const discover = "fab fa-cc-discover"
+
+                                            switch (type) {
+                                                case "visa":
+                                                    cardTypeRef.current.setAttribute("class", visa);
+                                                    break;
+                                                case "mastercard":
+                                                    cardTypeRef.current.setAttribute("class", mastercard);
+                                                    break;
+                                                case "amex":
+                                                    cardTypeRef.current.setAttribute("class", amex);
+                                                    break;
+                                                case "diners":
+                                                    cardTypeRef.current.setAttribute("class", diners)!;
+                                                    break;
+                                                case "jcb":
+                                                    cardTypeRef.current.setAttribute("class", jcb);
+                                                    break;
+                                                case "discover":
+                                                    cardTypeRef.current.setAttribute("class", discover);
+                                                    break;
+                                                default:
+                                                    cardTypeRef.current.setAttribute("class", "");
+                                                    break;
+                                            }
+                                        }
+                                    }}
                                     type="text"
                                     className="card__input card__input--large"
-                                    id="cardNumber"
+                                    id="cardNo"
+                                    name="cardNo"
                                     placeholder="xxxx-xxxx-xxxx-xxxx"
+                                    value={formik.values.cardNo}
+                                    onChange={formik.handleChange}
+                                // error={formik.touched.cardNo && Boolean(formik.errors.cardNo)}
+                                // helperText={formik.touched.cardNo && formik.errors.cardNo}
                                 />
                             </Box>
                             <Box className="card__col card__chip">
@@ -67,153 +101,62 @@ export default function CreditCard() {
                         <Box className="card__row">
                             <Box className="card__col">
                                 <label htmlFor="cardExpiry" className="card__label">Expiry Date</label
-                                ><input
+                                ><Cleave
+                                    options={{
+                                        date: true,
+                                        datePattern: ["m", "y"],
+                                    }}
                                     type="text"
                                     className="card__input"
                                     id="cardExpiry"
-                                    placeholder="xx/xx"
+                                    name="expiry"
+                                    placeholder="mm/yy"
+                                    value={formik.values.expiry}
+                                    onChange={formik.handleChange}
+                                // error={formik.touched.expiry && Boolean(formik.errors.expiry)}
+                                // helperText={formik.touched.expiry && formik.errors.expiry}
                                 />
                             </Box>
                             <Box className="card__col">
                                 <label htmlFor="cardCcv" className="card__label">CCV</label
-                                ><input
+                                ><Cleave
+                                    options={{
+                                        blocks: [3],
+                                        numericOnly: true
+                                    }}
                                     type="text"
                                     className="card__input"
-                                    id="cardCcv"
+                                    id="ccv"
+                                    name="ccv"
                                     placeholder="xxx"
+                                    value={formik.values.ccv}
+                                    onChange={formik.handleChange}
+                                // error={formik.touched.ccv && Boolean(formik.errors.ccv)}
+                                // helperText={formik.touched.ccv && formik.errors.ccv}
                                 />
                             </Box>
-                            <Box className="card__col card__brand"><i id="cardBrand"></i></Box>
+                            <Box className="card__col card__brand"><i ref={cardTypeRef} id="cardBrand"></i></Box>
                         </Box>
 
                     </Box>
                 </Box>
-                <FormControlLabel control={<Checkbox defaultChecked />} label=" Use Default Address Information" />
-                <Autocomplete
-                    id="nationality"
-                    options={countries}
-                    autoHighlight
-                    getOptionLabel={(option) => option.label}
-                    // value={value}
-                    onChange={(event: any, newValue: any) => {
-                        // setValue(newValue);
-                    }}
-                    // inputValue={inputValue}
-                    onInputChange={(event: any, newInputValue: any) => {
-                        // setInputValue(newInputValue);
-                    }}
-                    renderOption={(props, option) => (
-                        <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                            <img
-                                loading="lazy"
-                                width="20"
-                                src={`https://flagcdn.com/w20/${option.code.toLowerCase()}.png`}
-                                srcSet={`https://flagcdn.com/w40/${option.code.toLowerCase()}.png 2x`}
-                                alt=""
-                            />
-                            {option.label}
-                        </Box>
-                    )}
-                    renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label="Nationality"
-                            fullWidth
-                            required
-                            variant="outlined"
-                            margin="normal"
-                            name="nationality"
-                            inputProps={{
-                                ...params.inputProps,
-                                autoComplete: 'new-password', // disable autocomplete and autofill
-                            }}
-                        />
-                    )}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="address_line_1"
-                    label="Address Line 1"
-                    name="address_line_1"
-                    type="text"
-                    value={formik.values.address_line_1}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address_line_1 && Boolean(formik.errors.address_line_1)}
-                    helperText={formik.touched.address_line_1 && formik.errors.address_line_1}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    fullWidth
-                    name="address_line_2"
-                    label="Address Line 2"
-                    type="text"
-                    id="address_line_2"
-                    value={formik.values.address_line_2}
-                    onChange={formik.handleChange}
-                    error={formik.touched.address_line_2 && Boolean(formik.errors.address_line_2)}
-                    helperText={formik.touched.address_line_2 && formik.errors.address_line_2}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="city_town_village"
-                    label="City / Town / Village"
-                    type="text"
-                    id="city_town_village"
-                    value={formik.values.city_town_village}
-                    onChange={formik.handleChange}
-                    error={formik.touched.city_town_village && Boolean(formik.errors.city_town_village)}
-                    helperText={formik.touched.city_town_village && formik.errors.city_town_village}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="state_province_region"
-                    label="State / Province / Region"
-                    type="text"
-                    id="state_province_region"
-                    value={formik.values.state_province_region}
-                    onChange={formik.handleChange}
-                    error={formik.touched.state_province_region && Boolean(formik.errors.state_province_region)}
-                    helperText={formik.touched.state_province_region && formik.errors.state_province_region}
-                />
-                <TextField
-                    variant="outlined"
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="postal_code"
-                    label="Postal Code"
-                    type="text"
-                    id="postal_code"
-                    value={formik.values.postal_code}
-                    onChange={formik.handleChange}
-                    error={formik.touched.postal_code && Boolean(formik.errors.postal_code)}
-                    helperText={formik.touched.postal_code && formik.errors.postal_code}
-                />
+
                 <Button
                     type="submit"
                     variant="contained"
                     fullWidth
                     sx={{
                         color: "white",
-                        marginX: "auto"
+                        marginX: "auto",
+                        marginTop: 10
                     }}
-                    // disabled={register.loading}
+                    disabled={deposit.loading}
                 >
                     Next
                 </Button>
-                {/* {register.loading && (
+                {deposit.loading && (
                     <LinearProgress />
-                )} */}
+                )}
             </form>
         </Box>
     )
