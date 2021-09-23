@@ -8,7 +8,7 @@ import { useEffect } from "react";
 
 
 const App = () => {
-  const { auth, authCheckState } = useContext(AuthContext)
+  const { auth, authCheckState, getCsrfCookie } = useContext(AuthContext)
   const themeMui = createTheme({
     palette: {
       primary: {
@@ -17,6 +17,7 @@ const App = () => {
     },
   });
   useEffect(() => {
+    getCsrfCookie()
     authCheckState()
   }, []);
   console.log(auth)
@@ -25,13 +26,13 @@ const App = () => {
       <ThemeProvider theme={themeMui}>
         <Switch>
           <Route path="/console">
-            {/* {auth.token !== "null" ? ( */}
+            {auth.token !== "null" ? (
               <>
                 <LoggedInComponent />
               </>
-            {/* // ) : (
-            //   <><Redirect to="/login" /></>)
-            // } */}
+            ) : (
+              <><Redirect to="/login" /></>)
+            }
           </Route>
           <Route path="/">
             <LoggedOutComponent />

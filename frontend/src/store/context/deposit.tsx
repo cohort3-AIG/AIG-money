@@ -64,32 +64,57 @@ const DepositContextProvider = (props: any): JSX.Element => {
         depositDispatch(depositCardSuccess(cardNo, expiry, 1, ccv, "Card entered successfully"))
     }
 
-    const makeDeposit = () => {
+    const makeDeposit = (
+        number: number,
+        expiration_month: number,
+        expiration_year: number,
+        total_amount: number,
+        security_code: number,
+        first_name: string,
+        last_name: string,
+        address2: string,
+        address1: string,
+        postal_code: number,
+        locality: string,
+        administrative_area: string,
+        country: string,
+        email: string
+    ) => {
         depositDispatch(depositStart())
-        axios.post(`${HOST_URL}payment`, {
-            "number": "5225110000367222",
-            "expiration_month": "02",
-            "expiration_year": "2022",
-            "total_amount": "50000.0",
-            "security_code": "514",
-            "first_name": "John",
-            "last_name": "Deo",
-            "address2": "Address 2",
-            "address1": "201 S. Division St.",
-            "postal_code": "48104-2201",
-            "locality": "Ann Arbor",
-            "administrative_area": "MI",
-            "country": "US",
-            "email": "test@cybs.com"
-        }).then(res => {
-            depositDispatch(depositSuccess("Deposit Added Successfully"))
-        }).catch(err => {
-            if (err.response.data.errors) {
-                depositDispatch(depositFail(JSON.stringify(err.response.data.errors)))
-            } else {
-                depositDispatch(depositFail("Deposit Failed"))
-            }
-        })
+        const token = localStorage.getItem('token')
+        if (token) {
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+            axios.post(`${HOST_URL}payment`, {
+                number,
+                expiration_month,
+                expiration_year,
+                total_amount,
+                security_code,
+                first_name,
+                last_name,
+                address2,
+                address1,
+                postal_code,
+                locality,
+                administrative_area,
+                country,
+                email
+            }, config).then(res => {
+                console.log(res)
+                depositDispatch(depositSuccess("Deposit Added Successfully"))
+            }).catch(err => {
+                console.log(err)
+                if (err.response.data.errors) {
+                    depositDispatch(depositFail(JSON.stringify(err.response.data.errors)))
+                } else {
+                    depositDispatch(depositFail("Deposit Failed"))
+                }
+            })
+        } else {
+            depositDispatch(depositFail("You Needed to be Authenticated"))
+        }
     }
 
     return (

@@ -13,6 +13,9 @@ import AddIcon from '@mui/icons-material/Add';
 import Beneficiary from './components/beneficiary/beneficiary'
 import { DepositContext } from '../../../../store/context/deposit'
 import DepositDetails from './components/deposit/DepositDetails';
+import axios from 'axios'
+import useSwr from 'swr'
+import { HOST_URL } from "../../../../config/settings"
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -24,7 +27,14 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
+const token = localStorage.getItem('token')
+const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
+const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
+
 export default function Dashboard() {
+    const { data, error } = useSwr(`${HOST_URL}wallet/me/balance`, fetcher)
     const { deposit } = useContext(DepositContext)
     const [openDeposit, setOpenDeposit] = React.useState(false);
     const handleDepositOpen = () => setOpenDeposit(true);
@@ -47,9 +57,9 @@ export default function Dashboard() {
                             image="/images/default.png"
                         />
                         <CardContent>
-                            <Typography gutterBottom variant="h5" component="div">
-                                0 $
-                            </Typography>
+                            {data && (<Typography gutterBottom variant="h5" component="div">
+                                {data.balance} $
+                            </Typography>)}
                             <Typography variant="body2" color="text.secondary">
                                 Musumba Gerald Michael
                             </Typography>

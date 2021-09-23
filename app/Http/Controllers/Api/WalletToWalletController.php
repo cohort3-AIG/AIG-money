@@ -31,7 +31,7 @@ class WalletToWalletController extends Controller
     {
         $user = User::find($request->user()->id);
         $user->id = $request->id;
-        return ["Current Balance of Logged in user is " => $user->wallet->get()->last()->balance];
+        return ["balance" => $user->wallet->get()->last()->balance];
     }
 
     # works

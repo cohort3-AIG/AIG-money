@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { Box, Typography, Checkbox, FormControlLabel, Autocomplete, TextField, LinearProgress, Button, Paper } from "@mui/material"
 import { useFormik } from "formik"
 import * as yup from "yup"
@@ -6,6 +6,9 @@ import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
 import { countries } from "../../../../../shared/countries/countries"
 import { DepositContext } from '../../../../../../store/context/deposit';
+import axios from 'axios'
+import useSwr from 'swr'
+import { HOST_URL } from "../../../../../../config/settings"
 const validationSchema = yup.object({
     postal_code: yup
         .number()
@@ -49,8 +52,14 @@ const validationSchema = yup.object({
         }),
     amount: yup.number().required("Amount is required")
 });
+const token = localStorage.getItem('token')
+const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
+const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function DepositDetails() {
-    const { deposit, insertCard } = useContext(DepositContext)
+    const { data, error } = useSwr(`${HOST_URL}wallet_get`, fetcher)
+    const { deposit, makeDeposit } = useContext(DepositContext)
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory()
     const formik = useFormik({
@@ -67,10 +76,55 @@ export default function DepositDetails() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            console.log(values)
-            // create_wallet(inputValue, values.address_line_1, values.address_line_2, values.city_town_village, values.state_province_region, values.postal_code);
+            makeDeposit(
+                parseInt(deposit.cardNo.replaceAll("-","")),
+                parseInt(deposit.expiry.split("/")[0]),
+                2000 + parseInt(deposit.expiry.split("/")[1]),
+                values.amount,
+                deposit.ccv,
+                values.first_name,
+                values.last_name,
+                values.address_line_2,
+                values.address_line_1,
+                values.postal_code,
+                values.city_town_village,
+                values.state_province_region,
+                inputValue,
+                localStorage.getItem('email')
+            )
         },
     });
+    const [value, setValue] = React.useState();
+    const [inputValue, setInputValue] = React.useState();
+    React.useEffect(() => {
+        console.log("value", value);
+    }, [value]);
+    React.useEffect(() => {
+        console.log("inputValue", inputValue);
+    }, [inputValue]);
+
+    useEffect(() => {
+        if (deposit.success) {
+            enqueueSnackbar(deposit.success, {
+                variant: 'success',
+            })
+            history.push("/console");
+        }
+        if (deposit.error) {
+            try {
+                var errors: any = Object.values(JSON.parse(deposit.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(deposit.error, {
+                    variant: 'error',
+                })
+            }
+        }
+    }, [deposit])
     return (
         <Box>
             <Paper
@@ -144,13 +198,13 @@ export default function DepositDetails() {
                                     options={countries}
                                     autoHighlight
                                     getOptionLabel={(option) => option.label}
-                                    // value={value}
+                                    value={value}
                                     onChange={(event: any, newValue: any) => {
-                                        // setValue(newValue);
+                                        setValue(newValue);
                                     }}
-                                    // inputValue={inputValue}
+                                    inputValue={inputValue}
                                     onInputChange={(event: any, newInputValue: any) => {
-                                        // setInputValue(newInputValue);
+                                        setInputValue(newInputValue);
                                     }}
                                     renderOption={(props, option) => (
                                         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
@@ -263,6 +317,9 @@ export default function DepositDetails() {
                         >
                             Next
                         </Button>
+                        {deposit.loading && (
+                            <LinearProgress />
+                        )}
                     </form>
                 </Box>
             </Paper>

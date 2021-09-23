@@ -1,12 +1,12 @@
-import { FormControl, InputLabel, MenuItem, Select, TextField, Typography, Paper, Box, Avatar, Button } from '@mui/material'
-import React from 'react'
-import { SelectChangeEvent } from '@mui/material/Select';
+import { FormControl, InputLabel, MenuItem, Select, TextField, Typography, Paper, Box, Avatar, Button, LinearProgress } from '@mui/material'
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
 import "yup-phone";
+import { SendContext } from '../../../../../../store/context/send'
+import { useContext, useEffect } from 'react';
 const validationSchema = yup.object({
     amount: yup
         .number()
@@ -19,28 +19,23 @@ const validationSchema = yup.object({
         .string()
         .when("type", {
             is: "wallet",
-            then: yup.string().required("Must enter wallet Id")
+            then: yup.string()
         }),
     mobile: yup
         .string()
-        .phone()
         .when("type", {
             is: "mobile",
-            then: yup.string().required("Must enter mobile number")
+            then: yup.string().phone()
         }),
     beneficiary: yup
         .string()
         .when("type", {
             is: "beneficiary",
-            then: yup.string().required("Must select beneficiary")
+            then: yup.string()
         }),
 });
 export default function SelectMethod() {
-    const [age, setAge] = React.useState('');
-
-    const handleChange = (event: SelectChangeEvent) => {
-        setAge(event.target.value as string);
-    };
+    const { send, sendWallet } = useContext(SendContext)
     const formik = useFormik({
         initialValues: {
             amount: "",
@@ -51,10 +46,35 @@ export default function SelectMethod() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            // phoneValidate(values.phone)
-            console.log(values)
+            if (values.type === "wallet") {
+                sendWallet(values.walletid, values.amount)
+            }
         },
     });
+    const history = useHistory()
+    const { enqueueSnackbar } = useSnackbar()
+    useEffect(() => {
+        if (send.success) {
+            enqueueSnackbar(send.success, {
+                variant: 'success',
+            })
+            history.push("/console");
+        }
+        if (send.error) {
+            try {
+                var errors: any = Object.values(JSON.parse(send.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(send.error, {
+                    variant: 'error',
+                })
+            }
+        }
+    }, [send])
     return (
         <Box>
             <Paper
@@ -139,7 +159,6 @@ export default function SelectMethod() {
                             <TextField
                                 variant="outlined"
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="walletid"
                                 label="Wallet ID"
@@ -155,7 +174,6 @@ export default function SelectMethod() {
                             <TextField
                                 variant="outlined"
                                 margin="normal"
-                                required
                                 fullWidth
                                 id="mobile"
                                 label="Mobile No"
@@ -174,14 +192,13 @@ export default function SelectMethod() {
                             fullWidth
                             variant="contained"
                             color="primary"
-                        // endIcon={<AddIcon/>}
-                        // disabled={register.loading}
+                            disabled={send.loading}
                         >
                             Send
                         </Button>
-                        {/* {register.loading && (
+                        {send.loading && (
                             <LinearProgress />
-                        )} */}
+                        )}
                     </form>
                 </Box>
             </Paper>
