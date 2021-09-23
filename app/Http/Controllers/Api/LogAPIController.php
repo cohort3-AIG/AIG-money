@@ -23,16 +23,11 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function myTransactions(Request $request)
     {
-//        $user = $request->user()->id;
-//        return $user;
-        $user = User::find(1);
-        return $user;
-//        $myWallet = $user->wallet->get()->all();
-//
-//        return response()->json([
-//            'status'=> 200,
-//            'transactions'=> $myWallet,
-//        ]);
+        $myWallet = User::find(2)->wallet->transactions;
 
+        return response()->json([
+            'status'=> 200,
+            'My-transactions'=> $myWallet,
+        ]);
     }
 }
