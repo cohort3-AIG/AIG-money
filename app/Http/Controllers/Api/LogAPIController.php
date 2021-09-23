@@ -18,4 +18,15 @@ class LogAPIController extends Controller
             'transactions'=> $transaction_logs,
         ]);
     }
+    
+    /** Display a listing of the resource. */
+    public function myTransactions()
+    {
+        $transaction_logs = Transaction::find(1);
+
+        return response()->json([
+            'status'=> 200,
+            'transactions'=> $transaction_logs,
+        ]);
+    }
 }
