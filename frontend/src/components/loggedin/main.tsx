@@ -5,6 +5,7 @@ import { SideBar, Dashboard, Wallet, Statistics, Transactions, Settings, Wallet_
 import { styled } from '@mui/material/styles'
 import { Copyright } from '../shared'
 import DepositContextProvider from "../../store/context/deposit"
+import SendContextProvider from "../../store/context/send"
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -23,7 +24,9 @@ function Main() {
                     <DrawerHeader />
                     <Switch>
                         <DepositContextProvider>
-                            <Route exact path={`${path}`} component={Dashboard} />
+                            <SendContextProvider>
+                                <Route exact path={`${path}`} component={Dashboard} />
+                            </SendContextProvider>
                         </DepositContextProvider>
                         <Route exact path={`${path}/wallet`} component={Wallet} />
                         {/* <Route exact path={`${path}/details`} component={Wallet_Details} /> */}

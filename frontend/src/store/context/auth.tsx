@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/auth'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
-import { LOGIN_URL } from '../../config/settings'
+import { BASE_URL, LOGIN_URL } from '../../config/settings'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -57,7 +57,6 @@ const AuthContextProvider = (props: any): JSX.Element => {
             authDispatch(authFail(err))
         })
     }
-
     const logout = (): IAuthAction => {
 
         localStorage.removeItem('token')
@@ -72,6 +71,12 @@ const AuthContextProvider = (props: any): JSX.Element => {
         }
     }
 
+    const getCsrfCookie = () => {
+        axios.get(`${BASE_URL}sanctum/csrf-cookie`).then(res => {
+            console.log("from context")
+            console.log(res)
+        })
+    }
     const authCheckState = () => {
         authDispatch(authStart())
         const token: string = JSON.stringify(localStorage.getItem("token"))
@@ -84,7 +89,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
     }
 
     return (
-        <AuthContext.Provider value={{ auth, login, logout, authCheckState }}>
+        <AuthContext.Provider value={{ auth, login, logout, authCheckState, getCsrfCookie }}>
             {props.children}
         </AuthContext.Provider>
     )

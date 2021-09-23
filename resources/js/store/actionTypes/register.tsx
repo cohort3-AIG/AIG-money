@@ -1,7 +1,0 @@
-// authentication actions
-export const REGISTER_START = 'REGISTER_START';
-export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
-export const REGISTER_FAIL = 'REGISTER_FAIL';
-export const PHONE_PENDING = "PHONE_PENDING";
-export const PHONE_CONFIRMED="PHONE_CONFIRMED";
-export const WALLET_CREATED="WALLET_CREATED";

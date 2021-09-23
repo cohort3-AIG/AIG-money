@@ -52,7 +52,6 @@ const Login: React.FC = (): JSX.Element => {
                     marginX: "auto"
                 }}>
                 <Box
-                    // className={classes.paper}
                     sx={{
                         display: "flex", flexDirection: 'column',
                         alignItems: 'center',

@@ -31,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         ], 404);
     });
 
-    Route::get("charge",[TransactionController::class, 'get_charge']);
+    Route::get("charge", [TransactionController::class, 'get_charge']);
 
     // User
     Route::get("user/list", [UserAPIController::class, "index"]);
