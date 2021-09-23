@@ -4,49 +4,57 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Requests\WalletToWalletRequest;
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
-//use Bavix\Wallet\Test\Common\Models\Transfer;
 use App\Models\User;
 
 
 class WalletToWalletController extends Controller
 {
-    public function addToAuthWallet(Request $request)    // TOP MONEY TO WALLET of auth user
+    public function addToAuthWallet(Request $request)
     {
-        $user = User::find(Auth::user());
-//        $user->id=$request->id;
-        return ["Deposited " . $user->deposit(500)['amount'] . " to the Wallet of " . $user->first_name];
+        $user = $request->user();
+        return ["Deposited " . $user->deposit($request->input('amount'))['amount'] . " to the Wallet of " . $user->first_name];
     }
 
-    public function addToSomeWallet(Request $request)    // TOP MONEY TO WALLET of named user
+    # works
+    public function addToSomeWallet(Request $request)
     {
-        $user = User::find(1);
+        $user = User::find($request->input('id'));
 //        $user->id=$request->id;
         return ["Deposited " . $user->deposit(300)['amount'] . " to the Wallet of " . $user->first_name];
     }
 
-    public function walletBalanceOfAuthenticatedUser(Request $request)   // VIEW BALANCE of A logged-in USER
+    public function walletBalanceOfAuthenticatedUser(Request $request)
     {
-        $user = User::find($request->user());  // find logged-in user
-        $user->id=$request->id;
-        return ["Current Balance" => $user->balance];
+        $user = User::find($request->user()->id);
+        $user->id = $request->id;
+        return ["Current Balance of Logged in user is " => $user->wallet->get()->last()->balance];
     }
 
-    public function walletBalanceOfSpecificUser(Request $request)   // VIEW BALANCE of A named USER
+    # works
+    public function walletBalanceOfSpecificUser(Request $request)
     {
-        $user = User::find($request->id);   // return the user of specified 'id'
-        $user->id=$request->id;
-        return ["Current Balance" => $user->balance];
+        $user = User::find($request->input('id'));
+        $user->id = $request->id;
+        return ["Current Balance of selected user is " => $user->wallet->get()->last()->balance];
     }
 
-    public function transferWalletToWallet(Request $request)   // TRANSFER money from auth wallet to named wallet
+//    public function transferWalletToWallet(Request $request)
+//    {
+////        $sendingWallet = User::find($request->user());
+//        $sendingWallet = User::find(1)->wallet;    // the logged-in user
+//        $receivingWallet = User::find(2)->wallet;
+//        return $sendingWallet->transfer($receivingWallet, 100);
+//    }
+
+    public function transferWalletToWallet(Request $request)
     {
-//        $sendingWallet = $request->user();    // the logged-in user
-//        return [$sendingWallet];
-        $sendingWallet = User::find(1);    // the logged-in user
-        $receivingWallet = User::find($request->input('id'));   // user of entered 'id'
-        return $sendingWallet->transfer($receivingWallet, $request->input('amount'));  // send input amount
+//        $sendingWallet = User::find($request->user());
+        $sendingWallet = User::find(1)->wallet;    // the logged-in user
+        $receivingWallet = User::find($request->input('id'))->wallet;
+        return $sendingWallet->transfer($receivingWallet, $request->input('amount'));
     }
 }

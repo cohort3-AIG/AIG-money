@@ -17,8 +17,13 @@ class Beneficiary extends Model
         'phone_number',
     ];
 
-    // m2m relationship
-    public function users() {
-        return $this->belongsToMany(User::class);
-    }
+    public function users()    // m2m
+    {
+        return $this->belongsToMany(
+                User::class,
+                'beneficiaries_users',
+                'beneficiary_id',
+                'user_id'
+        );
+}
 }

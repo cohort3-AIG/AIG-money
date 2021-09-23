@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Bavix\Wallet\Interfaces\Wallet;
+use Bavix\Wallet\Models\Transaction;
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,23 +37,23 @@ class User extends Authenticatable implements Wallet
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
-    // Eloquent relationship to handle the one2one relationship of 'user ===>>> agent'
+    
     public function agent()
     {
         return $this->hasOne(Agent::class);
     }
 
-    // Eloquent relationship to handle the one2Many relationship of 'user ===>>> logs'
     public function logs()
     {
-        return $this->hasMany(Log::class);   // THE MANY PART
+        return $this->hasMany(Log::class);
     }
 
-    // m2m relationship
-    public function beneficiaries()
+    public function beneficiaries()    // m2m
     {
-        return $this->belongsToMany(Beneficiary::class);
+        return $this->belongsToMany(
+            Beneficiary::class,
+        'beneficiaries_users',
+        'user_id',
+        'beneficiary_id');
     }
 }
