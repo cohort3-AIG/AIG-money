@@ -82,6 +82,7 @@ const DepositContextProvider = (props: any): JSX.Element => {
     ) => {
         depositDispatch(depositStart())
         const token = localStorage.getItem('token')
+        axios.defaults.withCredentials = true
         if (token) {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }

@@ -37,7 +37,7 @@ const SendContextProvider = (props: any): JSX.Element => {
 
     const sendWallet = (id: number, amount: number) => {
         sendDispatch(sendStart())
-
+        axios.defaults.withCredentials = true
         const token = localStorage.getItem('token')
         if (token) {
             const config = {
