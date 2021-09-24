@@ -7,9 +7,9 @@ use App\Http\Resources\Cybersource as CybersourceResource;
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../Helpers/ExternalConfiguration.php';
 //use App\Models\Transaction;
-use Bavix\Wallet\Models\Transaction;
 use App\Models\TransactionCategory;
 use App\Models\User;
+use Bavix\Wallet\Models\Transaction;
 //use App\Models\Wallet;
 use Bavix\Wallet\Models\Wallet;
 use CyberSource\ApiClient;
@@ -101,10 +101,15 @@ class CybersourceController extends BaseController
                     ];
                     $processingInformationAuthorizationOptions = new Ptsv2paymentsProcessingInformationAuthorizationOptions($processingInformationAuthorizationOptionsArr);
 
+                    $processingInformationActionList = array();
+                    $processingInformationActionList[0] = "CONSUMER_AUTHENTICATION";
                     $processingInformationArr = [
                         'capture' => $capture,
-                        "authorizationOptions" => $processingInformationAuthorizationOptions
+                        "authorizationOptions" => $processingInformationAuthorizationOptions,
+                        "actionList" => $processingInformationActionList,
+
                     ];
+
                     $processingInformation = new Ptsv2paymentsProcessingInformation($processingInformationArr);
 
                     $paymentInformationCardArr = [
@@ -136,10 +141,10 @@ class CybersourceController extends BaseController
                         "address1" => $validated['address1'],
                         "postalCode" => $validated['postal_code'],
                         "locality" => $validated['locality'],
-                        "administrative_area" => $validated['administrative_area'],
+                        "administrativeArea" => $validated['administrative_area'],
                         "country" => $validated['country'],
                         "email" => $validated['email'],
-                        "phoneNumber" =>$user->phone_number
+                        "phoneNumber" => $user->phone_number,
                     ];
                     $address2 ? array_push($orderInformationBillToArr, (object) ["address2" => $address2]) : "";
                     $orderInformationBillTo = new Ptsv2paymentsOrderInformationBillTo($orderInformationBillToArr);
@@ -173,16 +178,14 @@ class CybersourceController extends BaseController
                     if ($result['status'] === 'AUTHORIZED') {
                         $new_trans = Transaction::updateOrCreate([
                             'wallet_id' => $user->id,
-                            'amount' =>  $validated['total_amount'],
+                            'amount' => $validated['total_amount'],
                             'status' => $result['status'],
                             'transaction_id' => bcrypt($result['processorInformation']['transactionId']),
                             'reconciliation_id' => bcrypt($result['reconciliationId']),
                             'transaction_cat_id' => 1,
-                            'charge'=>$charge_cat->charge * $validated['total_amount']
+                            'charge' => $charge_cat->charge * $validated['total_amount'],
                         ]);
                         $new_trans->save();
-
-
 
                         // to be removed.
                         // if (Wallet::find($user->id) === null) {
@@ -195,13 +198,13 @@ class CybersourceController extends BaseController
                         // } else {
 
 //                        $user_wallet = Wallet::where("wallet_id",$user->id)->get()->first();
-                        $user_wallet = $user->wallet;   // LIFESAVER 100% !
-                        $totalAmount=$user_wallet->balance + $validated['total_amount'];
+                        $user_wallet = $user->wallet; // LIFESAVER 100% !
+                        $totalAmount = $user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
                         $user_wallet->save();
                         // }
 
-                        return $this->sendResponse(['Your wallet was updated to $' . $totalAmount,"charge ".($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
+                        return $this->sendResponse(['Your wallet was updated to $' . $totalAmount, "charge " . ($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
                         return $this->sendResponse($result, 'Failed');
                     }
