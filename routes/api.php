@@ -53,10 +53,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Beneficiary
     Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
-    Route::get("beneficiary/{id}", [BeneficiaryAPIController::class, "show"]);
-    Route::put("beneficiary/{id}", [BeneficiaryAPIController::class, "update"]);
-    Route::delete("beneficiary/{id}", [BeneficiaryAPIController::class, "destroy"]);
-    Route::get("beneficiary/search/{name}", [BeneficiaryAPIController::class, "where"]);
-    Route::get("beneficiary/{id}/edit", [BeneficiaryAPIController::class, "edit"]);
+    Route::get("beneficiary/", [BeneficiaryAPIController::class, "show"]);
+    Route::delete("beneficiary/destroy/", [BeneficiaryAPIController::class, "destroy"]);
+    Route::delete("beneficiary/destroy/all/", [BeneficiaryAPIController::class, "destroyAll"]);
     Route::get("beneficiary/search/{name}", [BeneficiaryAPIController::class, "where"]);
 });
