@@ -78,7 +78,7 @@ class CybersourceController extends BaseController
                 if (!is_numeric($validated['expiration_year']) || $validated['expiration_year'] < $currentYear || $validated['expiration_year'] > $currentYear + 10) {
                     array_push($error_message, ['expiration_year' => 'Invalid expiry year of ' . $validated['expiration_year'] . ' submitted']);
                 }
-                if ($validated['total_amount'] < 2) {
+                if ($validated['total_amount'] < 0) {
                     array_push($error_message, ['total_amount' => "The amount entered is less than the required amount"]);
                 }
                 if (!empty($error_message)) {
@@ -204,7 +204,8 @@ class CybersourceController extends BaseController
 
                         return $this->sendResponse(['Your wallet was updated to $' . $totalAmount, "charge " . ($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
-                        return $this->sendError($result, 'Failed');
+                    
+                        return $this->sendError($apiResponse[1],["status"=>$apiResponse[0]["status"], "error"=>"Something went wrong,Check you data"]);
                     }
 
                 } catch (ApiException $e) {
