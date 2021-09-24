@@ -47,10 +47,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post("wallet/transfer/", [WalletToWalletController::class, "transferWalletToWallet"]);
     Route::get("transactions/logs/all/", [LogAPIController::class, "index"]);   // Works
     Route::get("transactions/logs/me/", [LogAPIController::class, "myTransactions"]);   // Works
+    Route::get("transfers/logs/me/", [LogAPIController::class, "myTransfers"]);   // Works
 
     // Beneficiary # workflow
     Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
+//    Route::get("beneficiaries/search", [BeneficiaryAPIController::class, "search"]);
     Route::delete("beneficiary/destroy/", [BeneficiaryAPIController::class, "destroy"]);
     Route::delete("beneficiary/destroy/all/", [BeneficiaryAPIController::class, "destroyAll"]);
 });

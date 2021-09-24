@@ -6,6 +6,8 @@ use Bavix\Wallet\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\User;
+use phpDocumentor\Reflection\DocBlock\Tags\Return_;
+
 
 class LogAPIController extends Controller
 {
@@ -21,12 +23,21 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function myTransactions(Request $request)
     {
-        $user = $request->user();
-//        $my_transactions = Transaction::with('wallet')->get()->$user;  // eager loaded
-        $my_transactions = Transaction::where("wallet_id", $user->wallet->holder_id)->get()->all();
-        return response()->json([
-            'status'=> 200,
-            'My-transactions'=> $my_transactions,
-        ]);
+        return $request->user()->transactions;
+
+
+
+//        return $this->myTransactions;
+////        return response()->json([
+////            'status'=> 200,
+////            'My-transactions'=> $my_transactions,
+//        ]);
+    }
+
+
+    /** Display a listing of the resource. */
+    public function myTransfers(Request $request)
+    {
+        return $request->user()->wallet->transfers;
     }
 }

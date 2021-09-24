@@ -27,6 +27,14 @@ class BeneficiaryAPIController extends Controller
         return ["Success!"];
     }
 
+//    public function search($name)
+//    {
+//        $beneficiaries = Beneficiary::whereHas('users', function ($query) {
+//            $query->where('first_name', 'LIKE', "%{'name'}%");
+//        })->get();
+//        return [$beneficiaries];
+//    }
+
     public function destroy(Request $request)
     {
         $user = $request->user();
