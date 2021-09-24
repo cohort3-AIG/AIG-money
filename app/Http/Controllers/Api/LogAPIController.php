@@ -12,10 +12,8 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function index()
     {
-        $transaction_logs = Transaction::all();
-
+        $transaction_logs = Transaction::with('wallet')->get();  // eager loaded
         return response()->json([
-            'status'=> 200,
             'transactions'=> $transaction_logs,
         ]);
     }
@@ -23,11 +21,12 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function myTransactions(Request $request)
     {
-        $myWallet = User::find(2)->wallet->transactions;
-
+        $user = $request->user();
+//        $my_transactions = Transaction::with('wallet')->get()->$user;  // eager loaded
+        $my_transactions = Transaction::where("wallet_id", $user->wallet->holder_id)->get()->all();
         return response()->json([
             'status'=> 200,
-            'My-transactions'=> $myWallet,
+            'My-transactions'=> $my_transactions,
         ]);
     }
 }
