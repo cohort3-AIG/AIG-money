@@ -55,13 +55,12 @@ class UserAPIController extends Controller
     {
         return User::query()
             ->where('first_name', 'LIKE', "%{$name}%")
-            ->orWhere('middle_name', 'LIKE', "%{$name}%")
             ->orWhere('last_name', 'LIKE', "%{$name}%")
             ->get();   // search for the user instance of the provided string about them.  RETURNS 'resource'
         // The convention above means that say you type 's' to search,
         // the result should contain character 's' somewhere at the start, middle or the end of the provided string which in our case is '$string'
     }
-    
+
     public function myBeneficiaries(){
         // code
 //        $this->myBeneficiaries()

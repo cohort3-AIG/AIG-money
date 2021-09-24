@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Agent;
+use App\Models\Log;
+use App\Models\Beneficiary;
 
 
 class User extends Authenticatable implements Wallet
@@ -55,8 +58,6 @@ class User extends Authenticatable implements Wallet
 //        'beneficiaries_users',
 //        'user_id',
 //        'beneficiary_id');
-
         return $this->belongsToMany(Beneficiary::class);
-
     }
 }
