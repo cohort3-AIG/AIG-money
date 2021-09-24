@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Bavix\Wallet\Models\Wallet;
+use App\Models\Wallet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\BaseController;
