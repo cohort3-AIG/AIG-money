@@ -10,10 +10,11 @@ const config = {
 };
 const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function BeneficiaryList() {
-    const { data} = useSwr(`${HOST_URL}beneficiaries/list`, fetcher)
+    const { data } = useSwr(`${HOST_URL}beneficiaries/list`, fetcher)
+    console.log(data)
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {data && data.map((beneficiary: any) => {
+            {data &&data.beneficiaries.map((beneficiary: any) => {
                 return (
                     <Box key={beneficiary.id}>
                         <ListItem alignItems="flex-start">

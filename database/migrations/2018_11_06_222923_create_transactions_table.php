@@ -1,6 +1,6 @@
 <?php
 
-use Bavix\Wallet\Models\Transaction;
+use App\Models\Transaction;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;

@@ -1,6 +1,6 @@
 <?php
 
-use Bavix\Wallet\Models\Transaction;
+use App\Models\Transaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

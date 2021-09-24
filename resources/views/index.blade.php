@@ -25,7 +25,7 @@
   </script>
   <script src='{{ asset("/static/js/2.064e8df5.chunk.js")  }}'>
   </script>
-  <script src='{{ asset("/static/js/main.1ff1e9bf.chunk.js")  }}'>
+  <script src='{{ asset("/static/js/main.38a4f927.chunk.js")  }}'>
   </script>
  </body>
 </html>

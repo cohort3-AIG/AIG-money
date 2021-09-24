@@ -37,7 +37,7 @@ const BeneficiaryContextProvider = (props: any): JSX.Element => {
 
     const create = (phone: string, first_name: string, last_name: string) => {
         beneficiaryDispatch(beneficiaryStart())
-        axios.defaults.withCredentials = true
+        // axios.defaults.withCredentials = true
         const token = localStorage.getItem('token')
         if (token) {
             const config = {
