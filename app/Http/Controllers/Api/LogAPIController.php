@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use Bavix\Wallet\Models\Transaction;
+use Bavix\Wallet\Models\Wallet;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\User;
@@ -23,8 +24,12 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function myTransactions(Request $request)
     {
-        return $request->user()->transactions;
+        return $request->user()->wallet->transactions;
 
+//        $transaction_logs = Wallet::with('transactions')->get();  // eager loaded
+//        return response()->json([
+//            'transactions'=> $transaction_logs,
+//        ]);
 
 
 //        return $this->myTransactions;
