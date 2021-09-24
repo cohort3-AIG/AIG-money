@@ -29,7 +29,7 @@ class WalletToWalletController extends Controller
     {
         $user = $request->user()->wallet;
         $authBal = $user->balance;
-        return ["Current Balance of Logged in user is " => $authBal];
+        return ["balance" => $authBal];
     }
 
     # works
@@ -37,7 +37,7 @@ class WalletToWalletController extends Controller
     {
         $user = User::find($request->input('id'));
         $userBal = $user->balance;
-        return ["Current Balance of selected user is " => $userBal];
+        return ["balance" => $userBal];
     }
 
     public function transferWalletToWallet(Request $request)

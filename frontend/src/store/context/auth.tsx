@@ -40,6 +40,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
 
     const login = (email: string, password: string) => {
         authDispatch(authStart())
+        axios.defaults.withCredentials = true
         axios.post(`${LOGIN_URL}`, {
             email: email,
             password: password
@@ -73,8 +74,8 @@ const AuthContextProvider = (props: any): JSX.Element => {
 
     const getCsrfCookie = () => {
         axios.get(`${BASE_URL}sanctum/csrf-cookie`).then(res => {
-            console.log("from context")
-            console.log(res)
+            // console.log("from context")
+            // console.log(res)
         })
     }
     const authCheckState = () => {

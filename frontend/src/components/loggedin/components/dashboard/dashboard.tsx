@@ -29,7 +29,8 @@ const style = {
 };
 const token = localStorage.getItem('token')
 const config = {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${token}` },
+    withCredentials: true
 };
 const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 
