@@ -11,7 +11,8 @@ class BeneficiaryAPIController extends Controller
 {
     public function index(Request $request)
     {
-        return $request->user()->beneficiaries;
+        $beneficiaries = $request->user()->beneficiaries;
+        return ['beneficiaries'=> $beneficiaries];
     }
 
     public function store(Request $request)
