@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles'
 import { Copyright } from '../shared'
 import DepositContextProvider from "../../store/context/deposit"
 import SendContextProvider from "../../store/context/send"
+import BeneficiaryContextProvider from "../../store/context/beneficiary"
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -25,7 +26,9 @@ function Main() {
                     <Switch>
                         <DepositContextProvider>
                             <SendContextProvider>
-                                <Route exact path={`${path}`} component={Dashboard} />
+                                <BeneficiaryContextProvider>
+                                    <Route exact path={`${path}`} component={Dashboard} />
+                                </BeneficiaryContextProvider>
                             </SendContextProvider>
                         </DepositContextProvider>
                         <Route exact path={`${path}/wallet`} component={Wallet} />

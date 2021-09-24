@@ -3,8 +3,6 @@ import * as actionTypes from '../actionTypes/beneficiary'
 import { IBeneficiary, IBeneficiaryAction } from '../models/beneficiary'
 
 export const initialState: IBeneficiary = {
-    name: null,
-    phone: null,
     error: null,
     success: null,
     loading: false,
