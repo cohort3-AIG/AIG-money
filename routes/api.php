@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CybersourceController;
 use App\Http\Controllers\Api\UserAPIController;
@@ -10,7 +9,6 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Api\WalletToWalletController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\BeneficiaryAPIController;
-
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -33,7 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::get("charge", [TransactionController::class, 'get_charge']);
 
-    // User
+    // User workflow
     Route::get("user/list", [UserAPIController::class, "index"]);
     Route::post("user/create", [UserAPIController::class, "store"]);
     Route::get("user/{id}", [UserAPIController::class, "show"]);
@@ -41,7 +39,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete("user/{id}", [UserAPIController::class, "destroy"]);
     Route::get("user/search/{name}", [UserAPIController::class, "where"]);
 
-    // start WALLET TO WALLET WORKFLOW
+    // Wallet to Wallet workflow
     Route::post("wallet/me/add/", [WalletToWalletController::class, "addToAuthWallet"]);
     Route::post("wallet/user/add/", [WalletToWalletController::class, "addToSomeWallet"]);   // WORKs !
     Route::get("wallet/me/balance/", [WalletToWalletController::class, "walletBalanceOfAuthenticatedUser"]);
@@ -50,11 +48,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get("transactions/logs/all/", [LogAPIController::class, "index"]);   // Works
     Route::get("transactions/logs/me/", [LogAPIController::class, "myTransactions"]);   // Works
 
-    // Beneficiary
+    // Beneficiary # workflow
     Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
-    Route::get("beneficiary/", [BeneficiaryAPIController::class, "show"]);
     Route::delete("beneficiary/destroy/", [BeneficiaryAPIController::class, "destroy"]);
     Route::delete("beneficiary/destroy/all/", [BeneficiaryAPIController::class, "destroyAll"]);
-    Route::get("beneficiary/search/{name}", [BeneficiaryAPIController::class, "where"]);
 });
+
+// TODO :  ... Querying on frontend ? or backend?
