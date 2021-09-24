@@ -10,12 +10,14 @@ import { Box } from '@mui/system';
 import SelectMethod from './components/send/selectMethod';
 import CreditCard from './components/deposit/CreditCard';
 import AddIcon from '@mui/icons-material/Add';
-import Beneficiary from './components/beneficiary/beneficiary'
+import Beneficiary from './components/beneficiary/beneficiary_create'
 import { DepositContext } from '../../../../store/context/deposit'
 import DepositDetails from './components/deposit/DepositDetails';
 import axios from 'axios'
 import useSwr from 'swr'
 import { HOST_URL } from "../../../../config/settings"
+import BeneficiaryList from './components/beneficiary/beneficiary_list';
+import Transactions from './components/transactions/transactions';
 const style = {
     position: 'absolute' as 'absolute',
     top: '50%',
@@ -78,26 +80,7 @@ export default function Dashboard() {
                         minHeight: "40vh", padding: 3, position: 'relative'
                     }}>
                         <Typography variant="h5" >Beneficiaries</Typography>
-                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemText
-                                    primary="Musumba"
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                sx={{ display: 'inline' }}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                            >
-                                                +256700215506
-                                            </Typography>
-                                        </React.Fragment>
-                                    }
-                                />
-                            </ListItem>
-                            <Divider variant="fullWidth" component="li" />
-                        </List>
+                        <BeneficiaryList />
                         <Fab color="primary" aria-label="add" sx={{
                             position: 'absolute',
                             bottom: 5,
@@ -112,30 +95,7 @@ export default function Dashboard() {
                 <Grid item xs={12} >
                     <Paper sx={{ minHeight: "40vh", padding: 3 }}>
                         <Typography variant="h5">Recent Transactions</Typography>
-                        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-                            <ListItem alignItems="flex-start">
-                                <ListItemAvatar>
-                                    <Avatar sx={{ background: '#3C9905' }}>50$</Avatar>
-                                </ListItemAvatar>
-                                <ListItemText
-                                    primary="To Gerald"
-                                    secondary={
-                                        <React.Fragment>
-                                            <Typography
-                                                sx={{ display: 'inline' }}
-                                                component="span"
-                                                variant="body2"
-                                                color="text.primary"
-                                            >
-                                                Charge 2$
-                                            </Typography>
-                                            {" — Wallet to Wallet"}
-                                        </React.Fragment>
-                                    }
-                                />
-                            </ListItem>
-                            <Divider variant="inset" component="li" />
-                        </List>
+                        <Transactions/>
                     </Paper>
                 </Grid>
             </Grid>

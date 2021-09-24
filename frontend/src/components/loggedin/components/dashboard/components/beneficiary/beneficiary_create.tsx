@@ -1,8 +1,7 @@
 
 import React, { useContext, useEffect } from 'react'
 import { LinearProgress, Avatar, Typography, Button, Box, Paper, TextField } from '@mui/material'
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-// import { RegisterContext } from '../../../../../../store/context/register'
+import { BeneficiaryContext } from "../../../../../../store/context/beneficiary"
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSnackbar } from 'notistack';
@@ -15,49 +14,52 @@ const validationSchema = yup.object({
         .string()
         .phone()
         .required('Phone is required'),
-    name: yup
+    first_name: yup
         .string()
         .min(2, "Name must be greater than 2")
         .required('Phone is required'),
-
+    last_name: yup
+        .string()
+        .min(2, "Name must be greater than 2")
+        .required('Phone is required'),
 });
 export default function Beneficiary() {
-    // const { register, phoneValidate } = useContext(RegisterContext)
+    const { beneficiary, create } = useContext(BeneficiaryContext)
     const { enqueueSnackbar } = useSnackbar();
     const history = useHistory()
     const formik = useFormik({
         initialValues: {
             phone: "",
-            name: ""
+            first_name: "",
+            last_name: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            // phoneValidate(values.phone)
-            console.log(values)
+            create(values.phone, values.first_name, values.last_name)
         },
     });
-    // useEffect(() => {
-    //     if (register.phone) {
-    //         enqueueSnackbar(register.success, {
-    //             variant: 'success',
-    //         })
-    //         history.push("/register/phone_confirm");
-    //     }
-    //     if (register.error) {
-    //         try {
-    //             var errors: any = Object.values(JSON.parse(register.error))
-    //             for (var i = 0; i < errors.length; i++) {
-    //                 enqueueSnackbar(errors[i][0], {
-    //                     variant: 'error',
-    //                 })
-    //             }
-    //         } catch (error) {
-    //             enqueueSnackbar(register.error, {
-    //                 variant: 'error',
-    //             })
-    //         }
-    //     }
-    // }, [register])
+    useEffect(() => {
+        if (beneficiary.success) {
+            enqueueSnackbar(beneficiary.success, {
+                variant: 'success',
+            })
+            history.push("/console");
+        }
+        if (beneficiary.error) {
+            try {
+                var errors: any = Object.values(JSON.parse(beneficiary.error))
+                for (var i = 0; i < errors.length; i++) {
+                    enqueueSnackbar(errors[i][0], {
+                        variant: 'error',
+                    })
+                }
+            } catch (error) {
+                enqueueSnackbar(beneficiary.error, {
+                    variant: 'error',
+                })
+            }
+        }
+    }, [beneficiary])
     return (
         <Box>
             <Paper
@@ -89,14 +91,28 @@ export default function Beneficiary() {
                             margin="normal"
                             required
                             fullWidth
-                            id="name"
-                            label="Name"
-                            name="name"
+                            id="first_name"
+                            label="First Name"
+                            name="first_name"
                             type="text"
-                            value={formik.values.name}
+                            value={formik.values.first_name}
                             onChange={formik.handleChange}
-                            error={formik.touched.name && Boolean(formik.errors.name)}
-                            helperText={formik.touched.name && formik.errors.name}
+                            error={formik.touched.first_name && Boolean(formik.errors.first_name)}
+                            helperText={formik.touched.first_name && formik.errors.first_name}
+                        />
+                        <TextField
+                            variant="outlined"
+                            margin="normal"
+                            required
+                            fullWidth
+                            id="last_name"
+                            label="Last Name"
+                            name="last_name"
+                            type="text"
+                            value={formik.values.last_name}
+                            onChange={formik.handleChange}
+                            error={formik.touched.last_name && Boolean(formik.errors.last_name)}
+                            helperText={formik.touched.last_name && formik.errors.last_name}
                         />
                         <TextField
                             variant="outlined"
@@ -119,14 +135,14 @@ export default function Beneficiary() {
                             fullWidth
                             variant="contained"
                             color="primary"
-                            endIcon={<AddIcon/>}
-                        // disabled={register.loading}
+                            endIcon={<AddIcon />}
+                            disabled={beneficiary.loading}
                         >
                             Create
                         </Button>
-                        {/* {register.loading && (
+                        {beneficiary.loading && (
                             <LinearProgress />
-                        )} */}
+                        )}
                     </form>
                 </Box>
             </Paper>
