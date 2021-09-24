@@ -204,7 +204,7 @@ class CybersourceController extends BaseController
 
                         return $this->sendResponse(['Your wallet was updated to $' . $totalAmount, "charge " . ($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
-                        return $this->sendResponse($result, 'Failed');
+                        return $this->sendError($result, 'Failed');
                     }
 
                 } catch (ApiException $e) {
