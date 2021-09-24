@@ -26,8 +26,8 @@ class CreateWalletsTable extends Migration
         Schema::create($this->table(), function (Blueprint $table) {
             $table->bigIncrements('id');
 //            $table->morphs('holder');
-            //$table->unsignedInteger('holder_id');
-            $table->foreignId('holder_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger('holder_id');
+            $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('holder_type')->nullable();
             $table->string('nationality')->nullable();
             $table->string('address_line_1')->nullable();

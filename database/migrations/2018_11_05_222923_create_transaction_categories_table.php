@@ -24,7 +24,6 @@ class CreateTransactionCategoriesTable extends Migration
             ['category' => 'wallet to mobile','charge'=>0.01],
             ['category' => 'wallet to card','charge'=>0.01],
         ]);
-
     }
 
     /** Reverse the migrations. */
