@@ -104,7 +104,7 @@ class CybersourceController extends BaseController
                     $processingInformationArr = [
                         'capture' => $capture,
                         "authorizationOptions" => $processingInformationAuthorizationOptions,
-                        "actionList" => $processingInformationActionList,
+                        // "actionList" => $processingInformationActionList,
 
                     ];
 
