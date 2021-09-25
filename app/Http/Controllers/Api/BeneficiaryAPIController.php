@@ -18,14 +18,16 @@ class BeneficiaryAPIController extends Controller
     public function store(Request $request)
     {
         $userId = $request->user()->id;
-        $request->validate([
-            'first_name'=> "required",
-            'last_name'=> "required",
-            'phone_number'=> "required",
-        ]);
-        Beneficiary::create($request->all())->users()->attach($userId);
-
-        return ["Success!"];
+        
+        // let's make sure a logged in user can't add themselves as a beneficiary
+        if($request->input('phone_number') !== $request->user()['phone_number']){
+            $request->validate([
+                'phone_number'=> "required"
+            ]);
+            Beneficiary::create($request->all())->users()->attach($userId);
+            return ["Success!"];
+        }
+        return "You can't add yourself as a beneficiary";
     }
 
 //    public function search($name)
