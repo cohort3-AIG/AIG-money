@@ -1,7 +1,7 @@
 import React from 'react'
 import { Route, Switch, useRouteMatch } from 'react-router-dom'
 import { Box } from "@mui/material"
-import { SideBar, Dashboard, Wallet, Statistics, Transactions, Settings, Wallet_Details } from "./components"
+import { SideBar, Dashboard, Statistics, Transactions, Settings } from "./components"
 import { styled } from '@mui/material/styles'
 import { Copyright } from '../shared'
 import DepositContextProvider from "../../store/context/deposit"
@@ -28,14 +28,12 @@ function Main() {
                             <SendContextProvider>
                                 <BeneficiaryContextProvider>
                                     <Route exact path={`${path}`} component={Dashboard} />
+                                    <Route exact path={`${path}/statistics`} component={Statistics} />
+                                    <Route exact path={`${path}/transactions`} component={Transactions} />
+                                    <Route exact path={`${path}/settings`} component={Settings} />
                                 </BeneficiaryContextProvider>
                             </SendContextProvider>
                         </DepositContextProvider>
-                        <Route exact path={`${path}/wallet`} component={Wallet} />
-                        {/* <Route exact path={`${path}/details`} component={Wallet_Details} /> */}
-                        <Route exact path={`${path}/statistics`} component={Statistics} />
-                        <Route exact path={`${path}/transactions`} component={Transactions} />
-                        <Route exact path={`${path}/settings`} component={Settings} />
                     </Switch>
                 </Box>
                 <Copyright />
