@@ -13,7 +13,6 @@ class CreateTransactionCategoriesTable extends Migration
         Schema::create('transaction_categories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('category');
-//            $table->unsignedInteger('charge');   // chsnged
             $table->decimal('charge');
             $table->timestamps();
         });
