@@ -22,7 +22,8 @@ class WalletController extends BaseController
             ]
         );
 
-        $user = User::first();
+//        $user = User::first();
+        $user = $request->user();
         $user->hasWallet('my-wallet'); // bool(false)
         $wallet = $user->createWallet([
         'holder_id' => $request->user()->id,
@@ -47,7 +48,7 @@ class WalletController extends BaseController
 //        $wallet->postal_code = $fields['postal_code'];
 //        $wallet->allow = 0;
 //        $wallet->save();
-        
+
         return ["wallet" => $wallet];
 
     }

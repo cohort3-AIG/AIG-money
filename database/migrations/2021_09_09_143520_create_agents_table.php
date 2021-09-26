@@ -13,7 +13,7 @@ class CreateAgentsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id')->unique();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->timestamps();  // dates created and updated very applicable here...
+            $table->timestamps();
         });
     }
 
