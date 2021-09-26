@@ -6,10 +6,10 @@ use App\Http\Controllers\Api\BaseController;
 use App\Http\Resources\Cybersource as CybersourceResource;
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../../vendor/autoload.php';
 require_once __DIR__ . DIRECTORY_SEPARATOR . '../../../Helpers/ExternalConfiguration.php';
-use App\Models\Transaction;
+use App\Models\MyTransaction;
 use App\Models\TransactionCategory;
 use App\Models\User;
-use App\Models\Wallet;
+use App\Models\MyWallet;
 use CyberSource\ApiClient;
 use Cybersource\ApiException;
 use CyberSource\Api\PaymentsApi;
@@ -28,7 +28,6 @@ use Illuminate\Validation\ValidationException;
 
 class CybersourceController extends BaseController
 {
-
     public function cybersource_api(Request $request)
     {
 
@@ -174,7 +173,7 @@ class CybersourceController extends BaseController
                     // update the wallet
                     $result = new CybersourceResource($apiResponse[0]);
                     if ($result['status'] === 'AUTHORIZED') {
-                        $new_trans = Transaction::updateOrCreate([
+                        $new_trans = MyTransaction::updateOrCreate([
                             'wallet_id' => $user->id,
                             'amount' => $validated['total_amount'],
                             'status' => $result['status'],
@@ -186,16 +185,16 @@ class CybersourceController extends BaseController
                         $new_trans->save();
 
                         // to be removed.
-                        // if (Wallet::find($user->id) === null) {
+                        // if (MyWallet::find($user->id) === null) {
 
-                        //     $user_wallet = Wallet::create([
+                        //     $user_wallet = MyWallet::create([
                         //         'wallet_id' => $user->id,
                         //         'transaction_id' => $new_trans->id,
                         //         'balance' => $charged_amount,
                         //     ]);
                         // } else {
 
-//                        $user_wallet = Wallet::where("wallet_id",$user->id)->get()->first();
+//                        $user_wallet = MyWallet::where("wallet_id",$user->id)->get()->first();
                         $user_wallet = $user->wallet; // LIFESAVER 100% !
                         $totalAmount = $user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
@@ -204,7 +203,7 @@ class CybersourceController extends BaseController
 
                         return $this->sendResponse(['Your wallet was updated to $' . $totalAmount, "charge " . ($charge_cat->charge * $validated['total_amount'])], 'Successfully.');
                     } else {
-                    
+
                         return $this->sendError($apiResponse[1],["status"=>$apiResponse[0]["status"], "error"=>"Something went wrong,Check you data"]);
                     }
 

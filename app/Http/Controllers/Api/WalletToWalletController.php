@@ -6,6 +6,7 @@ use App\Http\Requests\WalletToWalletRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\User;
+use App\Models\MyWallet;
 
 
 class WalletToWalletController extends Controller
@@ -42,10 +43,20 @@ class WalletToWalletController extends Controller
 
     public function transferWalletToWallet(Request $request)
     {
-        $sendingWallet = $request->user()->wallet;   // auth'd user
-        $receivingWallet = User::find($request->input('id'))->wallet;
+//        $sender = $request->user()->wallet;
+////      $receiver = User::find($request->input('id'));
+//        $receiver = User::where('phone_number', $request->input('phone_number'))->first()->wallet;
+//        return $sender->transfer($receiver, $request->input('amount'));
 
-        // sender->transfer(to, amount)
-        return $sendingWallet->transfer($receivingWallet, $request->input('amount'));
+        $sender = $request->user()->wallet;
+
+        // Check that entered num exists
+        $phone = $request->input('phone_number');
+        $receiver = User::where('phone_number', $phone)->first()->wallet;
+
+        if($phone === $request->user()['phone_number'] || !User::where('phone_number',  $phone)->exists()) {
+            return ["number is incorrect or self"];  // false
+        }
+        return $sender->transfer($receiver, $request->input('amount'));  // true
     }
 }

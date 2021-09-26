@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\Transaction;
-use App\Models\Wallet;
+use App\Models\MyTransaction;
+use App\Models\MyWallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\SQLiteConnection;
@@ -15,7 +15,7 @@ class UpdateTransactionsTable extends Migration
      */
     protected function table(): string
     {
-        return (new Transaction())->getTable();
+        return (new MyTransaction())->getTable();
     }
 
     /**
@@ -23,7 +23,7 @@ class UpdateTransactionsTable extends Migration
      */
     protected function walletTable(): string
     {
-        return (new Wallet())->getTable();
+        return (new MyWallet())->getTable();
     }
 
     /**
@@ -44,8 +44,8 @@ class UpdateTransactionsTable extends Migration
 
         $slug = config('wallet.wallet.default.slug', 'default');
         DB::transaction(function () use ($slug) {
-            Wallet::where('slug', $slug)->each(function (Wallet $wallet) {
-                Transaction::query()
+            MyWallet::where('slug', $slug)->each(function (MyWallet $wallet) {
+                MyTransaction::query()
                     ->where('payable_type', $wallet->holder_type)
                     ->where('payable_id', $wallet->holder_id)
                     ->update(['wallet_id' => $wallet->id]);

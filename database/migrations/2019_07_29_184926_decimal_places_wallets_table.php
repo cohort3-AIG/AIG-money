@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Wallet;
+use App\Models\MyWallet;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -12,7 +12,7 @@ class DecimalPlacesWalletsTable extends Migration
      */
     protected function table(): string
     {
-        return (new Wallet())->getTable();
+        return (new MyWallet())->getTable();
     }
 
     /**

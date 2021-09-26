@@ -21,13 +21,13 @@ class User extends Authenticatable implements Wallet
     use HasApiTokens, HasFactory, Notifiable, HasWallet, HasWallets;
 
     /** The attributes that are mass assignable. @var string[] */
-    protected $fillable = [
+    public $fillable = [
         'first_name',
         'last_name',
         'email',
         'phone_number',
         'password',
-        'allow'
+        'allow',
     ];
 
     /** The attributes that should be hidden for serialization. @var array */

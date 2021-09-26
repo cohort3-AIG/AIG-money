@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Transaction;
+use App\Models\MyTransaction;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\MySqlConnection;
 use Illuminate\Database\PostgresConnection;
@@ -8,6 +8,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent as ColumnDefinition;
+
 
 class CreateTransactionsTable extends Migration
 {
@@ -70,7 +71,7 @@ class CreateTransactionsTable extends Migration
      */
     protected function table(): string
     {
-        return (new Transaction())->getTable();
+        return (new MyTransaction())->getTable();
     }
 
     /**

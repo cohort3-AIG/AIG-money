@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Transaction;
+use App\Models\MyTransaction;
 use Bavix\Wallet\Models\Transfer;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -26,15 +26,8 @@ class CreateTransfersTable extends Migration
             $table->uuid('uuid')->unique();
             $table->timestamps();
 
-            $table->foreignId('deposit_id')
-                ->references('id')
-                ->on($this->transactionTable())
-                ->onDelete('cascade');
-
-            $table->foreignId('withdraw_id')
-                ->references('id')
-                ->on($this->transactionTable())
-                ->onDelete('cascade');
+            $table->foreignId('deposit_id')->references('id')->on($this->transactionTable())->onDelete('cascade');
+            $table->foreignId('withdraw_id')->references('id')->on($this->transactionTable())->onDelete('cascade');
         });
     }
 
@@ -51,7 +44,7 @@ class CreateTransfersTable extends Migration
      */
     protected function transactionTable(): string
     {
-        return (new Transaction())->getTable();
+        return (new MyTransaction())->getTable();
     }
 
     /**

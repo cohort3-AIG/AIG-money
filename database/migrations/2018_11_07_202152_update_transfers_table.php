@@ -7,6 +7,7 @@ use Illuminate\Database\SQLiteConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+
 class UpdateTransfersTable extends Migration
 {
     /**

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use App\Models\Transaction;
-use App\Models\Wallet;
+use App\Models\MyTransaction;
+use App\Models\MyWallet;
 use App\Models\User;
 
 class LogAPIController extends Controller
@@ -13,23 +13,25 @@ class LogAPIController extends Controller
     /** Display a listing of the resource. */
     public function index()
     {
-        $transaction_logs = Transaction::with('wallet')->get();  // eager loaded
+        $transaction_logs = MyTransaction::with('wallet')->get();  // eager loaded
         return response()->json([
-            'transactions'=> $transaction_logs,
+            'all_transactions'=> $transaction_logs,
         ]);
     }
 
     /** Display a listing of the resource. */
     public function myTransactions(Request $request)
     {
-        return $request->user()->wallet->transactions;
+        $my_transaction_logs = $request->user()->wallet->transactions;
+        return response()->json([
+            'my_transactions'=> $my_transaction_logs,
+        ]);
 
-//        $transaction_logs = Wallet::with('transactions')->get();  // eager loaded
+//        $transaction_logs = MyWallet::with('transactions')->get();  // eager loaded
 //        return response()->json([
 //            'transactions'=> $transaction_logs,
 //        ]);
-
-
+//
 //        return $this->myTransactions;
 ////        return response()->json([
 ////            'status'=> 200,
