@@ -9,13 +9,8 @@ class Beneficiary extends Model
 {
     use HasFactory;
 
-//    public $timestamps = false;
-
     /** The attributes that are mass assignable. @var string[] */
     protected $fillable = [
-//        'user_id',
-        'first_name',
-        'last_name',
         'phone_number',
     ];
 
