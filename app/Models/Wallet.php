@@ -51,11 +51,11 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
         'city_town_village',
         'state_pronvince_region',
         'postal_code',
-        'allow',
-        'name',
-        'slug',
-        'description',
-        'meta',
+//        'allow',
+//        'name',
+//        'slug',
+//        'description',
+//        'meta',
         'balance',
         'decimal_places',
     ];
@@ -66,6 +66,15 @@ class Wallet extends Model implements Customer, WalletFloat, Confirmable, Exchan
     protected $casts = [
         'decimal_places' => 'int',
         'meta' => 'json',
+    ];
+
+    /** The attributes that should be hidden for serialization. @var array */
+    protected $hidden = [
+        'allow',
+        'name',
+        'slug',
+        'description',
+        'meta',
     ];
 
     /**

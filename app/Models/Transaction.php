@@ -6,6 +6,7 @@ use function array_merge;
 use Bavix\Wallet\Interfaces\Mathable;
 use Bavix\Wallet\Interfaces\Wallet;
 use App\Models\Wallet as WalletModel;
+use App\Models\TransactionCharge;
 use Bavix\Wallet\Services\WalletService;
 use function config;
 use Illuminate\Database\Eloquent\Model;
@@ -41,13 +42,13 @@ class Transaction extends Model
         'transaction_id',
         'transaction_cat_id',
         'payable_type',
-        'payable_id',
+//        'payable_id',
         'wallet_id',
-        'uuid',
-        'type',
+//        'uuid',
+//        'type',
         'amount',
-        'confirmed',
-        'meta',
+//        'confirmed',
+//        'meta',
     ];
 
     /**
@@ -57,6 +58,18 @@ class Transaction extends Model
         'wallet_id' => 'int',
         'confirmed' => 'bool',
         'meta' => 'json',
+    ];
+
+
+    /** The attributes that should be hidden for serialization. @var array */
+    protected $hidden = [
+        'transaction_cat_id',
+//        'payable_type',
+        'payable_id',
+        'uuid',
+        'type',
+        'confirmed',
+        'meta',
     ];
 
     /**
@@ -122,5 +135,14 @@ class Transaction extends Model
             ->decimalPlaces($this->wallet);
 
         $this->amount = $math->round($math->mul($amount, $decimalPlaces));
+    }
+
+    public function transaction_charges(){
+        return $this->hasOne(App\Models\TransactionCharge::class)->ofMany([
+            'published_at' => 'max',
+            'id' => 'max',
+        ], function ($query) {
+            $query->where('published_at', '<', now());
+        });
     }
 }
