@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useContext, useState } from "react"
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -23,11 +23,11 @@ import CardMedia from '@mui/material/CardMedia';
 import { CardActionArea, Collapse } from '@mui/material';
 import { ArrowLeft, ExpandMore } from '@mui/icons-material';
 import { AccessAlarm, ThreeDRotation } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
-
+import { AuthContext } from "../../../../store/context/auth"
 //import Image from '../image/main.png';
 
 const Header = styled('div')(({ theme }) => ({
@@ -60,12 +60,10 @@ const Header = styled('div')(({ theme }) => ({
 // });
 
 export default function Home() {
-    const [auth, setAuth] = React.useState(true);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAuth(event.target.checked);
-    };
+    const { auth } = useContext(AuthContext)
+
 
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
@@ -106,8 +104,9 @@ export default function Home() {
                         </Button> */}
 
                         <Stack spacing={2} direction="row" sx={{ marginRight: 5 }}>
-                            <Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>
-                            <Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>
+                            {!auth.token && (<Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>)}
+                            {!auth.token && (<Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>)}
+                            {auth.token && (<Button onClick={() => { history.push('console') }} variant="contained" sx={{ borderRadius: 10 }}>dashboard</Button>)}
                         </Stack>
 
 

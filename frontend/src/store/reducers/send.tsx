@@ -17,6 +17,7 @@ const sendSuccess = (state: ISend, action: ISendAction): ISend => {
     return updateObject(state, {
         success: action.success,
         loading: false,
+        error: null
     })
 }
 
@@ -24,6 +25,7 @@ const sendFail = (state: ISend, action: ISendAction): ISend => {
     return updateObject(state, {
         error: action.error,
         loading: false,
+        success: null
     })
 }
 

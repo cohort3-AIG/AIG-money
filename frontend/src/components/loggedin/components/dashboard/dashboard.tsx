@@ -28,6 +28,8 @@ const style = {
     border: '2px solid #000',
     boxShadow: 24,
     p: 4,
+    maxHeight: "80vh",
+    overflow: "auto"
 };
 const token = localStorage.getItem('token')
 const config = {
@@ -37,7 +39,8 @@ const config = {
 const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 
 export default function Dashboard() {
-    const { data, error } = useSwr(`${HOST_URL}wallet/me/balance`, fetcher)
+    const { data } = useSwr(`${HOST_URL}wallet/me/balance`, fetcher)
+    const { data: wallet_data } = useSwr(`${HOST_URL}wallet_get/`, fetcher);
     const { deposit } = useContext(DepositContext)
     const [openDeposit, setOpenDeposit] = React.useState(false);
     const handleDepositOpen = () => setOpenDeposit(true);
@@ -52,19 +55,19 @@ export default function Dashboard() {
         <>
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6} >
-                    <Card sx={{ height: "40vh" }}>
-                        <CardMedia
+                    <Card >
+                        {/* <CardMedia
                             component="img"
                             alt="profile picture"
                             height="140"
                             image="/images/default.png"
-                        />
+                        /> */}
                         <CardContent>
                             {data && (<Typography gutterBottom variant="h5" component="div">
                                 {data.balance} $
                             </Typography>)}
                             <Typography variant="body2" color="text.secondary">
-                                Musumba Gerald Michael
+                                {wallet_data && wallet_data.data[0].first_name + " " + wallet_data.data[0].last_name}
                             </Typography>
                         </CardContent>
                         <CardActions>
@@ -77,7 +80,9 @@ export default function Dashboard() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Paper sx={{
-                        minHeight: "40vh", padding: 3, position: 'relative'
+                        // minHeight: "40vh",
+                        padding: 3,
+                        position: 'relative'
                     }}>
                         <Typography variant="h5" >Beneficiaries</Typography>
                         <BeneficiaryList />
@@ -95,7 +100,7 @@ export default function Dashboard() {
                 <Grid item xs={12} >
                     <Paper sx={{ minHeight: "40vh", padding: 3 }}>
                         <Typography variant="h5">Recent Transactions</Typography>
-                        <Transactions/>
+                        <Transactions />
                     </Paper>
                 </Grid>
             </Grid>

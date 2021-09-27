@@ -11,6 +11,8 @@ export const initialState: IBeneficiary = {
 const beneficiaryStart = (state: IBeneficiary, action: IBeneficiaryAction): IBeneficiary => {
     return updateObject(state, {
         loading: true,
+        error: null,
+        success: null,
     })
 }
 
@@ -18,6 +20,7 @@ const beneficiarySuccess = (state: IBeneficiary, action: IBeneficiaryAction): IB
     return updateObject(state, {
         success: action.success,
         loading: false,
+        error: null,
     })
 }
 
@@ -25,6 +28,7 @@ const beneficiaryFail = (state: IBeneficiary, action: IBeneficiaryAction): IBene
     return updateObject(state, {
         error: action.error,
         loading: false,
+        success: null
     })
 }
 

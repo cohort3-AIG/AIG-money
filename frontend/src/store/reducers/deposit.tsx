@@ -32,6 +32,7 @@ const depositSuccess = (state: IDeposit, action: IDepositAction): IDeposit => {
     return updateObject(state, {
         success: action.success,
         loading: false,
+        error: null
     })
 }
 
@@ -39,6 +40,7 @@ const depositFail = (state: IDeposit, action: IDepositAction): IDeposit => {
     return updateObject(state, {
         error: action.error,
         loading: false,
+        success: null
     })
 }
 

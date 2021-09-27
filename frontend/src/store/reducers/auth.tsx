@@ -13,6 +13,8 @@ const authStart = (state: IAuth, action: IAuthAction) => {
     return updateObject(state, {
         error: null,
         loading: true,
+        token: null,
+        email: null
     })
 }
 
@@ -29,6 +31,8 @@ const authFail = (state: IAuth, action: IAuthAction) => {
     return updateObject(state, {
         error: action.error,
         loading: false,
+        token: null,
+        email: null
     })
 }
 

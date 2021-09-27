@@ -10,11 +10,10 @@ const config = {
 };
 const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function Transactions() {
-    const { data } = useSwr(`${HOST_URL}transactions/logs/me`, fetcher)
-    console.log(data)
+    const { data, error } = useSwr(`${HOST_URL}transactions/logs/me`, fetcher)
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {data && data.map((transaction: any) => {
+            {data && data.my_transactions.map((transaction: any) => {
                 return (
                 <Box key={transaction.id}>
                     <ListItem alignItems="flex-start">

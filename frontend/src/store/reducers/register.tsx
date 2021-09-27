@@ -33,6 +33,7 @@ const registerFail = (state: IRegister, action: IRegisterAction) => {
     return updateObject(state, {
         error: action.error,
         loading: false,
+        success: null
     })
 }
 const phonePending = (state: IRegister, action: IRegisterAction): IRegister => {
@@ -40,7 +41,8 @@ const phonePending = (state: IRegister, action: IRegisterAction): IRegister => {
         state, {
         loading: false,
         success: action.success,
-        phone: action.phone
+        phone: action.phone,
+        error: null
     })
 }
 const phoneConfirmed = (state: IRegister, action: IRegisterAction): IRegister => {
@@ -49,7 +51,8 @@ const phoneConfirmed = (state: IRegister, action: IRegisterAction): IRegister =>
         loading: false,
         success: action.success,
         step: 1,
-        phone_confirmed: true
+        phone_confirmed: true,
+        error: null
     })
 }
 const walletCreated = (state: IRegister, action: IRegisterAction): IRegister => {
@@ -58,6 +61,7 @@ const walletCreated = (state: IRegister, action: IRegisterAction): IRegister => 
         loading: false,
         success: action.success,
         wallet_created: true,
+        error: null
     })
 }
 const reducer = (state: IRegister, action: IRegisterAction): IRegister => {

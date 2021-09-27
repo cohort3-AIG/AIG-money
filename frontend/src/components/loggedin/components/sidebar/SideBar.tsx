@@ -120,7 +120,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Box sx={{ flexGrow: 1 }}></Box>
-          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+          {/* <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
@@ -141,7 +141,7 @@ export default function MiniDrawer() {
             >
               <AccountCircle />
             </IconButton>
-          </Box>
+          </Box> */}
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -164,7 +164,7 @@ export default function MiniDrawer() {
             </ListItemIcon>
             <ListItemText primary="Transaction" />
           </ListItem>
-          <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
+          {/* <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
             <ListItemIcon>
               <AssessmentIcon />
             </ListItemIcon>
@@ -176,7 +176,7 @@ export default function MiniDrawer() {
               <SettingsIcon />
             </ListItemIcon>
             <ListItemText primary="Setting" />
-          </ListItem>
+          </ListItem> */}
           <ListItem button onClick={() => {
             logout()
             history.push('/')
