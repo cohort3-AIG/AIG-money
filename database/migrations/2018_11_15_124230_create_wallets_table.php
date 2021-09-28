@@ -25,12 +25,12 @@ class CreateWalletsTable extends Migration
     {
         Schema::create($this->table(), function (Blueprint $table) {
             $table->bigIncrements('id');
-//            $table->morphs('holder');
 
+//            $table->morphs('holder');
             $table->unsignedInteger('holder_id');
 //            $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
-
             $table->string('holder_type')->nullable();
+
             $table->string('phone_number')->nullable();
             $table->foreign('phone_number')->references('phone_number')->on('users')->onDelete('cascade');
 
