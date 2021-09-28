@@ -112,7 +112,7 @@ export default function Dashboard() {
             >
                 <Box sx={style}>
                     {deposit.step === 1 ?
-                        <DepositDetails />
+                        <DepositDetails/>
                         : <CreditCard />}
 
 

@@ -82,7 +82,7 @@ export default function Home() {
 
     // }
     const history = useHistory();
-
+    console.log(auth)
     return (
 
         <>
@@ -104,9 +104,9 @@ export default function Home() {
                         </Button> */}
 
                         <Stack spacing={2} direction="row" sx={{ marginRight: 5 }}>
-                            {!auth.token && (<Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>)}
-                            {!auth.token && (<Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>)}
-                            {auth.token && (<Button onClick={() => { history.push('console') }} variant="contained" sx={{ borderRadius: 10 }}>dashboard</Button>)}
+                            {(auth.token === 'null' || auth.token === null) && (<Button onClick={() => { history.push('login') }} variant="outlined" sx={{ borderRadius: 10 }}>Log In</Button>)}
+                            {(auth.token === 'null' || auth.token === null) && (<Button onClick={() => { history.push('register') }} variant="contained" sx={{ borderRadius: 10 }}>Sign Up</Button>)}
+                            {(auth.token !== 'null' && auth.token !== null) && (<Button onClick={() => { history.push('console') }} variant="contained" sx={{ borderRadius: 10 }}>dashboard</Button>)}
                         </Stack>
 
 

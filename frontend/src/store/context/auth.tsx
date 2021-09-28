@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/auth'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
-import { BASE_URL, LOGIN_URL } from '../../config/settings'
+import { BASE_URL, LOGIN_URL, DEBUG } from '../../config/settings'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -40,7 +40,9 @@ const AuthContextProvider = (props: any): JSX.Element => {
 
     const login = (email: string, password: string) => {
         authDispatch(authStart())
-        // axios.defaults.withCredentials = true
+        // if(DEBUG){
+            axios.defaults.withCredentials = true   
+        // }
         axios.post(`${LOGIN_URL}`, {
             email: email,
             password: password
@@ -54,8 +56,8 @@ const AuthContextProvider = (props: any): JSX.Element => {
                 authDispatch(authFail(res.data.message))
             }
         }).catch(err => {
-            console.log("error")
-            authDispatch(authFail(err))
+            // authDispatch(authFail(err))
+            console.log(err)
         })
     }
     const logout = (): IAuthAction => {
