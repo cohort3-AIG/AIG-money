@@ -87,7 +87,7 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     }
     const phoneValidate = (phone: string) => {
         registerDispatch(registerStart())
-        axios.defaults.withCredentials = true
+        // axios.defaults.withCredentials = true
         axios.post(`${HOST_URL}phone`,
             {
                 phone_number: phone,
@@ -111,7 +111,7 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     }
     const phoneConfirmationCode = (code: number, phone_number: string) => {
         registerDispatch(registerStart())
-        axios.defaults.withCredentials = true
+        // axios.defaults.withCredentials = true
         axios.post(`${HOST_URL}verify_phone`, {
             code,
             phone_number

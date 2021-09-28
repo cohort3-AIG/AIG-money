@@ -43,16 +43,15 @@ const SendContextProvider = (props: any): JSX.Element => {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            axios.post(`${HOST_URL}wallet/transfer/`, {
+            axios.post(`${HOST_URL}wallet/transfer`, {
                 phone_number: id,
                 amount
             }, config)
                 .then(res => {
-                    console.log(res)
                     sendDispatch(sendSuccess("Amount Sent Successfully"))
                 })
                 .catch(err => {
-                    console.log(err)
+                    // console.log(err)
                     sendDispatch(sendFail("Something Went wrong"))
                 })
         } else {
