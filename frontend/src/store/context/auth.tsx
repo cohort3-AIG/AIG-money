@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/auth'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
-import { BASE_URL, LOGIN_URL, DEBUG } from '../../config/settings'
+import { BASE_URL, LOGIN_URL, HOST_URL } from '../../config/settings'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -41,7 +41,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
     const login = (email: string, password: string) => {
         authDispatch(authStart())
         // if(DEBUG){
-            // axios.defaults.withCredentials = true   
+        // axios.defaults.withCredentials = true   
         // }
         axios.post(`${LOGIN_URL}`, {
             email: email,
@@ -56,8 +56,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
                 authDispatch(authFail(res.data.message))
             }
         }).catch(err => {
-            // authDispatch(authFail(err))
-            console.log(err)
+            authDispatch(authFail(err))
         })
     }
     const logout = (): IAuthAction => {
@@ -65,6 +64,12 @@ const AuthContextProvider = (props: any): JSX.Element => {
         localStorage.removeItem('token')
         localStorage.removeItem('email')
         localStorage.removeItem('expirationDate')
+
+        axios.post(`${LOGIN_URL}`).then(res => {
+            
+        }).catch(err => {
+            authDispatch(authFail("Failed to logout"))
+        })
 
         return {
             type: actionTypes.AUTH_LOGOUT,

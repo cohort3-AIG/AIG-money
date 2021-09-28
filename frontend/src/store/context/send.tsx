@@ -43,7 +43,7 @@ const SendContextProvider = (props: any): JSX.Element => {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            axios.post(`${HOST_URL}beneficiary/fund/plus/`, {
+            axios.post(`${HOST_URL}wallet/transfer/`, {
                 phone_number: id,
                 amount
             }, config)
