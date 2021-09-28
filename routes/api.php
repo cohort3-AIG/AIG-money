@@ -9,6 +9,7 @@ use App\Http\Controllers\WalletController;
 use App\Http\Controllers\Api\WalletToWalletController;
 use App\Http\Controllers\Api\TransactionController;
 use App\Http\Controllers\Api\BeneficiaryAPIController;
+use App\Http\Controllers\Api\WalletToBeneficiaryController;
 
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
@@ -52,9 +53,22 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Beneficiary # workflow
     Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
+
+
+
+    Route::post("beneficiary/create/new/", [BeneficiaryAPIController::class, "add_to_my_beneficiaries"]);
+    Route::post("beneficiary/fund/plus/", [BeneficiaryAPIController::class, "bless_new_beneficiary"]);
+    Route::get("beneficiary/bless/balance/", [BeneficiaryAPIController::class, "check_beneficiary_wallet"]);
+
+
+
+
 //    Route::get("beneficiaries/search", [BeneficiaryAPIController::class, "search"]);
     Route::delete("beneficiary/destroy/", [BeneficiaryAPIController::class, "destroy"]);
     Route::delete("beneficiary/destroy/all/", [BeneficiaryAPIController::class, "destroyAll"]);
+
+    // Wallet to beneficiary
+    Route::post("wallet/transfer/wb/", [WalletToBeneficiaryController::class, "w2b"]);
 });
 
 // TODO :  ... Querying on frontend ? or backend?
