@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Beneficiary extends Model
+class Beneficiary extends User
 {
     use HasFactory;
 
     /** The attributes that are mass assignable. @var string[] */
-    protected $fillable = [
+    public $fillable = [
+        'first_name',
+        'last_name',
         'phone_number',
     ];
 
