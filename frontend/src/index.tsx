@@ -9,12 +9,12 @@ import { SnackbarProvider } from 'notistack';
 ReactDOM.render(
     <React.StrictMode>
         {/* <ThemeContextProvider> */}
-        <AuthContextProvider>
+        < AuthContextProvider >
             <SnackbarProvider maxSnack={5}>
                 <App />
             </SnackbarProvider>
-        </AuthContextProvider>
+        </ AuthContextProvider>
         {/* </ThemeContextProvider> */}
-    </React.StrictMode>,
-    document.getElementById('root')
+    </React.StrictMode>
+    , document.getElementById('root')
 );

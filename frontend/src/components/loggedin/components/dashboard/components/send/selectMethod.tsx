@@ -7,6 +7,9 @@ import { useHistory } from "react-router-dom"
 import "yup-phone";
 import { SendContext } from '../../../../../../store/context/send'
 import { useContext, useEffect } from 'react';
+import axios from 'axios'
+import useSwr from 'swr'
+import { HOST_URL } from "../../../../../../config/settings"
 const validationSchema = yup.object({
     amount: yup
         .number()
@@ -15,12 +18,6 @@ const validationSchema = yup.object({
         .string()
         .min(2, "Name must be greater than 2")
         .required('Type is required'),
-    walletid: yup
-        .string()
-        .when("type", {
-            is: "wallet",
-            then: yup.string()
-        }),
     mobile: yup
         .string()
         .when("type", {
@@ -34,20 +31,26 @@ const validationSchema = yup.object({
             then: yup.string()
         }),
 });
+const token = localStorage.getItem('token')
+const config = {
+    headers: { Authorization: `Bearer ${token}` },
+    withCredentials: true
+};
+const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function SelectMethod() {
+    const { data } = useSwr(`${HOST_URL}beneficiaries/list`, fetcher)
     const { send, sendWallet } = useContext(SendContext)
     const formik = useFormik({
         initialValues: {
             amount: "",
             type: "",
-            walletid: "",
             mobile: "",
             beneficiary: "",
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            if (values.type === "wallet") {
-                sendWallet(values.walletid, values.amount)
+            if (values.type === "beneficiary") {
+                sendWallet(values.beneficiary, values.amount)
             }
         },
     });
@@ -75,6 +78,7 @@ export default function SelectMethod() {
             }
         }
     }, [send])
+    console.log(data)
     return (
         <Box>
             <Paper
@@ -130,7 +134,6 @@ export default function SelectMethod() {
                                 error={formik.touched.type && Boolean(formik.errors.type)}
                             >
                                 <MenuItem value="beneficiary">Beneficiary</MenuItem>
-                                <MenuItem value="wallet">Wallet</MenuItem>
                                 <MenuItem value="mobile">Mobile Number</MenuItem>
                             </Select>
                         </FormControl>
@@ -149,26 +152,13 @@ export default function SelectMethod() {
                                     onChange={formik.handleChange}
                                     error={formik.touched.beneficiary && Boolean(formik.errors.beneficiary)}
                                 >
-                                    <MenuItem value={10}>Gerald</MenuItem>
-                                    <MenuItem value={20}>Michael</MenuItem>
-                                    <MenuItem value={30}>Komuhangi</MenuItem>
+                                    {data && data.beneficiaries.map((beneficiary: any) => {
+                                        return (
+                                            <MenuItem key={beneficiary.phone_number} value={beneficiary.id}>{beneficiary.first_name + " " + beneficiary.last_name}</MenuItem>
+                                        )
+                                    })}
                                 </Select>
                             </FormControl>
-                        )}
-                        {formik.values.type === "wallet" && (
-                            <TextField
-                                variant="outlined"
-                                margin="normal"
-                                fullWidth
-                                id="walletid"
-                                label="Wallet ID"
-                                name="walletid"
-                                type="text"
-                                value={formik.values.walletid}
-                                onChange={formik.handleChange}
-                                error={formik.touched.walletid && Boolean(formik.errors.walletid)}
-                                helperText={formik.touched.walletid && formik.errors.walletid}
-                            />
                         )}
                         {formik.values.type === "mobile" && (
                             <TextField

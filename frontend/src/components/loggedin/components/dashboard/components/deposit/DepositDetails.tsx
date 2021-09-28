@@ -99,10 +99,11 @@ export default function DepositDetails() {
     const [inputValue, setInputValue] = React.useState();
 
     useEffect(() => {
-        if (deposit.success) {
+        if (deposit.success !== null && deposit.success !== "null") {
             enqueueSnackbar(deposit.success, {
                 variant: 'success',
             })
+            if (deposit.success !== "Card entered successfully") history.go(0)
         }
         if (deposit.error) {
             try {

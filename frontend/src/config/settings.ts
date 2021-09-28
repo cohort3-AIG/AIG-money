@@ -1,4 +1,4 @@
-let DEBUG: boolean = true
+let DEBUG: boolean = false
 let LOGIN_URL: string = "https://ed.asteriskint.group/api/login";
 let REGISTER_URL: string = "https://ed.asteriskint.group/api/register";
 let HOST_URL: string = "https://ed.asteriskint.group/api/";

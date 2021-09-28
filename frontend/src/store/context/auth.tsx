@@ -41,7 +41,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
     const login = (email: string, password: string) => {
         authDispatch(authStart())
         // if(DEBUG){
-            axios.defaults.withCredentials = true   
+            // axios.defaults.withCredentials = true   
         // }
         axios.post(`${LOGIN_URL}`, {
             email: email,

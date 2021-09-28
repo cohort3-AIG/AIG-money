@@ -50,6 +50,7 @@ export default function WalletCreate() {
             enqueueSnackbar(register.success, {
                 variant: 'success',
             })
+            window.location.reload()
             history.push("/console");
         }
         if (register.error) {

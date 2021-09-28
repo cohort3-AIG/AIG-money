@@ -158,12 +158,12 @@ export default function MiniDrawer() {
             </ListItemIcon>
             <ListItemText primary="Wallet" />
           </ListItem>
-          <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
+          {/* <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
             <ListItemIcon>
               <ReceiptIcon />
             </ListItemIcon>
             <ListItemText primary="Transaction" />
-          </ListItem>
+          </ListItem> */}
           {/* <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
             <ListItemIcon>
               <AssessmentIcon />

@@ -35,7 +35,7 @@ const SendContextProvider = (props: any): JSX.Element => {
         }
     }
 
-    const sendWallet = (id: number, amount: number) => {
+    const sendWallet = (id: string, amount: number) => {
         sendDispatch(sendStart())
         // axios.defaults.withCredentials = true
         const token = localStorage.getItem('token')
@@ -43,8 +43,8 @@ const SendContextProvider = (props: any): JSX.Element => {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            axios.post(`${HOST_URL}wallet/transfer`, {
-                id,
+            axios.post(`${HOST_URL}beneficiary/fund/plus/`, {
+                phone_number: id,
                 amount
             }, config)
                 .then(res => {
@@ -59,7 +59,6 @@ const SendContextProvider = (props: any): JSX.Element => {
             sendDispatch(sendFail("You Needed to be Authenticated"))
         }
     }
-
     return (
         <SendContext.Provider value={{ send, sendWallet }}>
             {props.children}
