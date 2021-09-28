@@ -9,19 +9,24 @@ use Illuminate\Routing\Controller;
 
 class WalletToBeneficiaryController extends Controller
 {
-    # xxx
-    public function w2b(Request $request)
-    {
-//        $senderWallet = $request->user()->wallet;
-        $phone = $request->input('phone_number');
-        $beneficiaryWallet = Beneficiary::firstWhere('phone_number', $phone)->users->wallet;
+    public function add_to_my_beneficiaries(Request $request, User $beneficiary_id){
+        $user = $request->user();
+        return $user->add_beneficiary($request->input('beneficiary_id'));
+    }
+
+    public function bless_new_beneficiary(Request $request, User $beneficiary_id){
+        $senderWallet = $request->user()->wallet; // works
+        $beneficiaryWallet = $request->user()->beneficiaries->find($request->input('beneficiary_id'))->wallet;  // beneficiary wallet
+        return $senderWallet->transfer($beneficiaryWallet, $request->input('amount'));
+
+//        return $beneficiaryWallet;
+
+//        $beneficiaryWallet = User::firstWhere(User, $phone)->users->wallet;
 ////        $beneficiaryWallet = Beneficiary::with($request->user()->beneficiaries->phone_number, $request->input('phone_number'))->first()->wallet;
-//        return $senderWallet->transfer($beneficiaryWallet, $request->input('amount'));
+////        return $senderWallet->transfer($beneficiaryWallet, $request->input('amount'));
+    }
 
-        return $beneficiaryWallet;
-
-////        $phone = $request->input('phone_number');
-////        $receiver = Beneficiary::where('phone_number', $phone)->first();
-//        return Beneficiary::find(1)['first_name'];
+    public function check_beneficiary_wallet(Request $request){
+        return User::find($request->input('beneficiary_id'))->wallet;
     }
 }

@@ -53,22 +53,14 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     // Beneficiary # workflow
     Route::get("beneficiaries/list", [BeneficiaryAPIController::class, "index"]);
     Route::post("beneficiary/create", [BeneficiaryAPIController::class, "store"]);
-
-
-
-    Route::post("beneficiary/create/new/", [BeneficiaryAPIController::class, "add_to_my_beneficiaries"]);
-    Route::post("beneficiary/fund/plus/", [BeneficiaryAPIController::class, "bless_new_beneficiary"]);
-    Route::get("beneficiary/bless/balance/", [BeneficiaryAPIController::class, "check_beneficiary_wallet"]);
-
-
-
-
 //    Route::get("beneficiaries/search", [BeneficiaryAPIController::class, "search"]);
     Route::delete("beneficiary/destroy/", [BeneficiaryAPIController::class, "destroy"]);
     Route::delete("beneficiary/destroy/all/", [BeneficiaryAPIController::class, "destroyAll"]);
 
     // Wallet to beneficiary
-    Route::post("wallet/transfer/wb/", [WalletToBeneficiaryController::class, "w2b"]);
+    Route::post("beneficiary/create/new/", [WalletToBeneficiaryController::class, "add_to_my_beneficiaries"]);
+    Route::post("beneficiary/fund/plus/", [WalletToBeneficiaryController::class, "bless_new_beneficiary"]);
+    Route::get("beneficiary/bless/balance/", [WalletToBeneficiaryController::class, "check_beneficiary_wallet"]);  // same as check user wallet
 });
 
-// TODO :  ... Querying on frontend ? or backend?
+// TODO :  ... Querying on frontend ? or backend ?

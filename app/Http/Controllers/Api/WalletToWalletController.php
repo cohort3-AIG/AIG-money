@@ -57,8 +57,8 @@ class WalletToWalletController extends Controller
         $receiver = User::where('phone_number', $phone)->first()->wallet;
 
         if($phone === $request->user()['phone_number'] || !User::where('phone_number',  $phone)->exists()) {
-//            return ["wallet num incorrect or self!"];  // false
-            abort(401, 'Bad params or incorrect data');
+            return ["wallet num incorrect or self!"];  // false
+//            abort(401, 'Bad params or incorrect data');
         }
         return $sender->transfer($receiver, $request->input('amount'));  // true
     }
