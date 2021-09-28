@@ -123,11 +123,11 @@ class CybersourceController extends BaseController
                     $paymentInformation = new Ptsv2paymentsPaymentInformation($paymentInformationArr);
 
                     $charge_cat = TransactionCategory::where('category', 'card to wallet')->first();
-                    $charged_amount = $validated['total_amount'] + ($charge_cat->charge * $validated['total_amount']);
+                    $charged_amount = ($validated['total_amount']+ ($charge_cat->charge * $validated['total_amount']))*3500 ;
 
                     $orderInformationAmountDetailsArr = [
                         'totalAmount' => $charged_amount,
-                        'currency' => 'USD',
+                        'currency' => 'UGX',
                     ];
                     $orderInformationAmountDetails = new Ptsv2paymentsOrderInformationAmountDetails($orderInformationAmountDetailsArr);
 
