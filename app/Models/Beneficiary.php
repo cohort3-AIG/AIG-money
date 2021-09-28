@@ -17,15 +17,15 @@ class Beneficiary extends User
         'phone_number',
     ];
 
-//    public function users()    // m2m
-//    {
-////        return $this->belongsToMany(
-////                User::class,
-////                'beneficiaries_users',
-////                'beneficiary_id',
-////                'user_id'
-////        );
-//
-//        return $this->belongsToMany(User::class );
-//    }
+    public function users()    // m2m
+    {
+//        return $this->belongsToMany(
+//                User::class,
+//                'beneficiaries_users',
+//                'beneficiary_id',
+//                'user_id'
+//        );
+
+        return $this->belongsToMany(User::class );
+    }
 }

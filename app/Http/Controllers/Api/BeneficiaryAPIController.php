@@ -11,7 +11,7 @@ class BeneficiaryAPIController extends Controller
 {
     public function index(Request $request)
     {
-        $beneficiaries = $request->user()->beneficiaries;
+        $beneficiaries = $request->user()->beneficiariess;
         return ['beneficiaries'=> $beneficiaries];
     }
 
@@ -50,26 +50,5 @@ class BeneficiaryAPIController extends Controller
     public function destroyAll(Request $request)
     {
         return $request->user()->beneficiaries()->detach();
-    }
-
-    public function add_to_my_beneficiaries(Request $request, User $beneficiary_id){
-        $user = $request->user();
-        return $user->add_beneficiary($request->input('beneficiary_id'));
-    }
-
-    public function bless_new_beneficiary(Request $request, User $beneficiary_id){
-        $senderWallet = $request->user()->wallet; // works
-        $beneficiaryWallet = $request->user()->beneficiaries->find($request->input('beneficiary_id'))->wallet;  // beneficiary wallet
-        return $senderWallet->transfer($beneficiaryWallet, $request->input('amount'));
-
-//        return $beneficiaryWallet;
-
-//        $beneficiaryWallet = User::firstWhere(User, $phone)->users->wallet;
-////        $beneficiaryWallet = Beneficiary::with($request->user()->beneficiaries->phone_number, $request->input('phone_number'))->first()->wallet;
-////        return $senderWallet->transfer($beneficiaryWallet, $request->input('amount'));
-    }
-
-    public function check_beneficiary_wallet(Request $request){
-        return User::find($request->input('beneficiary_id'))->get()->wallet;
     }
 }

@@ -61,7 +61,7 @@ class User extends Authenticatable implements Wallet
             'beneficiary_id',
             'user_id');
     }
-
+//
     // beneficiaries
     public function beneficiaries()    // m2m
     {
@@ -72,20 +72,26 @@ class User extends Authenticatable implements Wallet
             'beneficiary_id');
 //        return $this->belongsToMany(Beneficiary::class);
     }
-
-    public function add_beneficiary($beneficiary_id)
-    {
-        return $this->beneficiaries()->attach($beneficiary_id);   // add beneficiary
-//        $beneficiary = self::find($beneficiary_id);       // find your beneficiary, and...
-//        $beneficiary->beneficiaries()->attach($this->id);  // add yourself, too
-////
+//
+//    public function add_beneficiary($beneficiary_id)
+//    {
 //        return $this->beneficiaries()->attach($beneficiary_id);   // add beneficiary
-    }
+////        $beneficiary = self::find($beneficiary_id);       // find your beneficiary, and...
+////        $beneficiary->beneficiaries()->attach($this->id);  // add yourself, too
+//////
+////        return $this->beneficiaries()->attach($beneficiary_id);   // add beneficiary
+//    }
+//
+//    public function remove_beneficiary(Beneficiary $beneficiary_id)
+//    {
+//        $this->beneficiaries()->detach($beneficiary_id);   // remove beneficiary
+//        $beneficiary = self::find($beneficiary_id);       // find your beneficiary, and...
+//        $beneficiary->beneficiaries()->detach($this->id);  // remove yourself, too
+//    }
 
-    public function remove_beneficiary(Beneficiary $beneficiary_id)
+
+    public function beneficiariess()
     {
-        $this->beneficiaries()->detach($beneficiary_id);   // remove beneficiary
-        $beneficiary = self::find($beneficiary_id);       // find your beneficiary, and...
-        $beneficiary->beneficiaries()->detach($this->id);  // remove yourself, too
+        return $this->belongsToMany(Beneficiary::class);
     }
 }

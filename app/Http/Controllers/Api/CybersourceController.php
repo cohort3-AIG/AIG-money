@@ -127,7 +127,7 @@ class CybersourceController extends BaseController
 
                     $orderInformationAmountDetailsArr = [
                         'totalAmount' => $charged_amount,
-                        'currency' => 'UGX',
+                        'currency' => 'USD',
                     ];
                     $orderInformationAmountDetails = new Ptsv2paymentsOrderInformationAmountDetails($orderInformationAmountDetailsArr);
 
@@ -194,7 +194,7 @@ class CybersourceController extends BaseController
                         //     ]);
                         // } else {
 
-//                        $user_wallet = MyWallet::where("wallet_id",$user->id)->get()->first();
+                          //                        $user_wallet = MyWallet::where("wallet_id",$user->id)->get()->first();
                         $user_wallet = $user->wallet; // LIFESAVER 100% !
                         $totalAmount = $user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
@@ -208,7 +208,11 @@ class CybersourceController extends BaseController
                     }
 
                 } catch (ApiException $e) {
-                    return $this->sendError($e->getMessage(), $e->getResponseBody());
+                    $error=$e->getResponseBody();
+                    
+                    return $this->sendError("Invalid Data", ["message"=>[
+                        $error->message
+                        ]]);
                 }
             }
         }
