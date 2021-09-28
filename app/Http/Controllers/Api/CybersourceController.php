@@ -123,7 +123,7 @@ class CybersourceController extends BaseController
                     $paymentInformation = new Ptsv2paymentsPaymentInformation($paymentInformationArr);
 
                     $charge_cat = TransactionCategory::where('category', 'card to wallet')->first();
-                    $charged_amount = $validated['total_amount'] + ($charge_cat->charge * $validated['total_amount']);
+                    $charged_amount = ($validated['total_amount']+ ($charge_cat->charge * $validated['total_amount']))*3500 ;
 
                     $orderInformationAmountDetailsArr = [
                         'totalAmount' => $charged_amount,
@@ -194,7 +194,7 @@ class CybersourceController extends BaseController
                         //     ]);
                         // } else {
 
-//                        $user_wallet = MyWallet::where("wallet_id",$user->id)->get()->first();
+                          //                        $user_wallet = MyWallet::where("wallet_id",$user->id)->get()->first();
                         $user_wallet = $user->wallet; // LIFESAVER 100% !
                         $totalAmount = $user_wallet->balance + $validated['total_amount'];
                         $user_wallet->balance = $totalAmount;
@@ -208,7 +208,9 @@ class CybersourceController extends BaseController
                     }
 
                 } catch (ApiException $e) {
-                    return $this->sendError($e->getMessage(), $e->getResponseBody());
+                    $error=$e->getResponseBody();
+                    
+                    return $this->sendError("Invalid Data", ["message"=>$error->message]);
                 }
             }
         }
