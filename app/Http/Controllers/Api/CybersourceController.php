@@ -210,7 +210,9 @@ class CybersourceController extends BaseController
                 } catch (ApiException $e) {
                     $error=$e->getResponseBody();
                     
-                    return $this->sendError("Invalid Data", ["message"=>$error->message]);
+                    return $this->sendError("Invalid Data", ["message"=>[
+                        $error->message
+                        ]]);
                 }
             }
         }
