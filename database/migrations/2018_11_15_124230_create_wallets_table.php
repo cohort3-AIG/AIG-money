@@ -28,8 +28,8 @@ class CreateWalletsTable extends Migration
 
 //            $table->morphs('holder');
             $table->unsignedInteger('holder_id');
-//            $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('holder_type')->nullable();
+            $table->foreign('holder_id')->references('id')->on('users')->onDelete('cascade');
+            $table->string('holder_type')->default('Cybersource');
 
             $table->string('phone_number')->nullable();
             $table->foreign('phone_number')->references('phone_number')->on('users')->onDelete('cascade');
@@ -42,12 +42,12 @@ class CreateWalletsTable extends Migration
             $table->unsignedInteger('postal_code')->nullable();
             $table->boolean('allow')->default(0);
             $table->string('name')->nullable();
-            $table->string('slug')->index()->nullable();
+            $table->string('slug')->index()->default('default');
             $table->string('description')->nullable();
             $table->decimal('balance', 64, 0)->default(0);
             $table->timestamps();
 
-            $table->unique(['holder_type', 'holder_id', 'slug']);
+            $table->unique(['holder_type', 'holder_id', 'slug']);   // this is the unique key
         });
 
         /**

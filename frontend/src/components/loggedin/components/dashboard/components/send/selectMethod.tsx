@@ -78,7 +78,6 @@ export default function SelectMethod() {
             }
         }
     }, [send])
-    console.log(data)
     return (
         <Box>
             <Paper
@@ -113,6 +112,7 @@ export default function SelectMethod() {
                             id="amount"
                             label="Amount"
                             name="amount"
+                            placeholder="In US $..."
                             type="text"
                             value={formik.values.amount}
                             onChange={formik.handleChange}
@@ -154,7 +154,7 @@ export default function SelectMethod() {
                                 >
                                     {data && data.beneficiaries.map((beneficiary: any) => {
                                         return (
-                                            <MenuItem key={beneficiary.phone_number} value={beneficiary.id}>{beneficiary.first_name + " " + beneficiary.last_name}</MenuItem>
+                                            <MenuItem key={beneficiary.id} value={beneficiary.phone_number}>{beneficiary.first_name + " " + beneficiary.last_name}</MenuItem>
                                         )
                                     })}
                                 </Select>

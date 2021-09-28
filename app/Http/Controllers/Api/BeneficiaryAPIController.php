@@ -11,7 +11,7 @@ class BeneficiaryAPIController extends Controller
 {
     public function index(Request $request)
     {
-        $beneficiaries = $request->user()->beneficiariess;
+        $beneficiaries = $request->user()->beneficiaries;
         return ['beneficiaries'=> $beneficiaries];
     }
 
@@ -39,6 +39,13 @@ class BeneficiaryAPIController extends Controller
 //        })->get();
 //        return [$beneficiaries];
 //    }
+
+    public function update(Request $request)
+    {
+        $beneficiary = Beneficiary::find($request->input('id'));
+        $beneficiary->update($request->all());
+        return $beneficiary;
+    }
 
     public function destroy(Request $request)
     {
