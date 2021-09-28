@@ -26,7 +26,7 @@ class BeneficiaryAPIController extends Controller
                 'last_name'=> "required",
                 'phone_number'=> "required"
             ]);
-            Beneficiary::create($request->all())->users();
+            Beneficiary::create($request->all())->users()->attach($userId);
             return ["Success!"];
         }
         return "Can't add self as a beneficiary";
@@ -70,6 +70,6 @@ class BeneficiaryAPIController extends Controller
     }
 
     public function check_beneficiary_wallet(Request $request){
-        return User::find($request->input('beneficiary_id'))->get()->wallet->balance;
+        return User::find($request->input('beneficiary_id'))->get()->wallet;
     }
 }
