@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use App\Models\User;
 use App\Models\MyWallet;
+use App\Exceptions\NumIncorrectOrSelfException;
 
 
 class WalletToWalletController extends Controller
@@ -25,7 +26,7 @@ class WalletToWalletController extends Controller
         return ["Deposited " . $user->deposit(300)['amount'] . " to the Wallet of " . $user->first_name];
     }
 
-    // works
+    # works
     public function walletBalanceOfAuthenticatedUser(Request $request)
     {
         $user = $request->user()->wallet;
@@ -41,6 +42,7 @@ class WalletToWalletController extends Controller
         return ["balance" => $userBal];
     }
 
+    # works
     public function transferWalletToWallet(Request $request)
     {
 //        $sender = $request->user()->wallet;
@@ -55,7 +57,8 @@ class WalletToWalletController extends Controller
         $receiver = User::where('phone_number', $phone)->first()->wallet;
 
         if($phone === $request->user()['phone_number'] || !User::where('phone_number',  $phone)->exists()) {
-            return ["number is incorrect or self"];  // false
+//            return ["wallet num incorrect or self!"];  // false
+            abort(401, 'Bad params or incorrect data');
         }
         return $sender->transfer($receiver, $request->input('amount'));  // true
     }
