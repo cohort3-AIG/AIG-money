@@ -1,5 +1,5 @@
 
-import React, { useContext, useEffect } from 'react'
+import { useContext, useEffect } from 'react'
 import { LinearProgress, Avatar, Typography, Button, Box, Paper, TextField } from '@mui/material'
 import { BeneficiaryContext } from "../../../../../../store/context/beneficiary"
 import { useFormik } from 'formik';
@@ -11,6 +11,7 @@ import ReceiptIcon from '@mui/icons-material/Receipt';
 import { useSWRConfig } from "swr"
 import { HOST_URL } from '../../../../../../config/settings'
 import "yup-phone";
+import { useParams } from "react-router"
 const validationSchema = yup.object({
     phone: yup
         .string()
@@ -26,10 +27,11 @@ const validationSchema = yup.object({
         .required('Phone is required'),
 });
 export default function Beneficiary() {
-    const { beneficiary, create } = useContext(BeneficiaryContext)
+    const { beneficiary, update } = useContext(BeneficiaryContext)
     const { enqueueSnackbar } = useSnackbar();
     const { mutate } = useSWRConfig()
     const history = useHistory()
+    const { id } = useParams<{ id: string }>()
     const formik = useFormik({
         initialValues: {
             phone: "",
@@ -38,7 +40,7 @@ export default function Beneficiary() {
         },
         validationSchema: validationSchema,
         onSubmit: (values) => {
-            create(values.phone, values.first_name, values.last_name)
+            update(parseInt(id), values.phone, values.first_name, values.last_name)
         },
     });
     useEffect(() => {
@@ -46,6 +48,7 @@ export default function Beneficiary() {
             enqueueSnackbar(beneficiary.success, {
                 variant: 'success',
             })
+            history.push("console")
             mutate(`${HOST_URL}beneficiaries/list`)
         }
         if (beneficiary.error) {
@@ -141,7 +144,7 @@ export default function Beneficiary() {
                             endIcon={<AddIcon />}
                             disabled={beneficiary.loading}
                         >
-                            Create
+                            Update
                         </Button>
                         {beneficiary.loading && (
                             <LinearProgress />

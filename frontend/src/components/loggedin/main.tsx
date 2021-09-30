@@ -7,6 +7,7 @@ import { Copyright } from '../shared'
 import DepositContextProvider from "../../store/context/deposit"
 import SendContextProvider from "../../store/context/send"
 import BeneficiaryContextProvider from "../../store/context/beneficiary"
+import Edit from './components/dashboard/components/beneficiary/edit'
 const DrawerHeader = styled('div')(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
@@ -28,6 +29,7 @@ function Main() {
                             <SendContextProvider>
                                 <BeneficiaryContextProvider>
                                     <Route exact path={`${path}`} component={Dashboard} />
+                                    <Route exact path={`${path}/beneficiary/:id`} component={Edit} />
                                     <Route exact path={`${path}/statistics`} component={Statistics} />
                                     <Route exact path={`${path}/transactions`} component={Transactions} />
                                     <Route exact path={`${path}/settings`} component={Settings} />
