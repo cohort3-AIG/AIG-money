@@ -72,7 +72,7 @@ const BeneficiaryContextProvider = (props: any): JSX.Element => {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-            axios.post(`${HOST_URL}beneficiary/update/`, {
+            axios.put(`${HOST_URL}beneficiary/update/`, {
                 id,
                 first_name,
                 last_name,
@@ -83,7 +83,7 @@ const BeneficiaryContextProvider = (props: any): JSX.Element => {
                 if (err.response.data.errors) {
                     beneficiaryDispatch(beneficiaryFail(JSON.stringify(err.response.data.errors)))
                 } else {
-                    beneficiaryDispatch(beneficiaryFail("Beneficiary Update Failed Failed"))
+                    beneficiaryDispatch(beneficiaryFail("Beneficiary Update Failed"))
                 }
             })
         } else {

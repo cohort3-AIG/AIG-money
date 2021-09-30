@@ -20,7 +20,8 @@ class BeneficiaryAPIController extends Controller
         $userId = $request->user()->id;
 
         // let's make sure a logged in user can't add themselves as a beneficiary
-        if($request->input('phone_number') !== $request->user()['phone_number']){
+        // if entered number        ...is not same as...  num of authenticated user
+        if($request->input('phone_number') !== $request->user()['phone_number'] && Beneficiary::all()->exists()){
             $request->validate([
                 'first_name'=> "required",
                 'last_name'=> "required",
@@ -40,11 +41,10 @@ class BeneficiaryAPIController extends Controller
 //        return [$beneficiaries];
 //    }
 
-    public function update(Request $request)
+    public function update(Request $request, Beneficiary $id)
     {
-        $beneficiary = Beneficiary::find($request->input('id'));
-        $beneficiary->update($request->all());
-        return $beneficiary;
+        $id->update($request->all());
+        return response()->json($id, 200);
     }
 
     public function destroy(Request $request)
