@@ -7,6 +7,7 @@ export const initialState: IAuth = {
     email: null,
     error: null,
     loading: false,
+    success: null
 }
 
 const authStart = (state: IAuth, action: IAuthAction) => {
@@ -24,6 +25,7 @@ const authSuccess = (state: IAuth, action: IAuthAction) => {
         token: action.token,
         email: action.email,
         loading: false,
+        success: action.success
     })
 }
 
@@ -32,7 +34,8 @@ const authFail = (state: IAuth, action: IAuthAction) => {
         error: action.error,
         loading: false,
         token: null,
-        email: null
+        email: null,
+        success: null
     })
 }
 
@@ -42,6 +45,16 @@ const authLogout = (state: IAuth, action: IAuthAction) => {
         email: null,
         error: null,
         loading: false,
+        success: action.success
+    })
+}
+const authLoggedOut = (state: IAuth, action: IAuthAction) => {
+    return updateObject(state, {
+        token: null,
+        email: null,
+        error: null,
+        loading: false,
+        success: null
     })
 }
 
@@ -55,6 +68,8 @@ const reducer = (state: IAuth, action: IAuthAction): IAuth => {
             return authFail(state, action)
         case actionTypes.AUTH_LOGOUT:
             return authLogout(state, action)
+        case actionTypes.AUTH_LOGGED_OUT:
+            return authLoggedOut(state, action)
         default:
             return state
     }

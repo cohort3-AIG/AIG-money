@@ -12,34 +12,37 @@ const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function Transactions() {
     const { data, error } = useSwr(`${HOST_URL}transactions/logs/me`, fetcher)
     return (
-        <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {data && data.my_transactions.map((transaction: any) => {
-                return (
-                <Box key={transaction.id}>
-                    <ListItem alignItems="flex-start">
-                        <ListItemAvatar>
-                            <Avatar sx={{ background: '#3C9905' }}>{transaction.status}</Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                            primary={transaction.amount +"$"}
-                            secondary={
-                                <React.Fragment>
-                                    <Typography
-                                        sx={{ display: 'inline' }}
-                                        component="span"
-                                        variant="body2"
-                                        color="text.primary"
-                                    >
-                                        Charge 2$
-                                    </Typography>
-                                    {` — ${transaction.type}`}
-                                </React.Fragment>
-                            }
-                        />
-                    </ListItem>
-                    <Divider variant="inset" component="li" />
-                </Box>)
-            })}
-        </List>
+        <div>
+            <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
+                {data && data.my_transactions.map((transaction: any) => {
+                    const date = new Date(transaction.created_at)
+                    return (
+                        <Box key={transaction.id}>
+                            <ListItem alignItems="flex-start">
+                                <ListItemAvatar>
+                                    <Avatar sx={{ background: '#3C9905' }}>{transaction.status}</Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={`${transaction.amount}$ —— ${date}`}
+                                    secondary={
+                                        <React.Fragment>
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="span"
+                                                variant="body2"
+                                                color="text.primary"
+                                            >
+                                                {`Charge ${transaction.charge}`}
+                                            </Typography>
+                                            {` — ${transaction.type}`}
+                                        </React.Fragment>
+                                    }
+                                />
+                            </ListItem>
+                            <Divider variant="inset" component="li" />
+                        </Box>)
+                })}
+            </List>
+        </div>
     )
 }

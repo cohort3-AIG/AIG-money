@@ -154,16 +154,16 @@ export default function MiniDrawer() {
         <List>
           <ListItem button onClick={() => { history.push(url) }}>
             <ListItemIcon>
-            <AccountBalanceWalletIcon />
+              <AccountBalanceWalletIcon />
             </ListItemIcon>
             <ListItemText primary="Wallet" />
           </ListItem>
-          {/* <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
+          <ListItem button onClick={() => { history.push(`${url}/transactions`) }}>
             <ListItemIcon>
               <ReceiptIcon />
             </ListItemIcon>
-            <ListItemText primary="Transaction" />
-          </ListItem> */}
+            <ListItemText primary="Transactions" />
+          </ListItem>
           {/* <ListItem button onClick={() => { history.push(`${url}/statistics`) }}>
             <ListItemIcon>
               <AssessmentIcon />
@@ -179,7 +179,6 @@ export default function MiniDrawer() {
           </ListItem> */}
           <ListItem button onClick={() => {
             logout()
-            history.push('/')
             window.location.reload()
           }}>
             <ListItemIcon>

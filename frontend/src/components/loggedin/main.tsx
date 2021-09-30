@@ -19,7 +19,7 @@ function Main() {
     let { path } = useRouteMatch()
     return (
         <>
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: 'flex', minHeight: "97vh" }}>
                 <SideBar />
                 <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                     <DrawerHeader />
@@ -36,8 +36,8 @@ function Main() {
                         </DepositContextProvider>
                     </Switch>
                 </Box>
-                <Copyright />
             </Box>
+            <Copyright />
         </>
     );
 }

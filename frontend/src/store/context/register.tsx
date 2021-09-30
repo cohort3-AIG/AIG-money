@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/register'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/register'
 import { IRegister, IRegisterAction } from '../models/register'
-import { REGISTER_URL, HOST_URL } from '../../config/settings'
+import { REGISTER_URL, HOST_URL, DEBUG } from '../../config/settings'
 
 export const RegisterContext = createContext<IRegister | any>(initialState);
 
@@ -87,7 +87,9 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     }
     const phoneValidate = (phone: string) => {
         registerDispatch(registerStart())
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         axios.post(`${HOST_URL}phone`,
             {
                 phone_number: phone,
@@ -111,7 +113,9 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     }
     const phoneConfirmationCode = (code: number, phone_number: string) => {
         registerDispatch(registerStart())
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         axios.post(`${HOST_URL}verify_phone`, {
             code,
             phone_number
@@ -135,7 +139,9 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     const signup = (email: string, first_name: string, last_name: string, password: string, password_confirmation: string, phone_number: string) => {
         registerDispatch(registerStart())
         let phone_number1 = localStorage.getItem('phone')
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         axios.post(`${REGISTER_URL}`, {
             first_name,
             last_name,
@@ -144,10 +150,6 @@ const RegisterContextProvider = (props: any): JSX.Element => {
             password,
             password_confirmation
         },
-            // {
-            //     xsrfHeaderName: "X-XSRF-TOKEN", // change the name of the header to "X-XSRF-TOKEN" and it should works
-            //     withCredentials: true
-            // }
         ).then(res => {
             localStorage.setItem("token", res.data.token)
             localStorage.setItem('email', email)
@@ -166,7 +168,9 @@ const RegisterContextProvider = (props: any): JSX.Element => {
     }
     const create_wallet = (nationality: string, address_line_1: string, address_line_2: string, city_town_village: string, state_pronvince_region: string, postal_code: number) => {
         registerDispatch(registerStart())
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         const token = localStorage.getItem('token')
         if (token) {
             const config = {

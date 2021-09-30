@@ -1,8 +1,11 @@
-import React from 'react'
-import { List, ListItem, Typography, Divider, ListItemText, Box } from "@mui/material"
+import React, { useContext } from 'react'
+import { List, ListItem, Typography, Divider, ListItemText, Box, IconButton } from "@mui/material"
 import axios from 'axios'
-import useSwr from 'swr'
+import useSwr, { useSWRConfig } from 'swr'
 import { HOST_URL } from "../../../../../../config/settings"
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import { BeneficiaryContext } from '../../../../../../store/context/beneficiary'
 const token = localStorage.getItem('token')
 const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -11,9 +14,11 @@ const config = {
 const fetcher = (url: string) => axios.get(url, config).then(res => res.data)
 export default function BeneficiaryList() {
     const { data } = useSwr(`${HOST_URL}beneficiaries/list`, fetcher)
+    const { deleteBeneficiary } = useContext(BeneficiaryContext)
+    const { mutate } = useSWRConfig()
     return (
         <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
-            {data &&data.beneficiaries.map((beneficiary: any) => {
+            {data && data.beneficiaries.map((beneficiary: any) => {
                 return (
                     <Box key={beneficiary.id}>
                         <ListItem alignItems="flex-start">
@@ -32,6 +37,17 @@ export default function BeneficiaryList() {
                                     </React.Fragment>
                                 }
                             />
+                            <Box sx={{ padding: 0 }}>
+                                <IconButton color="warning" aria-label="upload picture" component="span" sx={{ display: "block", marginBottom: 0 }}>
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton color="error" aria-label="upload picture" component="span" sx={{ display: "block", marginTop: 0 }} onClick={() => {
+                                    deleteBeneficiary(beneficiary.id)
+                                    mutate(`${HOST_URL}beneficiaries/list`)
+                                }}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </Box>
                         </ListItem>
                         <Divider variant="fullWidth" component="li" />
                     </Box>

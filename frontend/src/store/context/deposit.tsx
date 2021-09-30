@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/deposit'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/deposit'
 import { IDeposit, IDepositAction } from '../models/deposit'
-import { HOST_URL } from '../../config/settings'
+import { HOST_URL, DEBUG } from '../../config/settings'
 
 export const DepositContext = createContext<IDeposit | any>(initialState);
 
@@ -82,7 +82,9 @@ const DepositContextProvider = (props: any): JSX.Element => {
     ) => {
         depositDispatch(depositStart())
         const token = localStorage.getItem('token')
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         if (token) {
             const config = {
                 headers: { Authorization: `Bearer ${token}` }

@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/auth'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/auth'
 import { IAuth, IAuthAction } from '../models/auth'
-import { BASE_URL, LOGIN_URL, HOST_URL } from '../../config/settings'
+import { BASE_URL, LOGIN_URL, HOST_URL, DEBUG } from '../../config/settings'
 
 export const AuthContext = createContext<IAuth | any>(initialState);
 
@@ -17,15 +17,17 @@ const AuthContextProvider = (props: any): JSX.Element => {
             error: null,
             token: null,
             email: null,
+            success: null
         }
     }
 
-    const authSuccess = (email: string, token: string): IAuthAction => {
+    const authSuccess = (email: string, token: string, success: string): IAuthAction => {
         return {
             type: actionTypes.AUTH_SUCCESS,
             token: token,
             email: email,
             error: null,
+            success
         }
     }
 
@@ -35,14 +37,32 @@ const AuthContextProvider = (props: any): JSX.Element => {
             error: error,
             email: null,
             token: null,
+            success: null
         }
     }
-
+    const authLogoutSuccess = (success: string): IAuthAction => {
+        return {
+            type: actionTypes.AUTH_LOGOUT,
+            email: null,
+            error: null,
+            token: null,
+            success
+        }
+    }
+    const authLoggedOut = (): IAuthAction => {
+        return {
+            type: actionTypes.AUTH_LOGGED_OUT,
+            email: null,
+            error: null,
+            token: null,
+            success: null
+        }
+    }
     const login = (email: string, password: string) => {
         authDispatch(authStart())
-        // if(DEBUG){
-        // axios.defaults.withCredentials = true   
-        // }
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         axios.post(`${LOGIN_URL}`, {
             email: email,
             password: password
@@ -51,7 +71,7 @@ const AuthContextProvider = (props: any): JSX.Element => {
             if (res.data.token) {
                 localStorage.setItem("token", token)
                 localStorage.setItem('email', email)
-                authDispatch(authSuccess(email, token))
+                authDispatch(authSuccess(email, token, "Logged In Successfully"))
             } else {
                 authDispatch(authFail(res.data.message))
             }
@@ -59,24 +79,18 @@ const AuthContextProvider = (props: any): JSX.Element => {
             authDispatch(authFail(err))
         })
     }
-    const logout = (): IAuthAction => {
+    const logout = () => {
 
         localStorage.removeItem('token')
         localStorage.removeItem('email')
-        localStorage.removeItem('expirationDate')
-
-        axios.post(`${LOGIN_URL}`).then(res => {
-            
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
+        axios.post(`${HOST_URL}logout`).then(res => {
+            authDispatch(authLogoutSuccess("Logged Out Successfully"))
         }).catch(err => {
             authDispatch(authFail("Failed to logout"))
         })
-
-        return {
-            type: actionTypes.AUTH_LOGOUT,
-            email: null,
-            error: null,
-            token: null,
-        }
     }
 
     const getCsrfCookie = () => {
@@ -90,9 +104,9 @@ const AuthContextProvider = (props: any): JSX.Element => {
         const token: string = JSON.stringify(localStorage.getItem("token"))
         const email: string = JSON.stringify(localStorage.getItem('email'))
         if (token === undefined) {
-            authDispatch(logout())
+            authDispatch(authLoggedOut())
         } else {
-            authDispatch(authSuccess(email, token))
+            authDispatch(authSuccess(email, token, "Welcome Back"))
         }
     }
 

@@ -80,21 +80,27 @@ export default function Dashboard() {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Paper sx={{
-                        // minHeight: "40vh",
+                        maxHeight: "40vh",
                         padding: 3,
-                        position: 'relative'
+                        position: 'relative',
+                        overflow: "auto"
                     }}>
-                        <Typography variant="h5" >Beneficiaries</Typography>
+                        <Box>
+                            <Typography variant="h5" sx={{ display: "inline" }} >Beneficiaries</Typography>
+                            <Button color="primary" aria-label="add"
+                                variant="contained"
+                                sx={{
+                                    marginTop: 1,
+                                    position: 'absolute',
+                                    top: 5,
+                                    right: 5
+                                }}
+                                onClick={handleBeneficiaryOpen}
+                            >
+                                Add
+                            </Button>
+                        </Box>
                         <BeneficiaryList />
-                        <Fab color="primary" aria-label="add" sx={{
-                            position: 'absolute',
-                            bottom: 5,
-                            right: 5
-                        }}
-                            onClick={handleBeneficiaryOpen}
-                        >
-                            <AddIcon />
-                        </Fab>
                     </Paper>
                 </Grid>
                 <Grid item xs={12} >
@@ -112,10 +118,8 @@ export default function Dashboard() {
             >
                 <Box sx={style}>
                     {deposit.step === 1 ?
-                        <DepositDetails/>
+                        <DepositDetails />
                         : <CreditCard />}
-
-
                 </Box>
             </Modal>
 

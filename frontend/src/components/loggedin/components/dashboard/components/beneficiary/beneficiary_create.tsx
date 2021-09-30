@@ -8,6 +8,8 @@ import { useSnackbar } from 'notistack';
 import { useHistory } from "react-router-dom"
 import AddIcon from '@mui/icons-material/Add'
 import ReceiptIcon from '@mui/icons-material/Receipt';
+import { useSWRConfig } from "swr"
+import { HOST_URL } from '../../../../../../config/settings'
 import "yup-phone";
 const validationSchema = yup.object({
     phone: yup
@@ -26,6 +28,7 @@ const validationSchema = yup.object({
 export default function Beneficiary() {
     const { beneficiary, create } = useContext(BeneficiaryContext)
     const { enqueueSnackbar } = useSnackbar();
+    const { mutate } = useSWRConfig()
     const history = useHistory()
     const formik = useFormik({
         initialValues: {
@@ -43,6 +46,7 @@ export default function Beneficiary() {
             enqueueSnackbar(beneficiary.success, {
                 variant: 'success',
             })
+            mutate(`${HOST_URL}beneficiaries/list`)
             history.push("/console");
         }
         if (beneficiary.error) {

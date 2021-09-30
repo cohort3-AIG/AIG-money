@@ -3,7 +3,7 @@ import reducer, { initialState } from '../reducers/send'
 import axios from 'axios'
 import * as actionTypes from '../actionTypes/send'
 import { ISend, ISendAction } from '../models/send'
-import { HOST_URL } from '../../config/settings'
+import { HOST_URL, DEBUG } from '../../config/settings'
 
 export const SendContext = createContext<ISend | any>(initialState);
 
@@ -37,7 +37,9 @@ const SendContextProvider = (props: any): JSX.Element => {
 
     const sendWallet = (id: string, amount: number) => {
         sendDispatch(sendStart())
-        // axios.defaults.withCredentials = true
+        if (DEBUG) {
+            axios.defaults.withCredentials = true
+        }
         const token = localStorage.getItem('token')
         if (token) {
             const config = {
