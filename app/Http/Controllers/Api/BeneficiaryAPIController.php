@@ -15,13 +15,14 @@ class BeneficiaryAPIController extends Controller
         return ['beneficiaries'=> $beneficiaries];
     }
 
-    public function store(Request $request)
+    public function store(Request $request, Beneficiary $phone_number)
     {
         $userId = $request->user()->id;
 
         // let's make sure a logged in user can't add themselves as a beneficiary
-        // if entered number        ...is not same as...  num of authenticated user
-        if($request->input('phone_number') !== $request->user()['phone_number'] && Beneficiary::all()->exists()){
+        // if entered number        ...is not same as...  num of authenticated user and  this num already exists in beneficiaries in the db
+        if($request->input('phone_number') !== $request->user()['phone_number'] || Beneficiary::where('phone_number', $phone_number)->exists())
+        {
             $request->validate([
                 'first_name'=> "required",
                 'last_name'=> "required",
