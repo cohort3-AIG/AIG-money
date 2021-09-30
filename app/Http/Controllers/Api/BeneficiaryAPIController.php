@@ -19,7 +19,6 @@ class BeneficiaryAPIController extends Controller
     {
         $userId = $request->user()->id;
 
-        // let's make sure a logged in user can't add themselves as a beneficiary
         // if entered number        ...is not same as...  num of authenticated user and  this num already exists in beneficiaries in the db
         if($request->input('phone_number') !== $request->user()['phone_number'] || Beneficiary::where('phone_number', $phone_number)->exists())
         {
@@ -28,10 +27,10 @@ class BeneficiaryAPIController extends Controller
                 'last_name'=> "required",
                 'phone_number'=> "required"
             ]);
-            Beneficiary::create($request->all())->users()->attach($userId);
-            return ["Success!"];
+            $created = Beneficiary::create($request->all())->users()->attach($userId);
+            return response()->json($created, 200, '', '');
         }
-        return "Can't add self as a beneficiary";
+        return response()->json(['error' => '"Can\'t add self as a beneficiary"'], 500);
     }
 
 //    public function search($name)
